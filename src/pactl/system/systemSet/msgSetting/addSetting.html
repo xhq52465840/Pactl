@@ -1,0 +1,114 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">发报类型<span class="text-danger">*</span></div>
+        <div class="col-sm-7 modal-body-value">
+          <div ui-select ng-model="itemObj.sendType" theme="select2" class="form-control" on-select="sendTypeSelected($item)">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in sendTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="itemObj.sendType" name="sendType" required>
+        </div>
+        <div class="col-sm-1 modal-body-name" ng-if="notShowAirData!=='1'">航空公司<span class="text-danger" ng-if="!showAir()">*</span></div>
+        <div class="col-sm-3 modal-body-value" ng-if="notShowAirData!=='1'">
+          <div ui-select ng-model="itemObj.airId" theme="select2" class="form-control" ng-disabled="showAir()">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="itemObj.airId" w5c-dynamic-element name="airId" ng-required="notShowAirData!=='1'" ng-if="!showAir()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">报文类型<span class="text-danger">*</span></div>
+        <div class="col-sm-3 modal-body-value">
+          <div ui-select ng-model="itemObj.msgType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in msgTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="itemObj.msgType" name="msgType" required>
+        </div>
+        <div class="col-sm-1 modal-body-name">报文版本号<span class="text-danger" ng-if="!showmVersion('msgVersion')">*</span></div>
+        <div class="col-sm-3 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.msgVersion" ng-required="!showmVersion('msgVersion')" ng-disabled="showmVersion('msgVersion')" name="msgVersion">
+        </div>
+        <div class="col-sm-1 modal-body-name">报文优先级<span class="text-danger" ng-if="!showmVersion('msgPriority')">*</span></div>
+        <div class="col-sm-3 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.msgPriority" ng-required="!showmVersion('msgPriority')" ng-disabled="showmVersion('msgPriority')" name="msgPriority">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">卸机站</div>
+        <div class="col-sm-3 modal-body-value">
+          <div ui-select ng-model="itemObj.station" theme="select2" class="form-control" ng-disabled="showStation()">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1 modal-body-name">航班号</div>
+        <div class="col-sm-3 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.fltNo" ng-disabled="showFltNo()">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">说明</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="itemObj.explain"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <!--         <div class="col-sm-1 modal-body-name">发报地址<span class="text-danger" ng-if="showSendAddr()">*</span></div> -->
+        <div class="col-sm-1 modal-body-name">发报地址</div>
+        <div class="col-sm-11 modal-body-value">
+          <input type="text" ng-model="itemObj.sendAddr" class="form-control">
+          <!--           <input type="text" ng-model="itemObj.sendAddr" class="form-control" ng-if="!showSendAddr()"> -->
+          <!--           <input type="text" class="form-control" ng-model="itemObj.sendAddr" name="sendAddr" required w5c-dynamic-element ng-if="showSendAddr()"> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">收报地址<span class="text-danger" ng-if="!showmVersion('recAddr')">*</span></div>
+        <div class="col-sm-11 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.recAddr" ng-required="!showmVersion('recAddr')" ng-disabled="showmVersion('recAddr')" name="recAddr">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">发报目录<span class="text-danger">*</span></div>
+        <div class="col-sm-11 modal-body-value">
+          <div ui-select ng-model="itemObj.msgSendDir" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.remark}}</div>
+            <div ui-select-choices repeat="item in msgSendDirData | filter: {remark:$select.search}">
+              <div ng-bind-html="item.remark | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" ng-model="itemObj.msgSendDir" required name="msgSendDir">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">备注</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="itemObj.remark"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

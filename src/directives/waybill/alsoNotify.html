@@ -1,0 +1,34 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="line-row">
+        <div class="form-control">{{alsoObj.notifyName}}</div>
+      </div>
+      <div class="line-row">
+        <div class="form-control">{{alsoObj.notifyAddress}}</div>
+      </div>
+      <div class="line-row">
+        <div class="form-control line-row-1">{{alsoObj.notifyZipcode}}</div>
+        <div class="form-control line-row-1">{{alsoObj.notifyCity}}</div>
+        <div class="form-control line-row-1">{{alsoObj.notifyState}}</div>
+        <div class="form-control line-row-1">{{alsoObj.notifyCountry}}</div>
+      </div>
+      <div class="line-row">
+        <div class="form-control line-row-1">{{alsoObj.notifyTel}}</div>
+        <div class="form-control line-row-1">{{alsoObj.notifyFax}}</div>
+        <div class="form-control line-row-2">{{alsoObj.notifyContractor}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

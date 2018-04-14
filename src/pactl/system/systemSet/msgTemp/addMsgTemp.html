@@ -1,0 +1,36 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">编号<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" name="num" required ng-model="msgObj.num" ng-disabled="msgObj.id">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">模板名称<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" name="name" required ng-model="msgObj.name">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">模板内容<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" name="content" required ng-model="msgObj.content"></textarea>
+        </div>
+      </div>            
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

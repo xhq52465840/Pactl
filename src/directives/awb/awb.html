@@ -1,0 +1,1303 @@
+<div class="fwb-print">
+  <div style="width: 794px;margin: 0 auto;" ng-if="awbType==='A4'">
+    <div class="awb-left">
+      <img ng-src="{{'data:image/jpeg;base64,' + awbImg.shu}}" alt="" style="margin-top: 110px;width: 30px;height: 271px;">
+    </div>
+    <div class="awb-content row">
+      <div class="row">
+        <div class="awb-bar">
+          <div class="awb-bar-left">
+            <div class="awb-bar-left-1">{{billNo1}}</div>
+            <div class="awb-bar-left-2">{{obj.dept}}</div>
+            <div class="awb-bar-left-3">{{billNo2}}</div>
+          </div>
+          <div class="awb-bar-center">
+            <img ng-src="{{'data:image/jpeg;base64,' + awbImg.heng}}" alt="" style="height: 30px;width: 270px;">
+          </div>
+          <div class="awb-bar-right">{{billNo1 + '-' + billNo2}}</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row spl">
+          <div class="spl-spna">
+            <div class="spl-spna-address">
+              Shipper's Name and Address
+            </div>
+            <div class="spl-spna-version">
+            </div>
+          </div>
+          <div class="spl-span">
+            <div class="spl-span-number">
+              Shipper's Account Number
+            </div>
+            <div class="spl-span-no">
+              {{obj.spAccountNumber}}
+            </div>
+          </div>
+          <div class="spl-content clear">
+            <div class="spl-content-text">
+              {{obj.spName}}
+            </div>
+            <div class="spl-content-text">
+              {{obj.spAddress}}
+            </div>
+            <div class="spl-content-text">
+              {{sp_zcs}}
+            </div>
+            <div class="spl-content-text">
+              {{sp_tel}}
+            </div>
+          </div>
+        </div>
+        <div class="row spr">
+          <div class="spr-content row">
+            <div class="spr-content-left">
+              <div class="spr-content-left-nn">
+                Not Negotiable
+              </div>
+              <div class="spr-content-left-awb">
+                Air Waybill
+              </div>
+              <div class="spr-content-left-ib">
+                issued by
+              </div>
+            </div>
+            <div class="spr-content-right">
+              <div class="spr-content-right-text1">
+                {{obj.issuedBy}}
+              </div>
+              <!--<div class="spr-content-right-text2">
+              </div>
+              <div class="spr-content-right-text3">
+              </div>
+              <div class="spr-content-right-text4">
+              </div>
+              <div class="spr-content-right-text5">
+              </div>-->
+            </div>
+          </div>
+          <div class="spr-copy">
+            Copies 1, 2 and 3 of this Air Waybill are originals and have the same validity.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row cnl">
+          <div class="cnl-cnna">
+            <div class="cnl-cnna-address">
+              Consignee's Name and Address
+            </div>
+          </div>
+          <div class="cnl-cnan">
+            <div class="cnl-cnan-number">
+              Shipper's Account Number
+            </div>
+            <div class="cnl-cnan-no">
+              {{obj.csAccountNumber}}
+            </div>
+          </div>
+          <div class="cnl-content clear">
+            <div class="cnl-content-text">
+              {{obj.csName}}
+            </div>
+            <div class="cnl-content-text">
+              {{obj.csAddress}}
+            </div>
+            <div class="cnl-content-text">
+              {{cs_zcs}}
+            </div>
+            <div class="cnl-content-text">
+              {{cs_tel}}
+            </div>
+          </div>
+        </div>
+        <div class="row cnr">
+          <div class="cnr-content">
+            It is agreed that the goods described herein are accepted in apparent good order and condition (except as noted) for carriage
+            SUBJECT TO THE CONDITIONS OF CONTRACT ON THE REVERSE HEREOF. ALL GOODS MAY BE CARRIED BY ANY OTHER MEANS INCLUDING
+            ROAD OR ANY OTHER CARRIER UNLESS SPECIFIC CONTRARY INSTRUCTIONS ARE GIVEN HEREON BY THE SHIPPER, AND SHIPPER
+            AGREES THAT THE SHIPMENT MAY BE CARRIED VIA INTERMEDIATE STOPPING PLACES WHICH THE CARRIER DEEMS APPROPRIATE.
+            THE SHIPPER'S ATTENTION IS DRAWN TO THE NOTICE CONCERNING CARRIER'S LIMITATION OF LIABILITY. Shipper may increase
+            such limitation of liability by declaring a higher value for carriage and paying a supplemental charge if required.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row icl">
+          <div class="icl-content-up">
+            <div class="icl-anc">
+              Issuing Carrier's Agent Name and City
+            </div>
+            <div class="icl-content-up-text">
+              {{obj.agentOprn}}/{{obj.agentCity}}
+            </div>
+            <div class="icl-content-up-text">
+              {{obj.agentSales}}
+            </div>
+          </div>
+          <div class="icl-content-down">
+            <div class="icl-content-down-left">
+              <div class="icl-content-down-left-ic">
+                Agent's IATA Code
+              </div>
+              <div class="icl-content-down-left-text">
+                {{iata_code1}} {{iata_code2}} {{obj.agentCassAddress}} {{obj.agentPartIdentifier}}
+              </div>
+            </div>
+            <div class="icl-content-down-right">
+              <div class="icl-content-down-right-an">
+                Account No.
+              </div>
+              <div class="icl-content-down-right-text">
+                {{obj.accountNo}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row icr">
+          <div class="icr-ai">
+            Accounting Information
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid">
+            {{obj.freightPrepaid}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid1">
+            {{obj.freightPrepaid1}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid2">
+            {{obj.freightPrepaid2}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid3">
+            {{obj.freightPrepaid3}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid4">
+            {{obj.freightPrepaid4}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid5">
+            {{obj.freightPrepaid5}}
+          </div>
+          <div class="icr-aii" ng-if="obj.freightPrepaid6">
+            {{obj.freightPrepaid6}}
+          </div>
+          <div class="icr-aii" ng-if="obj.alsoNotify">
+            <div><span>ALSO NOTIFY:</span><span>{{obj.notifyName}}</span></div>
+            <div>{{obj.notifyAddress}}</div>
+            <div>{{al_zcs}}</div>
+            <div>{{al_tel}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row adl">
+          <div class="adl-adrr">
+            Airport of Departure (Addr. of First Carrier) and Requested Routing
+          </div>
+          <div class="adl-adrr-text">
+            {{obj.deptDesc}}
+          </div>
+        </div>
+        <div class="row adr">
+          <div class="adr-top">
+            <img src="../../image/pactl/left-line.png" alt="" class="adr-top-left-img"> Optional Shipping Information
+            <img src="../../image/pactl/right-line.png" alt="" class="adr-top-right-img">
+          </div>
+          <div class="adr-left">
+            <div class="adr-left-rn">
+              Reference Number
+            </div>
+            <div class="adr-left-text">
+
+            </div>
+          </div>
+          <div class="adr-center">
+            <div class="adr-center-rn">
+            </div>
+            <div class="adr-center-text">
+
+            </div>
+          </div>
+          <div class="adr-right">
+            <div class="adr-right-rn">
+            </div>
+            <div class="adr-right-text">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row tol">
+          <div class="tol-to">
+            <div class="tol-to-title">To</div>
+            <div class="tol-to-text">
+              {{obj.dest1}}
+            </div>
+          </div>
+          <div class="tol-bfc">
+            <div class="tol-bfc-title">By First Carrier</div>
+            <div class="tol-to-text">
+              {{obj.carrier1}}
+            </div>
+            <div class="to-bfc-rd">
+              <img src="../../image/pactl/left-line.png" alt="" class="adr-top-left-img"> Routing and Destination
+              <img src="../../image/pactl/right-line.png" alt="" class="adr-top-right-img">
+            </div>
+          </div>
+          <div class="tol-to">
+            <div class="tol-to-title">to</div>
+            <div class="tol-to-text">
+              {{obj.dest2}}
+            </div>
+          </div>
+          <div class="tol-by-1">
+            <div class="tol-to-title">by</div>
+            <div class="tol-to-text">
+              {{obj.carrier2}}
+            </div>
+          </div>
+          <div class="tol-to">
+            <div class="tol-to-title">to</div>
+            <div class="tol-to-text">
+              {{obj.dest4 || obj.dest3}}
+            </div>
+          </div>
+          <div class="tol-by-2">
+            <div class="tol-to-title">by</div>
+            <div class="tol-to-text">
+              {{obj.carrier4 || obj.carrier3}}
+            </div>
+          </div>
+        </div>
+        <div class="row tor">
+          <div class="tor-left">
+            <div class="tor-left-cr">
+              <div class="tor-left-cr-title">
+                Currency
+              </div>
+              <div class="tor-left-cr-text">
+                {{obj.currency}}
+              </div>
+            </div>
+            <div class="tor-left-cc">
+              <div class="tor-left-cc-title">
+                CHGS Code
+              </div>
+              <div class="tor-left-cc-text">
+                {{obj.chargeCode}}
+              </div>
+            </div>
+            <div class="tor-left-wv">
+              <div class="tor-left-wv-title">
+                WT/VAL
+              </div>
+              <div class="tor-left-wv-text">
+                <div class="tor-left-wv-text-left">
+                  <div class="tor-left-wv-text-left-title">
+                    PPD
+                  </div>
+                  <div class="tor-left-wv-text-left-text">
+                    {{obj.wtVal_p}}
+                  </div>
+                </div>
+                <div class="tor-left-wv-text-right">
+                  <div class="tor-left-wv-text-right-title">
+                    COLL
+                  </div>
+                  <div class="tor-left-wv-text-right-text">
+                    {{obj.wtVal_c}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tor-left-ot">
+              <div class="tor-left-ot-title">
+                Other
+              </div>
+              <div class="tor-left-ot-text">
+                <div class="tor-left-ot-text-left">
+                  <div class="tor-left-ot-text-left-title">
+                    PPD
+                  </div>
+                  <div class="tor-left-ot-text-left-text">
+                    {{obj.other_p}}
+                  </div>
+                </div>
+                <div class="tor-left-ot-text-right">
+                  <div class="tor-left-ot-text-right-title">
+                    COLL
+                  </div>
+                  <div class="tor-left-ot-text-right-text">
+                    {{obj.other_c}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tor-center">
+            <div class="tor-center-title">
+              Declared Value for Carriage
+            </div>
+            <div class="tor-center-text">
+              {{obj.carriageValue}}
+            </div>
+          </div>
+          <div class="tor-right">
+            <div class="tor-right-title">
+              Declared Value for Customs
+            </div>
+            <div class="tor-right-text">
+              {{obj.customsValue}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="adai">
+          <div class="adai-left">
+            <div class="adai-left-ad">
+              <div class="adai-left-ad-title">
+                Airport of Destination
+              </div>
+              <div class="adai-left-ad-text" style="font-size: 9px;padding-left: 5px;">
+                {{airportDataName}}
+              </div>
+            </div>
+            <div class="adai-left-rf">
+              <div class="adai-left-rf-up">
+                <div class="adai-left-rf-up-text">
+                  <img src="../../image/pactl/left-line.png" alt="" class="adr-top-left-img"> Requested Flight/Date
+                  <img src="../../image/pactl/right-line.png" alt="" class="adr-top-right-img">
+                </div>
+              </div>
+              <div class="adai-left-rf-down">
+                <div class="adai-left-rf-down-left">
+                  {{obj.flightNo}}{{obj.fltDate ? '/'+(obj.fltDate|date: 'dd') : ''}}
+                </div>
+                <div class="adai-left-rf-down-right">
+                  {{obj.flightNo2}}{{obj.fltDate2 ? '/'+(obj.fltDate2|date: 'dd') : ''}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="adai-right">
+            <div class="adai-right-ai">
+              <div class="adai-right-ai-title">
+                Amount of Insurance
+              </div>
+              <div class="adai-right-ai-text">
+                {{obj.insuranceValue}}
+              </div>
+            </div>
+            <div class="adai-right-ii">
+              INSURANCE – If carrier offers insurance, and such insurance is requested in accordance with the conditions thereof, indicate
+              amount to be insured in figures in box marked "Amount of Insurance".
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="hi">
+          <div class="hi-title">
+            Handling Information
+          </div>
+          <div class="hi-text">
+            <div ng-if="obj.ssr" class="">
+              {{obj.ssr}}
+            </div>
+            <div ng-if="obj.osi1" class="">
+              {{obj.osi1}}
+            </div>
+            <div ng-if="obj.holdCode" class="">
+              {{obj.holdCode}}
+            </div>
+          </div>
+          <div class="hi-sc">
+            <div class="hi-sc-title">
+              SCI
+            </div>
+            <div class="hi-sc-text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rrc">
+          <div class="rrc-div">
+            <textarea class="rrc-textarea" maxlength="720" placeholder="这里可以输入内容" ng-class="{'noprint':!obj.xremarks || obj.xremarks.length===0}" ng-model="obj.xremarks"></textarea>
+          </div>
+          <div class="rrc-npr">
+            <div class="rrc-npr-head">
+              No. of Pieces RCP
+            </div>
+            <div class="rrc-npr-body">
+              <div class="rrc-npr-body-1">{{obj.rcpNo}}</div>
+              <div class="rrc-npr-body-2" ng-if="obj.slac">
+                SLAC<br>
+                {{obj.slac}}
+              </div>
+            </div>
+            <div class="rrc-npr-foot">
+              {{obj.rcpNo}}
+            </div>
+          </div>
+          <div class="rrc-gw">
+            <div class="rrc-gw-head">
+              Gross Weight
+            </div>
+            <div class="rrc-gw-body">
+              {{obj.grossWeight}}
+            </div>
+            <div class="rrc-gw-foot">
+              {{obj.grossWeight}}
+            </div>
+          </div>
+          <div class="rrc-kl">
+            <div class="rrc-kl-head">
+              kg lb
+            </div>
+            <div class="rrc-kl-body">
+              {{obj.weightCode}}
+            </div>
+          </div>
+          <div class="rrc-gray">
+            <img src="../../image/pactl/gray.png" alt="" class="rrc-gray-img">
+          </div>
+          <div class="rrc-rcc">
+            <div class="rrc-rcc-head">
+              Rate Class
+            </div>
+            <div class="rrc-rcc-body">
+              <div class="rrc-rcc-body-left">
+                {{obj.rateClass}}
+              </div>
+              <div class="rrc-rcc-body-right">
+                <div class="rrc-rcc-body-right-head">
+                  <div>Commodity</div>
+                  <div>Item No.</div>
+                </div>
+                <div class="rrc-rcc-body-right-body">
+                  {{obj.commodityNo}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rrc-gray">
+            <img src="../../image/pactl/gray.png" alt="" class="rrc-gray-img">
+          </div>
+          <div class="rrc-cw">
+            <div class="rrc-cw-head">
+              Chargeable Weight
+            </div>
+            <div class="rrc-cw-body">
+              {{obj.chargeWeight}}
+            </div>
+          </div>
+          <div class="rrc-gray">
+            <img src="../../image/pactl/gray.png" alt="" class="rrc-gray-img">
+          </div>
+          <div class="rrc-rc">
+            <div class="rrc-rc-head">
+              <div class="rrc-rc-head-r">
+                Rate
+              </div>
+              <div class="rrc-rc-head-c">
+                Charge
+              </div>
+              <img class="rrc-rc-head-img" src="../../image/pactl/rc-line.png" alt="">
+            </div>
+            <div class="rrc-rc-body">
+              {{obj.rateCharge}}
+            </div>
+          </div>
+          <div class="rrc-gray">
+            <img src="../../image/pactl/gray.png" alt="" class="rrc-gray-img">
+          </div>
+          <div class="rrc-total">
+            <div class="rrc-total-head">
+              Total
+            </div>
+            <div class="rrc-total-body">
+              {{obj.totalCount}}
+            </div>
+            <div class="rrc-total-foot">
+              {{obj.totalCount}}
+            </div>
+          </div>
+          <div class="rrc-gray">
+            <img src="../../image/pactl/gray.png" alt="" class="rrc-gray-img">
+          </div>
+          <div class="rrc-nqg">
+            <div class="rrc-nqg-head">
+              <div>Nature and Quantity of Goods</div>
+              <div>(incl. Dimensions or Volume)</div>
+            </div>
+            <div class="rrc-nqg-body">
+              <div>{{goodsDesc}}</div>
+              <div>{{goodsDesc1}}</div>
+              <br>
+              <div>{{obj.remark}}</div>
+              <div ng-repeat="item in goodsDescs track by $index">{{item}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="pwcoc">
+          <div class="pwcoc-left">
+            <div class="pwcoc-left-top">
+              <div class="pwcoc-left-top-head">
+                <div class="pwcoc-left-top-head-p">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Prepaid
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+                <div class="pwcoc-left-top-head-w">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Weight Charge
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+                <div class="pwcoc-left-top-head-c">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Collect
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="pwcoc-left-top-body">
+                <div class="pwcoc-left-top-body-left">
+                  {{obj.prepaid || ''}}
+                </div>
+                <div class="pwcoc-left-top-body-right">
+                  {{obj.collect || ''}}
+                </div>
+              </div>
+            </div>
+            <div class="pwcoc-left-middle">
+              <div class="pwcoc-left-middle-head">
+                <div class="pwcoc-left-middle-head-vc">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Valuation Charge
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="pwcoc-left-middle-body">
+                <div class="pwcoc-left-middle-body-left">
+                  {{obj.valuationCharge || ''}}
+                </div>
+                <div class="pwcoc-left-middle-body-right">
+                  {{obj.valuationCharge2 || ''}}
+                </div>
+              </div>
+            </div>
+            <div class="pwcoc-left-bottom">
+              <div class="pwcoc-left-bottom-head">
+                <div class="pwcoc-left-bottom-head-t">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Tax
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="pwcoc-left-bottom-body">
+                <div class="pwcoc-left-bottom-body-left">
+                  {{obj.tax || ''}}
+                </div>
+                <div class="pwcoc-left-bottom-body-right">
+                  {{obj.tax2 || ''}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pwcoc-right">
+            <div class="pwcoc-right-oc">
+              Other Charges
+            </div>
+            <div class="pwcoc-right-body">
+              <div class="pwcoc-right-body-left">
+                <div class="pwcoc-right-body-left-data" ng-repeat="item in rateDetails track by $index">
+                  {{item.code + item.owner}}
+                </div>
+              </div>
+              <div class="pwcoc-right-body-right">
+                <div class="" ng-repeat="item in rateDetails track by $index">
+                  {{item.fee}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="tocdac">
+          <div class="tocdac-left">
+            <div class="tocdac-left-top">
+              <div class="tocdac-left-top-head">
+                <div class="tocdac-left-top-head-tocda">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Total Other Charges Due Agent
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="tocdac-left-top-body">
+                <div class="tocdac-left-top-body-left">
+                  {{obj.totalAgent || ''}}
+                </div>
+                <div class="tocdac-left-top-body-right">
+                  {{obj.totalAgent2 || ''}}
+                </div>
+              </div>
+            </div>
+            <div class="tocdac-left-middle">
+              <div class="tocdac-left-middle-head">
+                <div class="tocdac-left-middle-head-tocdc">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Total Other Charges Due Carrier
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="tocdac-left-middle-body">
+                <div class="tocdac-left-middle-body-left">
+                  {{obj.totalCarrier || ''}}
+                </div>
+                <div class="tocdac-left-middle-body-right">
+                  {{obj.totalCarrier2 || ''}}
+                </div>
+              </div>
+            </div>
+            <div class="tocdac-left-bottom">
+              <div class="tocdac-left-bottom-left">
+                <img src="../../image/pactl/grey.png" alt="" class="rrc-gray-img">
+              </div>
+              <div class="tocdac-left-bottom-right">
+                <img src="../../image/pactl/grey.png" alt="" class="rrc-gray-img">
+              </div>
+            </div>
+          </div>
+          <div class="tocdac-right">
+            <div class="tocdac-right-body">
+              Shipper certifies that the particulars on the face hereof are correct and that insofar as any part of the consignment contains
+              dangerous goods, such part is properly described by name and is in proper condition for carriage by air according
+              to the applicable Dangerous Goods Regulations.
+            </div>
+            <div class="tocdac-right-bottom">
+              {{obj.signatureAgent}}
+            </div>
+            <div class="tocdac-right-foot">
+              Signature of Shipper or his Agent
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="tptc">
+          <div class="tptc-left">
+            <div class="tptc-left-top">
+              <div class="tptc-left-top-left">
+                <div class="tptc-left-top-left-head">
+                  <div class="tptc-left-top-left-head-tp">
+                    <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Total Prepaid
+                    <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                  </div>
+                </div>
+                <div class="tptc-left-top-left-body">
+                  {{obj.totalPrepaid ? obj.totalPrepaid : ''}}
+                </div>
+              </div>
+              <div class="tptc-left-top-right">
+                <div class="tptc-left-top-right-head">
+                  <div class="tptc-left-top-right-head-tc">
+                    <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Total Collect
+                    <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                  </div>
+                </div>
+                <div class="tptc-left-top-right-body">
+                  {{obj.totalCollect ? obj.totalCollect : ''}}
+                </div>
+              </div>
+            </div>
+            <div class="tptc-left-middle">
+              <div class="tptc-left-middle-left">
+                <div class="tptc-left-middle-left-head">
+                  <div class="tptc-left-middle-left-head-ccr">
+                    <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Currency Conversion Rates
+                    <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                  </div>
+                </div>
+                <div class="tptc-left-middle-left-body">
+                  {{obj.destCurrency}}{{obj.rates || ''}}
+                </div>
+              </div>
+              <div class="tptc-left-middle-right">
+                <div class="tptc-left-middle-right-head">
+                  <div class="tptc-left-middle-left-head-cdc">
+                    <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> CC Charges in Dest. Currency
+                    <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                  </div>
+                </div>
+                <div class="tptc-left-middle-right-body">
+                  {{obj.ccChargesDes || ''}}
+                </div>
+              </div>
+            </div>
+            <div class="tptc-left-bottom">
+              <div class="tptc-left-bottom-left">
+                <div>
+                  For Carrier's Use only
+                </div>
+                <div>
+                  at Destination
+                </div>
+              </div>
+              <div class="tptc-left-bottom-right">
+                <div class="tptc-left-bottom-right-head">
+                  <div class="tptc-left-bottom-right-head-cd">
+                    <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Charges at Destination
+                    <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                  </div>
+                </div>
+                <div class="tptc-left-bottom-right-body">
+                  {{obj.chargesDestination || ''}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tptc-right">
+            <div class="tptc-right-body">
+              <div class="tptc-right-body-body">
+                <div class="row" style="height: 27px;"></div>
+                <div class="row">
+                  <div class="tptc-right-body-foot-end">
+                    {{obj.executed | date: 'dd/MMM/yy'}}
+                  </div>
+                  <div class="tptc-right-body-foot-ap">
+                    {{obj.place}}
+                  </div>
+                  <div class="tptc-right-body-foot-sca">
+                    {{obj.signatureIssuing}}
+                  </div>
+                </div>
+              </div>
+              <div class="tptc-right-body-foot">
+                <div class="tptc-right-body-foot-end">
+                  Executed on (date)
+                </div>
+                <div class="tptc-right-body-foot-ap">
+                  at (place)
+                </div>
+                <div class="tptc-right-body-foot-sca">
+                  Signature of Issuing Carrier or its Agent
+                </div>
+              </div>
+            </div>
+            <div class="tptc-right-foot">
+              <div class="tptc-right-foot-head">
+                <div class="tptc-right-foot-head-tcc">
+                  <img src="../../image/pactl/left-line.png" alt="" class="pwcoc-left-img"> Total Collect Charges
+                  <img src="../../image/pactl/right-line.png" alt="" class="pwcoc-right-img">
+                </div>
+              </div>
+              <div class="tptc-right-foot-body">
+                {{obj.totalCollectCharges || ''}}
+              </div>
+            </div>
+            <div class="tptc-right-foot-right">
+              {{billNo1 + '-' + billNo2}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="awbType==='FWB'">
+    <div class="fwb-content">
+      <div class="fwb-content-1">
+        {{billNo1}}
+      </div>
+      <div class="fwb-content-2">
+        {{obj.dept}}
+      </div>
+      <div class="fwb-content-3">
+        {{billNo2}}
+      </div>
+      <div class="fwb-content-5">{{billNo1 + '-' + billNo2}}</div>
+      <div class="fwb-content-6">
+        {{obj.spAccountNumber}}
+      </div>
+      <div class="fwb-content-7">
+        {{obj.spName}} <br> {{obj.spAddress}} <br> {{sp_zcs}} <br> {{sp_tel}}
+      </div>
+      <div class="fwb-content-8">
+
+      </div>
+      <div class="fwb-content-9">
+
+      </div>
+      <div class="fwb-content-10">
+
+      </div>
+      <div class="fwb-content-11">
+        {{obj.issuedBy}}
+      </div>
+      <div class="fwb-content-12">
+        {{obj.csAccountNumber}}
+      </div>
+      <div class="fwb-content-13">
+        {{obj.csName}} <br> {{obj.csAddress}} <br> {{cs_zcs}} <br> {{cs_tel}}
+      </div>
+      <div class="fwb-content-14">
+      </div>
+      <div class="fwb-content-15">
+      </div>
+      <div class="fwb-content-16">
+      </div>
+      <div class="fwb-content-18">
+        {{obj.agentOprn}}/{{obj.agentCity}}<br> {{obj.agentName}}
+      </div>
+      <div class="fwb-content-19">
+        {{iata_code1}} {{iata_code2}} {{obj.agentCassAddress}} {{obj.agentPartIdentifier}}
+      </div>
+      <div class="fwb-content-20">
+        {{obj.accountNo}}
+      </div>
+      <div class="fwb-content-21">
+        <div ng-if="obj.freightPrepaid">{{obj.freightPrepaid}}</div>
+        <div ng-if="obj.freightPrepaid1">{{obj.freightPrepaid1}}</div>
+        <div ng-if="obj.freightPrepaid2">{{obj.freightPrepaid2}}</div>
+        <div ng-if="obj.freightPrepaid3">{{obj.freightPrepaid3}}</div>
+        <div ng-if="obj.freightPrepaid4">{{obj.freightPrepaid4}}</div>
+        <div ng-if="obj.freightPrepaid5">{{obj.freightPrepaid5}}</div>
+        <div ng-if="obj.freightPrepaid6">{{obj.freightPrepaid6}}</div>
+        <div ng-if="obj.alsoNotify">
+          <div><span>ALSO NOTIFY:</span><span>{{obj.notifyName}}</span></div>
+          <div>{{obj.notifyAddress}}</div>
+          <div>{{al_zcs}}</div>
+          <div>{{al_tel}}</div>
+        </div>
+      </div>
+      <div class="fwb-content-22">
+        {{obj.deptDesc}}
+      </div>
+      <div class="fwb-content-23">
+        {{obj.dest1}}
+      </div>
+      <div class="fwb-content-24">
+        {{obj.carrier1}}
+      </div>
+      <div class="fwb-content-25">
+        {{obj.dest2}}
+      </div>
+      <div class="fwb-content-26">
+        {{obj.carrier2}}
+      </div>
+      <div class="fwb-content-27">
+        {{obj.dest4 || obj.dest3}}
+      </div>
+      <div class="fwb-content-28">
+        {{obj.carrier4 || obj.carrier3}}
+      </div>
+      <div class="fwb-content-29">
+        {{obj.currency}}
+      </div>
+      <div class="fwb-content-30">
+        {{obj.chargeCode}}
+      </div>
+      <div class="fwb-content-31">
+        {{obj.wtVal_p}}
+      </div>
+      <div class="fwb-content-32">
+        {{obj.wtVal_c}}
+      </div>
+      <div class="fwb-content-33">
+        {{obj.other_p}}
+      </div>
+      <div class="fwb-content-34">
+        {{obj.other_c}}
+      </div>
+      <div class="fwb-content-35">
+        {{obj.carriageValue}}
+      </div>
+      <div class="fwb-content-36">
+        {{obj.customsValue}}
+      </div>
+      <div class="fwb-content-37" ng-if="airportDataName1">
+        {{airportDataName1}}
+      </div>
+      <div class="fwb-content-37-1" ng-if="airportDataName2">
+        {{airportDataName2}}
+      </div>
+      <div class="fwb-content-38">
+        {{obj.flightNo}}{{obj.fltDate ? '/'+(obj.fltDate|date: 'dd') : ''}}
+      </div>
+      <div class="fwb-content-39">
+        {{obj.flightNo2}}{{obj.fltDate2 ? '/'+(obj.fltDate2|date: 'dd') : ''}}
+      </div>
+      <div class="fwb-content-40">
+        {{obj.insuranceValue}}
+      </div>
+      <div class="fwb-content-41">
+        <div>{{obj.ssr}}</div>
+        <div>{{obj.osi1}}</div>
+        <div>{{obj.holdCode}}</div>
+      </div>
+      <div class="fwb-content-76" ng-if="obj.slac">
+        SLAC <br>
+        {{obj.slac}}
+      </div>
+      <div class="fwb-content-42">
+        {{obj.rcpNo}}
+      </div>
+      <div class="fwb-content-43">
+        {{obj.rcpNo}}
+      </div>
+      <div class="rrc-div" style="top: 60%;left: 12%;">
+        <textarea class="rrc-textarea" style="width:440px;height:140px;" maxlength="660" placeholder="这里可以输入内容" ng-class="{'noprint':!obj.xremarks || obj.xremarks.length===0}" ng-model="obj.xremarks"></textarea>
+      </div>
+      <div class="fwb-content-44">
+        {{obj.grossWeight}}
+      </div>
+      <div class="fwb-content-45">
+        {{obj.grossWeight}}
+      </div>
+      <div class="fwb-content-46">
+        {{obj.weightCode}}
+      </div>
+      <div class="fwb-content-47">
+        {{obj.rateClass}}
+      </div>
+      <div class="fwb-content-48">
+        {{obj.commodityNo}}
+      </div>
+      <div class="fwb-content-49">
+        {{obj.chargeWeight}}
+      </div>
+      <div class="fwb-content-50">
+        {{obj.rateCharge}}
+      </div>
+      <div class="fwb-content-51">
+        {{obj.totalCount}}
+      </div>
+      <div class="fwb-content-52">
+        {{obj.totalCount}}
+      </div>
+      <div class="fwb-content-53">
+        <div>{{goodsDesc}}</div>
+        <div>{{goodsDesc1}}</div>
+        <div ng-repeat="item in goodsDescs track by $index">{{item}}</div>
+        <br>
+        <div>{{obj.remark}}</div>
+      </div>
+      <div class="fwb-content-54">
+        {{obj.prepaid || ''}}
+      </div>
+      <div class="fwb-content-55">
+        {{obj.collect || ''}}
+      </div>
+      <div class="fwb-content-56">
+        {{obj.valuationCharge || ''}}
+      </div>
+      <div class="fwb-content-57">
+        {{obj.valuationCharge2 || ''}}
+      </div>
+      <div class="fwb-content-58">
+        {{obj.tax || ''}}
+      </div>
+      <div class="fwb-content-59">
+        {{obj.tax2 || ''}}
+      </div>
+      <div class="fwb-content-60">
+        {{obj.totalAgent || ''}}
+      </div>
+      <div class="fwb-content-61">
+        {{obj.totalAgent2 || ''}}
+      </div>
+      <div class="fwb-content-62">
+        {{obj.totalCarrier || ''}}
+      </div>
+      <div class="fwb-content-63">
+        {{obj.totalCarrier2 || ''}}
+      </div>
+      <div class="fwb-content-64">
+        {{obj.totalPrepaid || ''}}
+      </div>
+      <div class="fwb-content-65">
+        {{obj.totalCollect || ''}}
+      </div>
+      <div class="fwb-content-66">
+        {{obj.destCurrency}}{{obj.rates || ''}}
+      </div>
+      <div class="fwb-content-67">
+        {{obj.ccChargesDes || ''}}
+      </div>
+      <div class="fwb-content-68">
+        {{obj.chargesDestination || ''}}
+      </div>
+      <div class="fwb-content-69">
+        <div ng-repeat="item in rateDetails track by $index">
+          <div class="fwb-content-69-1">{{item.code + item.owner}}</div>
+          <div class="fwb-content-69-2">{{item.fee}}</div>
+        </div>
+      </div>
+      <div class="fwb-content-70">
+        {{obj.signatureAgent}}
+      </div>
+      <div class="fwb-content-71">
+        {{obj.executed | date: 'dd/MMM/yy'}}
+      </div>
+      <div class="fwb-content-72">
+        {{obj.place}}
+      </div>
+      <div class="fwb-content-73">
+        {{obj.signatureIssuing}}
+      </div>
+      <div class="fwb-content-74">
+        {{obj.totalCollectCharges || ''}}
+      </div>
+      <div class="fwb-content-75">
+        {{billNo1 + '-' + billNo2}}
+      </div>
+    </div>
+  </div>
+  <div ng-if="awbType==='airLine'">
+    <div class="fwb-content">
+      <div class="fwb-content-1">
+      </div>
+      <div class="fwb-content-2">
+        {{obj.dept}}
+      </div>
+      <div class="fwb-content-3">
+      </div>
+      <div class="fwb-content-5">
+        <!-- {{billNo1 + '-' + billNo2}} -->
+      </div>
+      <div class="fwb-content-6">
+        {{obj.spAccountNumber}}
+      </div>
+      <div class="fwb-content-7">
+        {{obj.spName}}
+      </div>
+      <div class="fwb-content-8">
+        {{obj.spAddress}}
+      </div>
+      <div class="fwb-content-9">
+        {{sp_zcs}}
+      </div>
+      <div class="fwb-content-10">
+        {{sp_tel}}
+      </div>
+      <div class="fwb-content-11">
+        {{obj.issuedBy}}
+      </div>
+      <div class="fwb-content-12">
+        {{obj.csAccountNumber}}
+      </div>
+      <div class="fwb-content-13">
+        {{obj.csName}}
+      </div>
+      <div class="fwb-content-14">
+        {{obj.csAddress}}
+      </div>
+      <div class="fwb-content-15">
+        {{cs_zcs}}
+      </div>
+      <div class="fwb-content-16">
+        {{cs_tel}}
+      </div>
+      <div class="fwb-content-18">
+        {{obj.agentOprn}}/{{obj.agentCity}}<br> {{obj.agentName}}
+      </div>
+      <div class="fwb-content-19">
+        {{iata_code1}} {{iata_code2}} {{obj.agentCassAddress}} {{obj.agentPartIdentifier}}
+      </div>
+      <div class="fwb-content-20">
+        {{obj.accountNo}}
+      </div>
+      <div class="fwb-content-21">
+        <div ng-if="obj.freightPrepaid">{{obj.freightPrepaid}}</div>
+        <div ng-if="obj.freightPrepaid1">{{obj.freightPrepaid1}}</div>
+        <div ng-if="obj.freightPrepaid2">{{obj.freightPrepaid2}}</div>
+        <div ng-if="obj.freightPrepaid3">{{obj.freightPrepaid3}}</div>
+        <div ng-if="obj.freightPrepaid4">{{obj.freightPrepaid4}}</div>
+        <div ng-if="obj.freightPrepaid5">{{obj.freightPrepaid5}}</div>
+        <div ng-if="obj.freightPrepaid6">{{obj.freightPrepaid6}}</div>
+        <div ng-if="obj.alsoNotify">
+          <div><span>ALSO NOTIFY:</span><span>{{obj.notifyName}}</span></div>
+          <div>{{obj.notifyAddress}}</div>
+          <div>{{al_zcs}}</div>
+          <div>{{al_tel}}</div>
+        </div>
+      </div>
+      <div class="fwb-content-22">
+        {{obj.deptDesc}}
+      </div>
+      <div class="fwb-content-23">
+        {{obj.dest1}}
+      </div>
+      <div class="fwb-content-24">
+        {{obj.carrier1}}
+      </div>
+      <div class="fwb-content-25">
+        {{obj.dest2}}
+      </div>
+      <div class="fwb-content-26">
+        {{obj.carrier2}}
+      </div>
+      <div class="fwb-content-27">
+        {{obj.dest4 || obj.dest3}}
+      </div>
+      <div class="fwb-content-28">
+        {{obj.carrier4 || obj.carrier3}}
+      </div>
+      <div class="fwb-content-29">
+        {{obj.currency}}
+      </div>
+      <div class="fwb-content-30">
+        {{obj.chargeCode}}
+      </div>
+      <div class="fwb-content-31">
+        {{obj.wtVal_p}}
+      </div>
+      <div class="fwb-content-32">
+        {{obj.wtVal_c}}
+      </div>
+      <div class="fwb-content-33">
+        {{obj.other_p}}
+      </div>
+      <div class="fwb-content-34">
+        {{obj.other_c}}
+      </div>
+      <div class="fwb-content-35">
+        {{obj.carriageValue}}
+      </div>
+      <div class="fwb-content-36">
+        {{obj.customsValue}}
+      </div>
+      <div class="fwb-content-37" ng-if="airportDataName1">
+        {{airportDataName1}}
+      </div>
+      <div class="fwb-content-37-1" ng-if="airportDataName2">
+        {{airportDataName2}}
+      </div>
+      <div class="fwb-content-38">
+        {{obj.flightNo}}{{obj.fltDate ? '/'+(obj.fltDate|date: 'dd') : ''}}
+      </div>
+      <div class="fwb-content-39">
+        {{obj.flightNo2}}{{obj.fltDate2 ? '/'+(obj.fltDate2|date: 'dd') : ''}}
+      </div>
+      <div class="fwb-content-40">
+        {{obj.insuranceValue}}
+      </div>
+      <div class="fwb-content-41">
+        <div>{{obj.ssr}}</div>
+        <div>{{obj.osi1}}</div>
+        <div>{{obj.holdCode}}</div>
+      </div>
+      <div class="fwb-content-76" ng-if="obj.slac">
+        SLAC<br>
+        {{obj.slac}}
+      </div>
+      <div class="fwb-content-42">
+        {{obj.rcpNo}}
+      </div>
+      <div class="fwb-content-43">
+        {{obj.rcpNo}}
+      </div>
+      <div class="rrc-div" style="top: 60%;left: 12%;">
+        <textarea class="rrc-textarea" style="width:440px;height:140px;"  maxlength="660" placeholder="这里可以输入内容" ng-class="{'noprint':!obj.xremarks || obj.xremarks.length===0}" ng-model="obj.xremarks"></textarea>
+      </div>
+      <div class="fwb-content-44">
+        {{obj.grossWeight}}
+      </div>
+      <div class="fwb-content-45">
+        {{obj.grossWeight}}
+      </div>
+      <div class="fwb-content-46">
+        {{obj.weightCode}}
+      </div>
+      <div class="fwb-content-47">
+        {{obj.rateClass}}
+      </div>
+      <div class="fwb-content-48">
+        {{obj.commodityNo}}
+      </div>
+      <div class="fwb-content-49">
+        {{obj.chargeWeight}}
+      </div>
+      <div class="fwb-content-50">
+        {{obj.rateCharge}}
+      </div>
+      <div class="fwb-content-51">
+        {{obj.totalCount}}
+      </div>
+      <div class="fwb-content-52">
+        {{obj.totalCount}}
+      </div>
+      <div class="fwb-content-53">
+        <div>{{goodsDesc}}</div>
+        <div>{{goodsDesc1}}</div>
+        <div ng-repeat="item in goodsDescs track by $index">{{item}}</div>
+        <br>
+        <div>{{obj.remark}}</div>
+      </div>
+      <div class="fwb-content-54">
+        {{obj.prepaid || ''}}
+      </div>
+      <div class="fwb-content-55">
+        {{obj.collect || ''}}
+      </div>
+      <div class="fwb-content-56">
+        {{obj.valuationCharge || ''}}
+      </div>
+      <div class="fwb-content-57">
+        {{obj.valuationCharge2 || ''}}
+      </div>
+      <div class="fwb-content-58">
+        {{obj.tax || ''}}
+      </div>
+      <div class="fwb-content-59">
+        {{obj.tax2 || ''}}
+      </div>
+      <div class="fwb-content-60">
+        {{obj.totalAgent || ''}}
+      </div>
+      <div class="fwb-content-61">
+        {{obj.totalAgent2 || ''}}
+      </div>
+      <div class="fwb-content-62">
+        {{obj.totalCarrier || ''}}
+      </div>
+      <div class="fwb-content-63">
+        {{obj.totalCarrier2 || ''}}
+      </div>
+      <div class="fwb-content-64">
+        {{obj.totalPrepaid || ''}}
+      </div>
+      <div class="fwb-content-65">
+        {{obj.totalCollect || ''}}
+      </div>
+      <div class="fwb-content-66">
+        {{obj.destCurrency}}{{obj.rates || ''}}
+      </div>
+      <div class="fwb-content-67">
+        {{obj.ccChargesDes || ''}}
+      </div>
+      <div class="fwb-content-68">
+        {{obj.chargesDestination || ''}}
+      </div>
+      <div class="fwb-content-69">
+        <div ng-repeat="item in rateDetails track by $index">
+          <div class="fwb-content-69-1">{{item.code + item.owner}}</div>
+          <div class="fwb-content-69-2">{{item.fee}}</div>
+        </div>
+      </div>
+      <div class="fwb-content-70">
+        {{obj.signatureAgent}}
+      </div>
+      <div class="fwb-content-71">
+        {{obj.executed | date: 'dd/MMM/yy'}}
+      </div>
+      <div class="fwb-content-72">
+        {{obj.place}}
+      </div>
+      <div class="fwb-content-73">
+        {{obj.signatureIssuing}}
+      </div>
+      <div class="fwb-content-74">
+        {{obj.totalCollectCharges || ''}}
+      </div>
+      <div class="fwb-content-75">
+        <!-- {{billNo1 + '-' + billNo2}} -->
+      </div>
+    </div>
+  </div>
+</div>

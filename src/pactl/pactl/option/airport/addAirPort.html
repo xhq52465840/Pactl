@@ -1,0 +1,66 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">城市代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="cityCode" class="form-control" required ng-model="airPortObj.cityCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">城市全称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="cityName" class="form-control" required ng-model="airPortObj.cityName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">国家代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="countryCode" class="form-control" required ng-model="airPortObj.countryCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">州名代码</div>
+        <div class="modal-body-value">
+          <input type="text" name="stateCode" class="form-control" ng-model="airPortObj.stateCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">机场代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="airportCode" class="form-control" required ng-model="airPortObj.airportCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">机场全称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="airportName" class="form-control" required ng-model="airPortObj.airportName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">币种</div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="airPortObj.currency" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.currencyName}}</div>
+            <div ui-select-choices repeat="item in currencyData | filter: {currencyName:$select.search}">
+              <div ng-bind-html="item.currencyName | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="currency" ng-model="airPortObj.currency">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

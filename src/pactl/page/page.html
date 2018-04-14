@@ -1,0 +1,12 @@
+<div class="page-left">
+  每页显示
+  <select ng-options="m.id as m.name for m in page.perObj" ng-model="page.length" ng-change="search()" class="form-control pages">
+  </select> 
+  条，共{{page.totalItems}}条，共{{page.totalPages}}页
+</div>
+<div class="fr">
+  <pagination boundary-links="true" items-per-page="page.length" max-size="4" total-items="page.totalItems" ng-model="page.currentPage"
+    rotate="false" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+    ng-change="pageChanged()">
+  </pagination>
+</div>

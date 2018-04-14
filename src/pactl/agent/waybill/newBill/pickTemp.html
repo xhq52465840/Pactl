@@ -1,0 +1,45 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-main-search">
+    <div class="row" style="margin-bottom: 0px">
+        <div class="col-sm-1 modal-body-name" style="line-height: 35px;">模板名称</div>
+        <div class="col-sm-7 modal-body-value">
+          <input type="text" class="form-control" ng-model="tempObj.labelName">
+        </div>
+        <div class="col-sm-2">
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w30">模板名称</th>
+          <th class="w40">备注</th>
+          <th class="w30">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in tempData track by $index" ng-class-even="'even'">
+          <td>{{item.labelName}}</td>
+          <td>{{item.mRemark}}</td>
+          <td>
+            <a role="button" ng-click="select(item)">选择</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

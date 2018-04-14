@@ -1,0 +1,71 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">主单号</div>
+        <div class="col-sm-10 modal-body-value">
+          {{billNo}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-6">
+            <div class="mb10" ng-if="type!=='1'">未通过原因列表<span class="red">*</span></div>
+            <div class="mb10" ng-if="type==='1'">通过原因列表<span class="red">*</span></div>
+            <div class="recheck-reason-left form-control">
+              <ul>
+                <li ng-repeat="row in reasonData track by $index">
+                  <label><input type="checkbox" ng-click="check($event, row)">{{row.name}}</label>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="mb10">其他问题概要描述<span class="red">*</span></div>
+            <div>
+              <textarea class="form-control" cols="30" rows="10" style="resize: none;" ng-model="reasonObj.remark" maxlength="1000"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="showSelect==='0'">
+        <div class="col-sm-1 modal-body-name" style="width: 60px;">扣押库<span class="red">*</span></div>
+        <div class="col-sm-4 modal-body-value">
+          <div ui-select ng-model="reasonObj.seizure" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in seizureData | filter: {name:$select.search}" position="down">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2 modal-body-name" style="text-align: center;">危险品分类</div>
+        <div class="col-sm-4 modal-body-value">
+          <div ui-select multiple ng-model="reasonObj.danger" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+            <div ui-select-choices repeat="item in dangerData | filter: {name:$select.search}" position="down">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="showSelect==='0'">
+      <div class="col-sm-1 modal-body-name" style="width: 60px;">扣押位置</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="reasonObj.distressPlace">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

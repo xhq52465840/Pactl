@@ -1,0 +1,1463 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>运单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>主运单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">运单信息</li>
+</ol>
+<div class="content-main-title" id="btnGroup">
+  <div class="title">运单信息</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="save()">
+      <i class="i-save"></i>保存
+    </button>
+    <button class="btn btn-default" ng-click="audit()" ng-if="billObj.awId">
+      <i class="i-audit2"></i>预审操作
+    </button>
+    <!--<button class="btn btn-default" ng-click="print()" ng-if="billObj.awId">
+      <i class="i-print"></i>打印
+    </button>-->
+    <button class="btn btn-default" ng-click="del()" ng-if="billObj.awId && allowDeleteMasterBill">
+      <i class="i-remove"></i>删除
+    </button>
+    <button class="btn btn-default" ng-click="history(currentBillType)" ng-if="billObj.awId">
+      <i class="i-history"></i>历史记录
+    </button>
+    <button class="btn btn-default" ng-click="send()" ng-if="billObj.awId && currentBillType==='0'">
+      <i class="i-plane"></i>发送FWB<span ng-if="timesFWB>0">({{timesFWB}}次)</span>
+    </button>
+    <button class="btn btn-default" ng-click="sendFHL()" ng-if="currentBillType==='1'">
+      发送FHL<span ng-if="timesFHL>0">({{timesFHL}}次)</span>
+    </button>
+    <button class="btn" ng-click="lock()" ng-if="billObj.awId && currentBillType==='0'" ng-class="{'btn-notselected':!isLock,'btn-default':isLock}">
+      <i class="i-lock"></i><span ng-if="!isLock">未锁定</span><span ng-if="isLock">已锁定</span>
+    </button>
+    <button class="btn btn-default" ng-click="doFocus(billObj.awId)" ng-if="billObj.awId">
+      <i ng-class="{'btn-nostart': !isFocus, 'btn-start': isFocus}"></i>关注
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="row">
+    <div ng-if="billObj.awId" class="col-sm-2" style="padding: 10px 20px 0 0">
+      <div class="panel panel-default">
+        <div class="panel-heading panel-bill-heading">主运单</div>
+        <div class="panel-body panel-bill-body" ng-class="{'active': currentBillNo === billObj.waybillNo && currentBillType === billObj.type}"
+          ng-click="chooseMaster()">
+          {{billObj.waybillNo}}
+        </div>
+        <div class="panel-body panel-bill-body-row">
+          <div class="row panel-bill-body-row-1">
+            <div class="col-sm-8">件数/SLAC件数</div>
+            <div class="col-sm-4">重量KG</div>
+          </div>
+          <div class="row panel-bill-body-row-2">
+            <div class="col-sm-8">{{billObj.rcpNo || 0}}/{{billObj.slac || 0}}</div>
+            <div class="col-sm-4">{{billObj.grossWeight || 0}}</div>
+          </div>
+        </div>
+        <div class="panel-heading panel-bill-heading">分运单</div>
+        <div class="panel-body panel-bill-body-row">
+          <div class="row panel-bill-body-row-2">
+            <div class="col-sm-8">
+              <span ng-class="{'red-ft': +billObj.rcpNo != +showText.subRcpNo}">{{showText.subRcpNo}}</span> /{{showText.subSlac}}
+            </div>
+            <div class="col-sm-4">
+              <span ng-class="{'red-ft': +billObj.grossWeight != +showText.subGrossWeight}">{{showText.subGrossWeight}}</span>
+            </div>
+          </div>
+          <div class="row panel-bill-body-row-3">
+            <a role="button" ng-click="showAllInfo()">
+            <span ng-show="showAllSubInfo">收起分单信息</span>
+            <span ng-hide="showAllSubInfo">展开分单信息</span>
+          </a>
+          </div>
+        </div>
+        <ul class="list-group">
+          <li ng-repeat="row in subBill track by $index" class="list-group-item panel-bill-body" ng-class="{'active': currentBillNo === row.pAirWaybillInfo.waybillNo && currentBillType === row.pAirWaybillInfo.type}">
+            <div class="row mb10" ng-class="{'dropup':row.showLeftSub}">
+              <span class="caret mb5" ng-click="showLeftSub(row, $event)"></span>
+              <span ng-click="chooseBill(row, $index)">{{row.pAirWaybillInfo.waybillNo}}</span>
+              <i class="i-list-remove" ng-click="disConnect(row, $index, $event)" ng-if="wStatus && (row.pAirWaybillInfo.wbEle!=='1' || airlineAllowPullDown)" title="删除"></i>
+              <i class="i-copy pull-right" title="克隆" ng-click="copySub(row, $index, $event)" ng-if="wStatus"></i>
+            </div>
+            <div class="row sub-bill-li-row" ng-show="row.showLeftSub">
+              <div class="row">
+                <div class="col-sm-5">件数</div>
+                <div class="col-sm-7">{{row.pAirWaybillInfo.rcpNo || 0}}/{{row.pAirWaybillInfo.slac || 0}}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">重量KG</div>
+                <div class="col-sm-7">{{row.pAirWaybillInfo.grossWeight || 0}}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">目的港</div>
+                <div class="col-sm-7">{{row.pAirWaybillInfo.dest1}}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">品名</div>
+                <div class="col-sm-7 wdbrk">{{row.pAirWaybillInfo.goodsDesc}}</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="panel-heading" ng-if="wStatus">
+          <a role="button" ng-click="addSubBill()"><i class="i-list-add"></i>添加分运单</a>
+        </div>
+      </div>
+    </div>
+    <div ng-class="{'col-sm-10': billObj.awId, 'col-cm-12': !billObj.awId}">
+      <div class="row" ng-if="!showSubBill">
+        <div class="fl mr40">
+          <div class="search-text">
+            <i class="i-public"></i>主单号
+          </div>
+          <div class="search-input">
+            {{billObj.waybillNo}}
+          </div>
+        </div>
+        <div class="fl">
+          {{billObj.agentOprn}}/{{billObj.agentSales}}
+        </div>
+        <div class="pull-right">
+          <div class="dib">底色说明：
+            <div class="color-inst"></div>预审必录字段</div>
+          <button class="btn btn-pactl" ng-click="pickTemp('0')">
+          提取模板
+        </button>
+          <button class="btn btn-pactl" ng-click="saveTemp('0')">
+          保存到模板
+        </button>
+        </div>
+      </div>
+      <div class="content-main-body-bill row" ng-if="!showSubBill">
+        <!--line-1  start -->
+        <div class="row">
+          <div class="line-left line-left-1">
+            <div class="line-left-1-1">
+              <div class="line-left line-left-1-1-1">
+                Shipper's Name and Address*
+                <div class="line-left-1-1-1-2">
+                  <i class="i-search" ng-click="searchUser('1', '0')"></i>
+                  <i class="i-save fr" ng-click="saveUser('1', '0')"></i>
+                </div>
+              </div>
+              <div class="line-left-1-1-2">
+                Shipper's Account Number
+                <input type="text" class="form-control" ng-model="billObj.spAccountNumber" maxlength="14" ylx-cursor my-on-change="changeNum('spAccountNumber')"
+                  necessary="spAccountNumber" necessary-data="necessaryData">
+              </div>
+            </div>
+            <div class="line-left-1-2">
+              <div class="line-row">
+                <input type="text" class="form-control" placeholder="Name" ng-model="billObj.spName" maxlength="70" ylx-cursor my-on-change="changeText('spName')"
+                  necessary="spName" necessary-data="necessaryData">
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control" placeholder="Address" ng-model="billObj.spAddress" maxlength="70" ylx-cursor my-on-change="changeText('spAddress')"
+                  necessary="spAddress" necessary-data="necessaryData">
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control line-row-1-1" placeholder="Zipcode" ng-model="billObj.spZipcode" maxlength="9" ylx-cursor
+                  my-on-change="changeText1('spZipcode')" necessary="spZipcode" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-1" placeholder="City" ng-model="billObj.spCity" maxlength="17" ylx-cursor
+                  my-on-change="changeText('spCity')" necessary="spCity" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-1" placeholder="State" ng-model="billObj.spState" maxlength="9" ylx-cursor
+                  my-on-change="changeText('spState')" necessary="spState" necessary-data="necessaryData">
+                <div ui-select ng-model="billObj.spCountry" theme="select2" class="form-control line-row-1-2" necessary="spCountry" necessary-data="necessaryData">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                  <div ui-select-choices repeat="item in countryData | filter:{ countryCode: $select.search }">
+                    <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control line-row-1-3" placeholder="Tel" ng-model="billObj.spTel" maxlength="25" ylx-cursor
+                  my-on-change="changeNum12('spTel')" necessary="spTel" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-3" placeholder="Fax" ng-model="billObj.spFax" maxlength="25" ylx-cursor
+                  my-on-change="changeNum12('spFax')" necessary="spFax" necessary-data="necessaryData">
+              </div>
+            </div>
+          </div>
+          <div class="line-right line-right-2">
+            <div class="line-right-1-1">
+              <div class="line-right-1-1-1">
+                <div class="text1">Not Negotiable</div>
+                <div class="text2">AIR WAYBILL</div>
+                <div class="text1">Issued by</div>
+              </div>
+              <div class="line-right-1-1-2">
+                <textarea class="form-control" rows="3" ng-model="billObj.issuedBy" maxlength="500" ylx-cursor my-on-change="changeText('issuedBy')"
+                  necessary="issuedBy" necessary-data="necessaryData"></textarea>
+              </div>
+            </div>
+            <div class="line-right-1-2">
+              Copies 1,2 and 3 of this Air Waybill are originals and have the same validity.
+            </div>
+          </div>
+        </div>
+        <!-- line-1 end -->
+        <!-- line-2 start -->
+        <div class="row">
+          <div class="line-left line-left-2">
+            <div class="line-left-2-1">
+              <div class="line-left line-left-2-1-1">
+                Consignee's Name and Address*
+                <div class="line-left-2-1-1-2">
+                  <i class="i-search dib" ng-click="searchUser('0', '0')"></i>
+                  <i class="i-save dib fr" ng-click="saveUser('0', '0')"></i>
+                </div>
+              </div>
+              <div class="line-left-2-1-2">
+                Consignee's Account Number
+                <input type="text" class="form-control" ng-model="billObj.csAccountNumber" maxlength="14" ylx-cursor my-on-change="changeNum('csAccountNumber')"
+                  necessary="csAccountNumber" necessary-data="necessaryData">
+              </div>
+            </div>
+            <div class="line-left-2-2">
+              <div class="line-row">
+                <input type="text" class="form-control" placeholder="Name" ng-model="billObj.csName" maxlength="70" ylx-cursor my-on-change="changeText('csName')"
+                  necessary="csName" necessary-data="necessaryData">
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control" placeholder="Address" ng-model="billObj.csAddress" maxlength="70" ylx-cursor my-on-change="changeText('csAddress')"
+                  necessary="csAddress" necessary-data="necessaryData">
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control line-row-1-1" placeholder="Zipcode" ng-model="billObj.csZipcode" maxlength="9" ylx-cursor
+                  my-on-change="changeText1('csZipcode')" necessary="csZipcode" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-1" placeholder="City" ng-model="billObj.csCity" maxlength="17" ylx-cursor
+                  my-on-change="changeText('csCity')" necessary="csCity" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-1" placeholder="State" ng-model="billObj.csState" maxlength="9" ylx-cursor
+                  my-on-change="changeText('csState')" necessary="csState" necessary-data="necessaryData">
+                <div ui-select ng-model="billObj.csCountry" theme="select2" class="form-control line-row-1-2" necessary="csCountry" necessary-data="necessaryData">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                  <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                    <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="line-row">
+                <input type="text" class="form-control line-row-1-3" placeholder="Tel" ng-model="billObj.csTel" maxlength="25" ylx-cursor
+                  my-on-change="changeNum12('csTel')" necessary="csTel" necessary-data="necessaryData">
+                <input type="text" class="form-control line-row-1-3" placeholder="Fax" ng-model="billObj.csFax" maxlength="25" ylx-cursor
+                  my-on-change="changeNum12('csFax')" necessary="csFax" necessary-data="necessaryData">
+              </div>
+            </div>
+          </div>
+          <div class="line-right line-right-2">
+            <div class="line-right-2-1">
+              It is agreed that the goods described herein are accepted in apparent good order and condition (except as noted) for carriage
+              SUBJECT TO THE CONDITIONS OF CONTRACT ON THE REVERSE HEREOF, ALL GOODS MAY BE CARRIED BY ANY OTHER MEANS. INCLUDING
+              ROAD OR ANY OTHER CARRIER UNLESS SPECIFIC CONTRARY INSTRUCTIONS ARE GIVEN HEREON BY THE SHIPPER. THE SHIPPER’S
+              ATTENTION IS DRAWN TO THE NOTICE CONCERNING CARIER’S LIMITATION OF LIABILITY.Shipper may increase such limitation
+              of liability by declaring a higher value of carriage and paying a supplemental charge if required. INSURANCE-If
+            </div>
+          </div>
+        </div>
+        <!-- line-2 end-->
+        <!-- line-3 start-->
+        <div class="row">
+          <div class="line-left line-left-3">
+            <div class="line-left-3-1">
+              <div class="line-left-3-1-1">
+                Issuing Carrier’s Agent Name and City
+              </div>
+              <div class="line-left-3-1-2 line-row">
+                <input type="text" class="form-control line-row-3-1 line-row-3-1-1-1" placeholder="NAME" ng-model="billObj.agentSales" maxlength="35"
+                  ylx-cursor my-on-change="changeText('agentName')" necessary="agentName" necessary-data="necessaryData">
+                <div class="form-control line-row-1 line-row-3-1-1-2" ng-if="billObj.agentPartIdentifier">{{billObj.agentPartIdentifier}}</div>
+                <input type="text" class="form-control line-row-1 pull-right line-row-3-1-1-3" placeholder="CITY" ng-model="billObj.agentCity"
+                  maxlength="17" ylx-cursor my-on-change="changeText('agentCity')" necessary="agentCity" necessary-data="necessaryData">
+              </div>
+              <div class="line-row">
+                {{billObj.agentOprn}}
+              </div>
+            </div>
+            <div class="line-left-3-2">
+              <div class="line-left-3-2-1">
+                <div class="line-left-3-2-1-1">
+                  Agents IATA Code
+                </div>
+                <div class="line-left-3-2-1-2 line-row">
+                  <input type="text" class="form-control line-row-3-2" placeholder="CODE" ng-model="billObj.agentIataCode" maxlength="7" ylx-cursor
+                    my-on-change="changeNum('agentIataCode')" necessary="agentIataCode" necessary-data="necessaryData">
+                  <input type="text" class="form-control line-row-3-2" placeholder="CASS NUMBER" ng-model="billObj.agentCassAddress" maxlength="4"
+                    ylx-cursor my-on-change="changeNum('agentCassAddress')" necessary="agentCassAddress" necessary-data="necessaryData">
+                </div>
+              </div>
+              <div class="line-left-3-2-2">
+                <div class="line-left-3-2-2-1">
+                  Account No.
+                </div>
+                <div class="line-left-3-2-2-2 line-row">
+                  <input type="text" class="form-control" ng-model="billObj.accountNo" maxlength="14" ylx-cursor my-on-change="changeText('accountNo')"
+                    necessary="accountNo" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-3-3">
+              <div class="line-left-3-3-1">
+                Airport of Departure(Add. of First Carrier) and Requested Routing
+              </div>
+              <div class="line-left-3-3-2 line-row">
+                <div ui-select ng-model="billObj.dept" theme="select2" class="form-control line-row-1" on-select="onSelectDept($item)" necessary="dept"
+                  necessary-data="necessaryData">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                  <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                    <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+                <input type="text" class="form-control line-row-2" ng-model="billObj.deptDesc" ylx-cursor my-on-change="changeText('deptDesc')"
+                  necessary="deptDesc" necessary-data="necessaryData">
+              </div>
+            </div>
+          </div>
+          <div class="line-right line-right-3">
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid" ylx-cursor my-on-change="changeText('freightPrepaid')"
+                necessary="freightPrepaid" necessary-data="necessaryData">
+            </div>
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif1" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif1"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid1" ylx-cursor my-on-change="changeText('freightPrepaid1')"
+                necessary="freightPrepaid1" necessary-data="necessaryData">
+            </div>
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif2" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif2"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid2" ylx-cursor my-on-change="changeText('freightPrepaid2')"
+                necessary="freightPrepaid2" necessary-data="necessaryData">
+            </div>
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif3" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif3"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid3" ylx-cursor my-on-change="changeText('freightPrepaid3')"
+                necessary="freightPrepaid3" necessary-data="necessaryData">
+            </div>
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif4" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif4"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid4" ylx-cursor my-on-change="changeText('freightPrepaid4')"
+                necessary="freightPrepaid4" necessary-data="necessaryData">
+            </div>
+            <div class="line-row">
+              <div ui-select ng-model="billObj.accounInforIdentif5" theme="select2" class="form-control line-right-3-1" necessary="accounInforIdentif5"
+                necessary-data="necessaryData">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                  <div ng-bind-html="item.id | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-right-3-2" maxlength="35" ng-model="billObj.freightPrepaid5" ylx-cursor my-on-change="changeText('freightPrepaid5')"
+                necessary="freightPrepaid5" necessary-data="necessaryData">
+            </div>
+          </div>
+        </div>
+        <!-- line-3 end-->
+        <!-- line-4 start-->
+        <div class="row">
+          <div class="line-left-4">
+            <div class="line-left-4-1 w7">
+              <div class="line-left-4-1-1">To</div>
+              <div class="line-left-4-1-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.dest1" theme="select2" class="form-control" on-select="onSelectTo($item)" necessary="dest1"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                    <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                      <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-2 w7">
+              <div class="line-left-4-2-1">By First Carrier</div>
+              <div class="line-left-4-2-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.carrier1" theme="select2" class="form-control" on-select="onSelectCarrier1($item)" necessary="carrier1"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                    <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                      <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-3 w7">
+              <div class="line-left-4-3-1">To</div>
+              <div class="line-left-4-3-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.dest2" theme="select2" class="form-control" on-select="onSelectTo($item)" necessary="dest2"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                    <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                      <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-4 w7">
+              <div class="line-left-4-4-1">By</div>
+              <div class="line-left-4-4-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.carrier2" theme="select2" class="form-control" necessary="carrier2" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                    <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                      <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-5 w7">
+              <div class="line-left-4-5-1">To</div>
+              <div class="line-left-4-5-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.dest3" theme="select2" class="form-control" on-select="onSelectTo($item)" necessary="dest3"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                    <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                      <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-6 w7">
+              <div class="line-left-4-6-1">By</div>
+              <div class="line-left-4-6-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.carrier3" theme="select2" class="form-control" necessary="carrier3" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                    <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                      <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-13 w7">
+              <div class="line-left-4-13-1">To</div>
+              <div class="line-left-4-13-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.dest4" theme="select2" class="form-control" on-select="onSelectTo($item)" necessary="dest4"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                    <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                      <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-14 w7">
+              <div class="line-left-4-14-1">By</div>
+              <div class="line-left-4-14-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.carrier4" theme="select2" class="form-control" necessary="carrier4" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                    <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                      <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-7 w7">
+              <div class="line-left-4-7-1">Currency</div>
+              <div class="line-left-4-7-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.currency" theme="select2" class="form-control" necessary="currency" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.currencyCode}}</div>
+                    <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+                      <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-8 w7">
+              <div class="line-left-4-8-1">CHGS Code</div>
+              <div class="line-left-4-8-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.chargeCode" theme="select2" class="form-control" necessary="chargeCode" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                    <div ui-select-choices repeat="item in chargeCodeData | filter: {id:$select.search}">
+                      <div ng-bind-html="item.id | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-9 w7">
+              <div class="line-left-4-9-1">WT/VAL</div>
+              <div class="line-left-4-9-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.wtVal" theme="select2" class="form-control" on-select="selectWT()" necessary="wtVal" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-10 w7">
+              <div class="line-left-4-10-1">Other</div>
+              <div class="line-left-4-10-2">
+                <div class="line-row-4">
+                  <div ui-select ng-model="billObj.other" theme="select2" class="form-control" on-select="selectOwner()" necessary="other"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-11 w7">
+              <div class="line-left-4-11-1">Declared Value for Carriage</div>
+              <div class="line-left-4-11-2">
+                <div class="line-row-4">
+                  <input type="text" class="form-control" placeholder="NVD" ng-model="billObj.carriageValue" maxlength="11" ylx-cursor my-on-change="changeText3('carriageValue')"
+                    ng-class="{'error': errorData.indexOf('carriageValue')>-1}" necessary="carriageValue" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-4-12 w9">
+              <div class="line-left-4-12-1">Declared Value for Customs</div>
+              <div class="line-left-4-12-2">
+                <div class="line-row-4">
+                  <input type="text" class="form-control" placeholder="NCV" ng-model="billObj.customsValue" maxlength="11" ylx-cursor my-on-change="changeText4('customsValue')"
+                    ng-class="{'error': errorData.indexOf('customsValue')>-1}" necessary="customsValue" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- line-4 end-->
+        <!-- line-5 start-->
+        <div class="row">
+          <div class="line-left-5">
+            <div class="line-left-5-1 w15">
+              <div class="line-left-5-1-1">
+                Airport of Destination
+              </div>
+              <div class="line-left-5-1-2">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.airportDest}}</div>
+                </div>
+                <div class="line-row">{{showText.airPort}}</div>
+              </div>
+            </div>
+            <div class="line-left-5-2 w23">
+              <div class="line-left-5-2-1">
+                Flight No/Flight Date
+              </div>
+              <div class="line-left-5-2-2">
+                <div class="line-row">
+                  <input type="text" class="form-control line-row-5-1" placeholder="FLIGHT NO" ng-model="billObj.flightNo" maxlength="7" ylx-cursor
+                    my-on-change="changeText5('flightNo')" ng-class="{'error': errorData.indexOf('flightNo')>-1}" necessary="flightNo"
+                    necessary-data="necessaryData">
+                  <input type="text" class="form-control line-row-5-2" placeholder="FLIGHT DATE" pikaday="myPickerObject" ng-model="billObj.fltDate"
+                    on-select="onDate1(myPickerObject, myPickerObject1)" min-date="{{flightDate.dateNow}}" necessary="fltDate"
+                    necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-5-3 w23">
+              <div class="line-left-5-3-1">
+                Flight No/Flight Date
+              </div>
+              <div class="line-left-5-3-2">
+                <div class="line-row">
+                  <input type="text" class="form-control line-row-5-1" placeholder="FLIGHT NO" ng-model="billObj.flightNo2" maxlength="7" ylx-cursor
+                    my-on-change="changeText5('flightNo2')" ng-class="{'error': errorData.indexOf('flightNo2')>-1}" ng-disabled="fltDateAble()"
+                    necessary="flightNo2" necessary-data="necessaryData">
+                  <input type="text" class="form-control line-row-5-2" placeholder="FLIGHT DATE" pikaday="myPickerObject1" ng-model="billObj.fltDate2"
+                    ng-disabled="fltDateAble()" on-open="openDate(myPickerObject1)" necessary="fltDate2" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-5-4 w18">
+              <div class="line-left-5-4-1">
+                Amount of Insurance
+              </div>
+              <div class="line-left-5-4-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" placeholder="XXX" ng-model="billObj.insuranceValue" maxlength="11" ylx-cursor my-on-change="changeText6('insuranceValue')"
+                    ng-class="{'error': errorData.indexOf('insuranceValue')>-1}" necessary="insuranceValue" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-5-5 w21">
+              <div class="line-left-5-5-1">
+                INSURANCE-If carrier offers insurance and such insurance is requested in accordance with the conditions thereof indicate
+                amount to be insured in figures in box marked”Amount of Insurance”
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- line-5 end-->
+        <!-- line-6 start-->
+        <div class="row line-row-6">
+          <div class="line-row">
+            <div class="col-sm-12">Handling Information</div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-2">SSR (SPECIAL SERVICE REQUEST)</div>
+            <div class="col-sm-8">
+              <textarea class="form-control line-row-6-1" ng-model="billObj.ssr" text-height maxlength="195" my-on-change="changeText('ssr')"
+                ylx-cursor necessary="ssr" necessary-data="necessaryData"></textarea>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-2">OSI (OTHER SERVICE REQUEST)</div>
+            <div class="col-sm-8">
+              <textarea class="form-control line-row-6-2" ng-model="billObj.osi1" text-height maxlength="195" ylx-cursor my-on-change="changeText('osi1')"
+                necessary="osi1" necessary-data="necessaryData"></textarea>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-2">SHC (SPECIAL HANDLING CODE)</div>
+            <div class="col-sm-8">
+              <input type="text" class="hide" placeholder="代码间用逗号隔开" ng-model="billObj.holdCode" maxlength="35" ylx-cursor my-on-change="changeText2('holdCode')"
+                necessary="holdCode" necessary-data="necessaryData">
+              <div ui-select multiple tagging="tagTransform" tagging-label="" tagging-tokens="SPACE|,|/" ng-model="billObj.holdCodeList"
+                ng-change="tagTransform2str(billObj,'holdCodeList','holdCode')" theme="select2" class="form-control">
+                <div ui-select-match>{{$item.code}}</div>
+                <div ui-select-choices repeat="code in billObj.holdCodeList | filter: $select.search">
+                  {{code.code || code}}
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-default btn-line-6" ng-click="selectShcCode()">选择</button>
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-2">Also notify</div>
+            <div class="col-sm-8">
+              <div class="form-control line-row-6-4">{{billObj.alsoNotify}}</div>
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-default btn-line-6" ng-click="alsoNotify()">选择</button>
+            </div>
+          </div>
+        </div>
+        <!-- line-6 end-->
+        <!-- line-7 start-->
+        <div class="row">
+          <div class="line-left-7">
+            <div class="line-left-7-1 w13">
+              <div class="line-left-7-1-1">
+                No. of Pieces RCP
+              </div>
+              <div class="line-left-7-1-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.rcpNo" maxlength="4" ylx-cursor my-on-change="changeNum('rcpNo')"
+                    necessary="rcpNo" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-2 w13">
+              <div class="line-left-7-2-1">
+                Gross Weight (KG)
+              </div>
+              <div class="line-left-7-2-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.grossWeight" maxlength="7" ng-change="changeNum4('grossWeight')"
+                    ng-blur="blurGrossWeight()" ng-class="{'error': errorData.indexOf('grossWeight')>-1}" necessary="grossWeight"
+                    necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-9 w9">
+              <div class="line-left-7-9-1">
+                kg lb
+              </div>
+              <div class="line-left-7-9-2">
+                <div class="line-row">
+                  <div ui-select ng-model="billObj.weightCode" theme="select2" class="form-control" necessary="weightCode" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-3 w10">
+              <div class="line-left-7-3-1">
+                Rate Class
+              </div>
+              <div class="line-left-7-3-2">
+                <div class="line-row">
+                  <div ui-select ng-model="billObj.rateClass" theme="select2" class="form-control" necessary="rateClass" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in rateClassData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-4 w13">
+              <div class="line-left-7-4-1">
+                Commodity Item No.
+              </div>
+              <div class="line-left-7-4-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.commodityNo" maxlength="7" ylx-cursor my-on-change="changeText1('commodityNo')"
+                    necessary="commodityNo" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-5 w13">
+              <div class="line-left-7-5-1">
+                Chargeable Weight (KG)
+              </div>
+              <div class="line-left-7-5-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.chargeWeight" maxlength="7" ng-change="changeNum5('chargeWeight')"
+                    ng-blur="blurChargeWeight()" ng-class="{'error': errorData.indexOf('chargeWeight')>-1}" necessary="chargeWeight"
+                    necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-6 w13">
+              <div class="line-left-7-6-1">
+                Rate/Charge
+              </div>
+              <div class="line-left-7-6-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.rateCharge" maxlength="8" ylx-cursor my-on-change="changeNum6('rateCharge')"
+                    ng-class="{'error': errorData.indexOf('rateCharge')>-1}" necessary="rateCharge" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-7 w16">
+              <div class="line-left-7-7-1">
+                Total
+              </div>
+              <div class="line-left-7-7-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.totalCount" maxlength="12" ylx-cursor my-on-change="changeNum7('totalCount')"
+                    ng-class="{'error': errorData.indexOf('totalCount')>-1}" necessary="totalCount" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-8">
+              <div class="line-left-7-8-1">
+                <div class="line-left-7-8-1-1">SLAC</div>
+                <div class="line-left-7-8-1-2">
+                  <div class="line-row">
+                    <input type="text" class="form-control" ng-model="billObj.slac" maxlength="5" ylx-cursor my-on-change="changeNum('slac')"
+                      necessary="slac" necessary-data="necessaryData">
+                  </div>
+                </div>
+              </div>
+              <div class="line-left-7-8-2">
+                <div class="line-row">
+                  <div class="line-row-7-1">REMARK</div>
+                  <textarea class="form-control line-row-7-2" placeholder="仅供打印运单使用,同PACTL预审品名无关" ng-model="billObj.remark" ylx-cursor my-on-change="changeText('remark')" necessary="remark"
+                    necessary-data="necessaryData"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-right-7">
+            <div class="line-right-7-1">
+              Nature and Quantity of Goods (incl. Dimensions or Volume)
+            </div>
+            <div class="line-right-7-2">
+              <div class="line-right-7-2-1">
+                <div class="line-right-7-2-1-1">
+                  Goods Description
+                  <button class="btn btn-default" ng-click="selectName('main')">选择</button>
+                </div>
+                <div class="line-right-7-2-1-2">
+                  <textarea class="form-control line-row-7-2" ng-model="billObj.goodsDesc" maxlength="240" ylx-cursor my-on-change="changeText('goodsDesc')"
+                    necessary="goodsDesc" necessary-data="necessaryData"></textarea>
+                </div>
+                <div class="line-right-7-2-1-3">
+                </div>
+              </div>
+              <div class="line-right-7-2-2">
+                <div class="line-right-7-2-2-1">
+                  Vol
+                </div>
+                <div class="line-right-7-2-2-2">
+                  <input type="text" class="form-control w55 dib" ng-model="billObj.vol" maxlength="7" ylx-cursor my-on-change="changeNum8('vol')"
+                    ng-class="{'error': errorData.indexOf('vol')>-1}" necessary="vol" necessary-data="necessaryData">
+                  <div ui-select ng-model="billObj.volumeCode" theme="select2" class="form-control w35" necessary="volumeCode" necessary-data="necessaryData">
+                    <div ui-select-match placeholder="">{{$select.selected.id}}</div>
+                    <div ui-select-choices repeat="item in volumeCodeData | filter: {id:$select.search}">
+                      <div ng-bind-html="item.id | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="line-right-7-2-2-3">
+                  <button class="btn btn-default" ng-click="selectVol()">尺寸</button>
+                </div>
+              </div>
+              <div class="line-right-7-2-3" ng-if="billObj.densityGroup">
+                <div class="line-right-7-2-3-1">
+                  Density group
+                </div>
+                <div class="line-right-7-2-3-2">
+                  <div class="form-control">{{billObj.densityGroup}}</div>
+                </div>
+                <div class="line-right-7-2-3-3">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- line-7 end-->
+        <!-- line-8 start-->
+        <div class="row">
+          <div class="line-left-8">
+            <div class="line-left-8-1">
+              <div class="line-left-8-1-1">Prepaid</div>
+              <div class="line-left-8-1-2">Weight Charge</div>
+              <div class="line-left-8-1-3">Collect</div>
+            </div>
+            <div class="line-left-8-2">
+              <div class="line-left-8-2-1">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.prepaid}}</div>
+                </div>
+              </div>
+              <div class="line-left-8-2-2">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.collect}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-3">
+              <div class="line-left-8-3-1">&nbsp;</div>
+              <div class="line-left-8-3-2">Valuation Charge</div>
+              <div class="line-left-8-3-3">&nbsp;</div>
+            </div>
+            <div class="line-left-8-4">
+              <div class="line-left-8-4-1">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.valuationCharge" maxlength="12" ylx-cursor my-on-change="changeNum7('valuationCharge')"
+                    ng-class="{'error': errorData.indexOf('valuationCharge')>-1}" necessary="valuationCharge" necessary-data="necessaryData">
+                </div>
+              </div>
+              <div class="line-left-8-4-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.valuationCharge2" maxlength="12" ylx-cursor my-on-change="changeNum7('valuationCharge2')"
+                    ng-class="{'error': errorData.indexOf('valuationCharge2')>-1}" necessary="valuationCharge2" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-5">
+              <div class="line-left-8-5-1">&nbsp;</div>
+              <div class="line-left-8-5-2">Tax</div>
+              <div class="line-left-8-5-3">&nbsp;</div>
+            </div>
+            <div class="line-left-8-6">
+              <div class="line-left-8-6-1">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.tax" maxlength="12" ylx-cursor my-on-change="changeNum7('tax')"
+                    ng-class="{'error': errorData.indexOf('tax')>-1}" necessary="tax" necessary-data="necessaryData">
+                </div>
+              </div>
+              <div class="line-left-8-6-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.tax2" maxlength="12" ylx-cursor my-on-change="changeNum7('tax2')"
+                    ng-class="{'error': errorData.indexOf('tax2')>-1}" necessary="tax2" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-7">
+              <div class="line-left-8-7-1">&nbsp;</div>
+              <div class="line-left-8-7-2">Total Other Charges Due Agent</div>
+              <div class="line-left-8-7-3">&nbsp;</div>
+            </div>
+            <div class="line-left-8-8">
+              <div class="line-left-8-8-1">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalAgent || ''}}</div>
+                </div>
+              </div>
+              <div class="line-left-8-8-2">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalAgent2 || ''}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-9">
+              <div class="line-left-8-9-1">&nbsp;</div>
+              <div class="line-left-8-9-2">Total Other Charges Due Carrier</div>
+              <div class="line-left-8-9-3">&nbsp;</div>
+            </div>
+            <div class="line-left-8-10">
+              <div class="line-left-8-10-1">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalCarrier || ''}}</div>
+                </div>
+              </div>
+              <div class="line-left-8-10-2">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalCarrier2 || ''}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-11">
+              <div class="line-left-8-11-1">
+                <div class="line-row">
+                  &nbsp;
+                </div>
+              </div>
+              <div class="line-left-8-11-2">
+                <div class="line-row">
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-12">
+              <div class="line-left-8-12-1">
+                Total Prepaid
+              </div>
+              <div class="line-left-8-12-2">
+                Total Collect
+              </div>
+            </div>
+            <div class="line-left-8-13">
+              <div class="line-left-8-13-1">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalPrepaid || ''}}</div>
+                </div>
+              </div>
+              <div class="line-left-8-13-2">
+                <div class="line-row">
+                  <div class="form-control">{{billObj.totalCollect || ''}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="line-left-8-14">
+              <div class="line-left-8-14-1">
+                Currency Conversion Rates
+              </div>
+              <div class="line-left-8-14-2">
+                CC Charges in des. Currency
+              </div>
+            </div>
+            <div class="line-left-8-15">
+              <div class="line-left-8-15-1">
+                <div class="line-row">
+                  <div ui-select ng-model="billObj.destCurrency" theme="select2" class="form-control w30 fl mr10" necessary="destCurrency"
+                    necessary-data="necessaryData">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.currencyCode}}</div>
+                    <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+                      <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                  <input type="text" class="form-control w55 fl" ng-model="billObj.rates" maxlength="11" ylx-cursor my-on-change="changeNum9('rates')"
+                    ng-class="{'error': errorData.indexOf('rates')>-1}" necessary="rates" necessary-data="necessaryData">
+                </div>
+              </div>
+              <div class="line-left-8-15-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" ng-model="billObj.ccChargesDes" maxlength="12" ylx-cursor my-on-change="changeNum7('ccChargesDes')"
+                    ng-class="{'error': errorData.indexOf('ccChargesDes')>-1}" necessary="ccChargesDes" necessary-data="necessaryData">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-right-8">
+            <div class="line-right-8-1">
+              <div class="line-right-8-1-1 row">
+                <div class="w10">Other Fee</div>
+                <div class="w20">Code</div>
+                <div class="w20">Owner</div>
+                <div class="w45">Fee</div>
+              </div>
+              <div class="line-right-8-1-div row" ng-repeat="item in otherFeeData track by $index">
+                <div class="w10">
+                  <span class="glyphicon glyphicon-minus csp" ng-click="removeOtherFee($index)"></span>
+                </div>
+                <div class="w20">
+                  <div ui-select ng-model="item.code" theme="select2" class="form-control">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in otherCodeData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w20">
+                  <div ui-select ng-model="item.owner" theme="select2" class="form-control" on-select="selectOwner()">
+                    <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                    <div ui-select-choices repeat="item in otherOwnerData | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w45">
+                  <input type="text" class="form-control" ng-model="item.fee" maxlength="12" ylx-cursor my-on-change="changeNum3(item)" ng-class="{'error': item.errorFlag}">
+                </div>
+              </div>
+              <div class="row">
+                <span class="glyphicon glyphicon-plus csp" ng-click="addOtherFee()"></span>
+              </div>
+            </div>
+            <div class="line-right-8-2">
+              <div class="line-right-8-2-1">
+                Shipper certifies that the particulars on the face hereof are correct and that insofar as any part of the consignment contains
+                dangerous goods, such part is properly described by name and is in proper condition for carriage by air according
+                to the applicable Dangerous Goods Regulations
+              </div>
+              <div class="line-right-8-2-2">
+                <div class="line-right-8-2-2-check">
+                  <label>
+                  <input type="checkbox" ng-model="billObj.agreedFlag" ng-checked="billObj.agreedFlag === '1'">
+                  <span>I agreed with above all terms</span>
+                </label>
+                </div>
+              </div>
+              <div class="line-right-8-2-3">
+                <textarea class="form-control" rows="3" maxlength="50" ng-model="billObj.signatureAgent" ylx-cursor my-on-change="changeText('signatureAgent')"
+                  necessary="signatureAgent" necessary-data="necessaryData"></textarea>
+              </div>
+              <div class="line-right-8-2-4">
+                Signature of Shipper or his agent
+              </div>
+            </div>
+            <div class="line-right-8-3">
+              <div class="line-right-8-3-1">
+                <div>
+                  <input type="text" class="form-control" pikaday="myPickerObject2" ng-model="billObj.executed" necessary="executed" necessary-data="necessaryData">
+                  <div>Executed on(Date)</div>
+                </div>
+                <div>
+                  <input type="text" class="form-control" ng-model="billObj.place" maxlength="17" ylx-cursor my-on-change="changeText('place')"
+                    necessary="place" necessary-data="necessaryData">
+                  <div>at(Place)</div>
+                </div>
+                <div>
+                  <input type="text" class="form-control" ng-model="billObj.signatureIssuing" maxlength="20" ylx-cursor my-on-change="changeText('signatureIssuing')"
+                    necessary="signatureIssuing" necessary-data="necessaryData">
+                  <div>Signature of issuing Carrier or its Agent</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- line-8 end-->
+        <!-- line-9 start-->
+        <div class="row line-last">
+          <div class="line-left-9">
+            <div class="line-left-9-1">
+              For Carrier's Use Only at Destinationes at Destination
+            </div>
+            <div class="line-left-9-2">
+              <div class="line-left-9-2-1">
+                Charges at Destination
+              </div>
+              <div class="line-left-9-2-2">
+                <input type="text" class="form-control" ng-model="billObj.chargesDestination" maxlength="12" ylx-cursor my-on-change="changeNum7('chargesDestination')"
+                  ng-class="{'error': errorData.indexOf('chargesDestination')>-1}" necessary="chargesDestination" necessary-data="necessaryData">
+              </div>
+            </div>
+          </div>
+          <div class="line-right-9">
+            <div class="line-right-9-1">
+              Total Collect Charges
+            </div>
+            <div class="line-right-9-2">
+              <input type="text" class="form-control" ng-model="billObj.totalCollectCharges" maxlength="12" ylx-cursor my-on-change="changeNum7('totalCollectCharges')"
+                ng-class="{'error': errorData.indexOf('totalCollectCharges')>-1}" necessary="totalCollectCharges" necessary-data="necessaryData">
+            </div>
+          </div>
+        </div>
+        <!-- line-9 end-->
+      </div>
+      <div class="row" ng-if="showSubBill">
+        <div class="col-sm-12">
+          <div class="pull-right">
+            <!--<button class="btn btn-default" ng-click="sendFHL()">
+              发送FHL
+            </button>-->
+            <div class="dib">底色说明：
+              <div class="color-inst"></div>预审必录字段</div>
+            <button class="btn btn-pactl" ng-click="changeParent()">
+              更改主单
+            </button>
+            <button class="btn btn-pactl" ng-click="pickTemp('1')">
+              提取模板
+            </button>
+            <button class="btn btn-pactl" ng-click="saveTemp('1')">
+              保存到模板
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-12 content-main-body-bill-head-title">
+          <i class="i-public"></i>主单信息
+        </div>
+        <div class="col-sm-12 content-main-body-bill-head">
+          <div class="col-sm-2">
+            主单号
+            <span style="color: #7E3C02;font-weight: bold;">{{billObj.waybillNo}}</span>
+          </div>
+          <div class="col-sm-2">
+            始发站
+            <span>{{billObj.dept.airportCode}}</span>
+          </div>
+          <div class="col-sm-2">
+            目的站
+            <span>{{showText.dest}}</span>
+          </div>
+          <div class="col-sm-2">
+            件数
+            <span>{{billObj.rcpNo}}</span>
+          </div>
+          <div class="col-sm-2">
+            重量(KG)
+            <span>{{billObj.grossWeight}}</span>
+          </div>
+          <div class="col-sm-2">
+            分单合计
+            <span>{{subBill.length}}</span>
+          </div>
+        </div>
+        <div class="col-cm-12">
+          <div class="content-main-body-bill-head-title dib">
+            <i class="i-public"></i>分单信息
+          </div>
+        </div>
+        <div class="col-sm-12 pt10">
+          <div class="search-text">
+            分单号<span class="red">*</span>
+          </div>
+          <div class="search-input">
+            <input type="text" class="form-control" ng-model="subBillObj.waybillNo" maxlength="12" ylx-cursor my-on-change="changeSubText()"
+              necessary="waybillNo" necessary-data="necessarySubData">
+          </div>
+          <div class="search-text">
+            始发站<span class="red">*</span>
+          </div>
+          <div class="search-input" style="width: 100px;">
+            <div ui-select ng-model="subBillObj.dept" theme="select2" class="form-control" necessary="dept" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+              <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="search-text">
+            目的站<span class="red">*</span>
+          </div>
+          <div class="search-input" style="width: 100px;">
+            <div ui-select ng-model="subBillObj.dest1" theme="select2" class="form-control" necessary="dest1" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+              <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="search-text">
+            货物品名<span class="red">*</span>
+          </div>
+          <div class="search-input listCert" style="width: 30%;">
+            <input type="text" class="form-control" maxlength="200" ng-model="subBillObj.goodsDesc" ylx-cursor my-on-change="changeText7('goodsDesc')"
+              necessary="goodsDesc" necessary-data="necessarySubData" tooltip-placement="center" tooltip-html-unsafe="<div class=&quot;pre-name&quot; style=&quot;width:100%;word-break:break-all &quot;>{{subBillObj.goodsDesc}}</div>">
+          </div>
+          <button ng-click="selectName('sub')" class="btn btn-default">选择</button>
+        </div>
+      </div>
+      <div class="content-main-body-subBill row" ng-if="showSubBill">
+        <div class="row subBill-line-3">
+          <div class="subBill-line-3-1 w7">
+            件数<span class="red">*</span>
+          </div>
+          <div class="subBill-line-3-2 w17">
+            重量<span class="red">*</span>
+          </div>
+          <div class="subBill-line-3-3 w9">
+            SLAC件数
+          </div>
+          <div class="subBill-line-3-4 w11">
+            运输申明价值
+          </div>
+          <div class="subBill-line-3-5 w11">
+            运输保险价值
+          </div>
+          <div class="subBill-line-3-6 w11">
+            海关申明价值
+          </div>
+          <div class="subBill-line-3-7 w11">
+            付款方式
+          </div>
+          <div class="subBill-line-3-8 w12">
+            其他费用付款方式
+          </div>
+          <div class="subBill-line-3-9 w11">
+            币种
+          </div>
+        </div>
+        <div class="row subBill-line-4">
+          <div class="subBill-line-4-1 w7">
+            <input type="text" class="form-control" ng-model="subBillObj.rcpNo" maxlength="4" ylx-cursor my-on-change="changeNum10('rcpNo')"
+              necessary="rcpNo" necessary-data="necessarySubData">
+          </div>
+          <div class="subBill-line-4-2 w17">
+            <input type="text" class="form-control w50 dib" ng-model="subBillObj.grossWeight" maxlength="7" ylx-cursor my-on-change="changeNum11('grossWeight')"
+              ng-class="{'error': subErrorData.indexOf('grossWeight')>-1}" necessary="grossWeight" necessary-data="necessarySubData">
+            <div ui-select ng-model="subBillObj.weightCode" theme="select2" class="form-control w45" necessary="weightCode" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+              <div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="subBill-line-4-3 w9">
+            <input type="text" class="form-control" ng-model="subBillObj.slac" maxlength="5" ylx-cursor my-on-change="changeNum10('slac')"
+              necessary="slac" necessary-data="necessarySubData">
+          </div>
+          <div class="subBill-line-4-4 w11">
+            <input type="text" class="form-control" ng-model="subBillObj.carriageValue" maxlength="11" ylx-cursor my-on-change="changeText9('carriageValue')"
+              ng-class="{'error': subErrorData.indexOf('carriageValue')>-1}" necessary="carriageValue" necessary-data="necessarySubData">
+          </div>
+          <div class="subBill-line-4-5 w11">
+            <input type="text" class="form-control" ng-model="subBillObj.insuranceValue" maxlength="11" ylx-cursor my-on-change="changeText11('insuranceValue')"
+              ng-class="{'error': subErrorData.indexOf('insuranceValue')>-1}" necessary="insuranceValue" necessary-data="necessarySubData">
+          </div>
+          <div class="subBill-line-4-6 w11">
+            <input type="text" class="form-control" ng-model="subBillObj.customsValue" maxlength="11" ylx-cursor my-on-change="changeText10('customsValue')"
+              ng-class="{'error': subErrorData.indexOf('customsValue')>-1}" necessary="customsValue" necessary-data="necessarySubData">
+          </div>
+          <div class="subBill-line-4-7 w11">
+            <div ui-select ng-model="subBillObj.wtVal" theme="select2" class="form-control" necessary="wtVal" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+              <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="subBill-line-4-8 w12">
+            <div ui-select ng-model="subBillObj.other" theme="select2" class="form-control" on-select="selectOwner()" necessary="other"
+              necessary-data="necessarySubData">
+              <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+              <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="subBill-line-4-9 w11">
+            <div ui-select ng-model="subBillObj.currency" theme="select2" class="form-control" necessary="currency" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="">{{$select.selected.currencyCode}}</div>
+              <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+                <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="subBill-line-left subBill-line-left-1">
+            <div class="line-row">
+              <div class="fl">发货人信息</div>
+              <div class="fr">
+                <i class="i-search" ng-click="searchUser('1', '1')"></i>
+                <i class="i-save" ng-click="saveUser('1', '1')"></i>
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">名称</div>
+              <div class="col-sm-11">
+                <input type="text" class="form-control" ng-model="subBillObj.spName" maxlength="70" ylx-cursor my-on-change="changeText7('spName')"
+                  necessary="spName" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">地址</div>
+              <div class="col-sm-11">
+                <input type="text" class="form-control" ng-model="subBillObj.spAddress" maxlength="70" ylx-cursor my-on-change="changeText7('spAddress')"
+                  necessary="spAddress" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">城市</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.spCity" maxlength="17" ylx-cursor my-on-change="changeText7('spCity')"
+                  necessary="spCity" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">国家</div>
+              <div class="col-sm-3">
+                <div ui-select ng-model="subBillObj.spCountry" theme="select2" class="form-control" necessary="spCountry" necessary-data="necessarySubData">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                  <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                    <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-1 pl10">州</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.spState" maxlength="9" ylx-cursor my-on-change="changeText7('spState')"
+                  necessary="spState" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">邮编</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.spZipcode" maxlength="9" ylx-cursor my-on-change="changeText8('spZipcode')"
+                  necessary="spZipcode" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">电话</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.spTel" maxlength="25" ylx-cursor my-on-change="changeNum13('spTel')"
+                  necessary="spTel" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">传真</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.spFax" maxlength="25" ylx-cursor my-on-change="changeNum13('spFax')"
+                  necessary="spFax" necessary-data="necessarySubData">
+              </div>
+            </div>
+          </div>
+          <div class="subBill-line-right">
+            <div class="line-row">
+              <div class="fl">收货人信息</div>
+              <div class="fr">
+                <i class="i-search" ng-click="searchUser('0', '1')"></i>
+                <i class="i-save" ng-click="saveUser('0', '1')"></i>
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">名称</div>
+              <div class="col-sm-11">
+                <input type="text" class="form-control" ng-model="subBillObj.csName" maxlength="70" ylx-cursor my-on-change="changeText7('csName')"
+                  necessary="csName" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">地址</div>
+              <div class="col-sm-11">
+                <input type="text" class="form-control" ng-model="subBillObj.csAddress" maxlength="70" ylx-cursor my-on-change="changeText7('csAddress')"
+                  necessary="csAddress" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">城市</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.csCity" maxlength="17" ylx-cursor my-on-change="changeText7('csCity')"
+                  necessary="csCity" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">国家</div>
+              <div class="col-sm-3">
+                <div ui-select ng-model="subBillObj.csCountry" theme="select2" class="form-control" necessary="csCountry" necessary-data="necessarySubData">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                  <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                    <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-1 pl10">州</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.csState" maxlength="9" ylx-cursor my-on-change="changeText7('csState')"
+                  necessary="csState" necessary-data="necessarySubData">
+              </div>
+            </div>
+            <div class="line-row">
+              <div class="col-sm-1">邮编</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.csZipcode" maxlength="9" ylx-cursor my-on-change="changeText8('csZipcode')"
+                  necessary="csZipcode" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">电话</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.csTel" maxlength="25" ylx-cursor my-on-change="changeNum13('csTel')"
+                  necessary="csTel" necessary-data="necessarySubData">
+              </div>
+              <div class="col-sm-1 pl10">传真</div>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" ng-model="subBillObj.csFax" maxlength="25" ylx-cursor my-on-change="changeNum13('csFax')"
+                  necessary="csFax" necessary-data="necessarySubData">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row subBill-line-2">
+          <div class="line-row">
+            <div class="col-sm-1">英文品名补充</div>
+            <div class="col-sm-11">
+              <textarea rows="4" class="form-control" maxlength="585" ng-model="subBillObj.remark" ylx-cursor my-on-change="changeText7('remark')"
+                necessary="remark" necessary-data="necessarySubData"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row subBill-line-5">
+          <div class="subBill-line-5-left">
+            <div class="line-row">
+              <div class="col-sm-2">
+                特货代码<br> (代码间需用逗号","隔开)
+              </div>
+              <div class="col-sm-10">
+                <input type="text" class="hide" ng-model="subBillObj.holdCode" maxlength="35" ylx-cursor my-on-change="changeText12('holdCode')"
+                  necessary="holdCode" necessary-data="necessarySubData">
+                <div ui-select multiple tagging="tagTransform" tagging-label="" tagging-tokens="SPACE|,|/" ng-model="subBillObj.holdCodeList"
+                  ng-change="tagTransform2str(subBillObj,'holdCodeList','holdCode')" theme="select2" class="form-control">
+                  <div ui-select-match>{{$item.code}}</div>
+                  <div ui-select-choices repeat="code in subBillObj.holdCodeList | filter: $select.search">
+                    {{code.code || code}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="subBill-line-5-right">
+            <div class="line-row">
+              <div class="col-sm-2">
+                货物代码
+              </div>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model="subBillObj.commodityCodes" maxlength="350" my-on-change="changeText13('commodityCodes')"
+                  ylx-cursor ng-class="{'error': subErrorData.indexOf('commodityCodes')>-1}" necessary="commodityCodes" necessary-data="necessarySubData">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

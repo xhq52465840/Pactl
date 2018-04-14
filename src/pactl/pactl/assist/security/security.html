@@ -1,0 +1,101 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">安保部门退运</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">安保部门退运</div>
+  <div style="float:right"></div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">主单号:</div>
+        <div style="width:226px;margin-top:0px;height:36px;border:1px solid #ccc;" class="input-group bill-content-body-info search-value">
+          <input type="text" style="width: 65px;height: 32px;font-size:14px" class="form-control info-input-1" id="srh_code" ng-model="billObj.srh_code"
+            auto-focus="true">
+          <input type="text" style="width: 150px;height: 32px;font-size:14px" class="form-control info-input-2" id="srh_no" maxlength="8"
+            ng-model="billObj.srh_no">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">航空公司:</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.carrier1" do-search="search()">
+        </div>
+      </div>
+      <div class="col-sm-4" style="width: 330px;">
+        <div class="search-name">代理:</div>
+        <div ui-select ng-model="billObj.agentOprnId" theme="select2" class="form-control wd">
+          <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+          <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+            <div ng-bind-html="item.code | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fr">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <div class="fr" style="margin: 12px 20px;">
+    <button class="btn btn-primary" ng-click="save()">保存</button>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w6">代理</th>
+        <th class="w12">运单号</th>
+        <th class="w7">退运件数</th>
+        <th class="w4">件数</th>
+        <th class="w5">重量/KG</th>
+        <th class="w4">目的港</th>
+        <th class="w5">航空公司</th>
+        <th class="w10">品名</th>
+        <th class="w7">备注</th>
+        <th class="w7">已安检注销</th>
+        <th class="w8">退运操作员</th>
+        <th class="w25">退运时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in billviewData track by $index" ng-class-even="'even'">
+        <td>{{item.agentOprn}}</td>
+        <td><i class="i-e" ng-show="item.wbEle==='1'"></i>{{item.waybillNo}}</td>
+        <td ng-if="item.returnFlagCheck!=='1'"><input type="number" class="form-control" ng-model="item.returnCount" ng-change="item.isChange=true"></td>
+        <td ng-if="item.returnFlagCheck==='1'">{{item.returnCount}}</td>
+        <td>{{item.printCount}}</td>
+        <td>{{item.grossWeight}}</td>
+        <td>{{item.airportDest}}</td>
+        <td>{{item.carrier1}}</td>
+        <td>{{item.goodsDesc}}</td>
+        <td>{{item.returnReMarks}}</td>
+        <td>{{item.aFlag==1?'注销':'未注销'}}</td>
+        <td ng-if="item.returnFlagCheck!=='1'"><input type="text" class="form-control" ng-model="item.returnName" ng-change="item.isChange=true"></td>
+        <td ng-if="item.returnFlagCheck==='1'">{{item.returnName}}</td>
+        <!--         <td>
+          <div style="width:226px;margin-top:0px;height:36px;border:0px;" class="input-group bill-content-body-info search-value">
+            <input type="text" class="form-control dib" ng-model="item.returnTime" ng-change="item.isChange=true" pikaday="myPickerObject3" style="width: 110px;" max-date="{{currentDate}}">
+            <select class="form-control" style="width: 41px;margin-left: 1px;-webkit-appearance: none;" ng-change="item.isChange=true" ng-model="item.hour" ng-options="opt for opt in options.hour"></select>
+            <div style="position: absolute;left: 154px;height: 32px;top: 7px;">:</div>
+            <select class="form-control" style="width: 41px;margin-left: 9px;-webkit-appearance: none;" ng-change="item.isChange=true" ng-model="item.minute" ng-options="opt for opt in options.minute"></select>
+          </div>
+        </td> -->
+        <td ng-if="item.returnFlagCheck!=='1'">
+          <input type="text" class="form-control dib w50" ng-model="item.returnTime" ng-change="item.isChange=true" pikaday="myPickerObject3"
+            max-date="{{currentDate}}">
+          <input type="number" class="form-control dib w21 mr5" ng-change="item.isChange=true" ng-model="item.hour">:
+          <input type="number" class="form-control dib w21 ml5" ng-change="item.isChange=true" ng-model="item.minute">
+        </td>
+        <td ng-if="item.returnFlagCheck==='1'">
+          <span>{{item.returnTime}}&nbsp;{{item.hour}}:{{item.minute}}</span>
+          <button class="btn btn-primary" ng-click="cancelCheckreturn(item)" style="margin-left: 30%;">撤销</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

@@ -1,0 +1,42 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+      <span>{{waybill_no}}</span>
+        原因
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content modal-body-scroll">
+      <table class="table remark-table">
+        <thead>
+          <tr>
+            <th class="w15">序号</th>
+            <th class="w15">类型</th>
+            <th class="w25">原因</th>
+            <th class="w20">操作人</th>
+            <th class="w25">操作时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in reasonData track by $index">
+            <td class="w15">{{$index + 1}}</td>
+            <td class="w15">{{item.type}}</td>
+            <td class="w25">
+              <div ng-repeat="row in item.names">
+                  {{row.name}}
+              </div>
+            </td>
+            <td class="w20">{{item.personid}}</td>
+            <td class="w25">{{item.createtime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    </div>
+  </div>
+</form>

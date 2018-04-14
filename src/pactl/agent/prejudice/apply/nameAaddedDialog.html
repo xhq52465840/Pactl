@@ -1,0 +1,45 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{nameObj.waybillNo + '的品名补充'}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <table class="table content-dialog-table">
+        <thead>
+          <tr>
+            <th class="w30" style="text-align: center;">英文品名补充</th>
+            <th class="w30" style="text-align: center;">品名补充中文</th>
+            <th class="w40" style="text-align: center;">品名详细描述（可选）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <textarea rows="3" ng-model="nameObj.goodsNameEn" class="form-control" ng-disabled="!editAble || wbEle" ng-change="changeText('goodsNameEn')"
+                maxlength="585" name="goodsNameEn"></textarea>
+            </td>
+            <td>
+              <textarea rows="3" ng-model="nameObj.goodsNameCn" class="form-control" ng-disabled="!editAble" maxlength="200" name="goodsNameCn"></textarea>
+            </td>
+            <td>
+              <!-- <textarea rows="3" ng-model="nameObj.goodsRemarks" class="form-control pre-goodsRemarks" ng-disabled="!editAble" maxlength="1800" name="goodsRemarks"></textarea> -->
+              <div style="position: relative;">
+                <span style="font-style: 10px;"></span><textarea rows="3" ng-model="nameObj.goodsRemarks" class="form-control"
+                  ng-disabled="!editAble" maxlength="1300" name="goodsRemarks"></textarea>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="save()" ng-show="editAble">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    </div>
+  </div>
+</form>

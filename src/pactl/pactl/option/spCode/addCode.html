@@ -1,0 +1,48 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">三字代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="coding" class="form-control" required ng-model="codeObj.sccCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">选项</div>
+        <div class="modal-body-value">
+          <label class="label-checkbox"><input type="checkbox" ng-model="codeObj.dangerousMark" ng-checked="codeObj.dangerousMark">危险品</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="codeObj.liMark" ng-checked="codeObj.liMark">锂电池</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">现场检查类型</div>
+        <div class="modal-body-value">
+          <div ui-select multiple ng-model="codeObj.localeCheckType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.checkName}}</div>
+            <div ui-select-choices repeat="item in checkData | filter: {checkName:$select.search}">
+              <div ng-bind-html="item.checkName | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">代码说明</div>
+        <div class="modal-body-value">
+          <textarea rows="3" ng-model="codeObj.sccDesc" class="form-control"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

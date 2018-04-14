@@ -1,0 +1,76 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">货站审单任务分配规则设置</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">货站审单任务分配规则设置</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增规则
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">航空公司</div>
+        <div class="search-value">
+          <div ui-select ng-model="ruleObj.airLine" theme="select2" class="form-control wd" autofocus="true">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">货站</div>
+        <div class="search-value">
+          <div ui-select ng-model="ruleObj.goodsStation" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>    
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w16">航空公司</th>
+        <th class="w16">货站</th>
+        <th class="w16">占比</th>
+        <th class="w16">修改人</th>
+        <th class="w16">修改时间</th>
+        <th class="w20">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in ruleData track by $index" ng-class-even="'even'">
+        <td>{{item.fltCode}}-{{item.fltCode | showAirname : airData}}</td>
+        <td>{{item.goodsStation | showStation : stationData}}</td>
+        <td>{{item.percentage}}</td>
+        <td>{{item.modifier}}</td>
+        <td>{{item.modifiedDate|date:'yyyy-MM-dd'}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.fltCode)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

@@ -1,0 +1,117 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<div class="row mt10">
+				<div class="col-sm-2">账号编码</div>
+				<div class="col-sm-10"><input type="text" class="form-control" name="accountCode" autocomplete="off" required ng-model="email.accountCode">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">Email地址</div>
+				<div class="col-sm-10">
+					<input type="email" class="form-control" name="emailAddr" autocomplete="off" required ng-model="email.emailAddr" >
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">账号名称</div>
+				<div class="col-sm-10"> 
+					<input type="text" class="form-control" name="accountName" autocomplete="off" required ng-model="email.accountName">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">账号描述</div>
+				<div class="col-sm-10"> 
+					<input type="text" class="form-control" name="accountDesc" autocomplete="off" required ng-model="email.accountDesc">
+				</div>
+			</div>
+			<h3>收件服务器设置</h3>
+			<div class="row mt10">
+				<div class="col-sm-2">邮箱类型</div>
+				<div class="col-sm-4">					
+					<div ui-select ng-model="email.recvProto" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in mailTypes | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-1 mr10" style="text-align:right">账号</div>
+				<div class="col-sm-4"><input type="text" class="form-control" name="recvUser" autocomplete="off" required ng-model="email.recvUser">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">密码</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="recvPass" autocomplete="off" onfocus="this.type='password'" required  ng-model="email.recvPass">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">服务器</div>
+				<div class="col-sm-3 mr10"> 
+					<input type="text" class="form-control" name="recvHost" autocomplete="off" required ng-model="email.recvHost">
+				</div>
+				<div class="col-sm-2 mr10" style="text-align:right">启用SSL</div>
+				<div class="col-sm-1"> 
+					<input type="checkbox" ng-model="email.recvSsl" ng-checked="email.recvSsl==1">
+				</div>
+				<div class="col-sm-1">端口</div>
+				<div class="col-sm-2"> 
+					<input type="number" class="form-control" name="recvPort" autocomplete="off" required ng-model="email.recvPort"
+					ng-maxlength="5" >
+				</div>
+			</div>
+			<h3>发件服务器设置</h3>
+			<div class="row mt10">
+				<div class="col-sm-2">邮箱类型</div>
+				<div class="col-sm-4">						
+					<input type="text" class="form-control" value="smtp" readonly>
+				</div>
+				<div class="col-sm-1 mr10" style="text-align:right">账号</div>
+				<div class="col-sm-4"><input type="text" class="form-control" name="sendUser" autocomplete="off" required ng-model="email.sendUser">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">密码</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="sendPass" autocomplete="off" onfocus="this.type='password'" required ng-model="email.sendPass">
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">服务器</div>
+				<div class="col-sm-3 mr10"> 
+					<input type="text" class="form-control" name="sendHost" autocomplete="off" required ng-model="email.sendHost">
+				</div>
+				<div class="col-sm-2 mr10" style="text-align:right">启用SSL</div>
+				<div class="col-sm-1"> 
+					<input type="checkbox" ng-model="email.sendSsl" ng-checked="email.sendSsl==1">
+				</div>
+				<div class="col-sm-1 mr10" style="text-align:right">端口</div>
+				<div class="col-sm-2"> 
+					<input type="number" class="form-control" name="sendPort" autocomplete="off" required ng-model="email.sendPort"
+					ng-maxlength="5">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">邮件发送身份验证</div>
+				<div class="col-sm-1"> 
+					<input type="checkbox" ng-model="email.sendAuth" ng-checked="true" ng-disabled="true">
+				</div>
+				<div class="col-sm-8">
+				<button class="btn btn-primary fr" w5c-form-submit="test()">校验</button>
+				</div>
+			</div>			
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" ng-click="save()" ng-disabled="afterTest">确定</button>
+			<button class="btn btn-default" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+</form>

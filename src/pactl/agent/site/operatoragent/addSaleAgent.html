@@ -1,0 +1,93 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="col-sm-7">
+          <div class="row" ng-show="!isedit">
+            <div class="modal-body-name">代码<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="code" required ng-model="unitObj.code" ng-change="changeText('code')">
+            </div>
+          </div>
+          <div class="row" ng-show="isedit">
+            <div class="modal-body-name">代码</div>
+            <div class="modal-body-value">
+              <label class="label-checkbox">{{unitObj.code}}</label>
+            </div>
+          </div>
+          <div class="row" ng-show="!isedit || (isSuper===true && unitType==='salesAgent')">
+            <div class="modal-body-name">IATA代码<span class="text-danger"></span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="IATACode" ng-model="unitObj.IATACode">
+            </div>
+          </div>
+          <div class="row" ng-show="isedit && (isSuper===false || unitType!=='salesAgent')">
+            <div class="modal-body-name">IATA代码</div>
+            <div class="modal-body-value">
+              <label class="label-checkbox">{{unitObj.IATACode}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">中文名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input ng-if="!isEdit" type="text" class="form-control" name="name" required ng-model="unitObj.name">
+              <span ng-if="isEdit">{{unitObj.name}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">英文名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input ng-if="!isEdit" type="text" class="form-control" name="ename" required ng-model="unitObj.ename">
+              <span ng-if="isEdit">{{unitObj.ename}}</span>
+            </div>
+          </div>
+          <div class="row" ng-if="!isEdit">
+            <div class="modal-body-name">权限方案<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="unitObj.plan" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in planData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="hidden" name="plan" required ng-model="unitObj.plan">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">机构角色<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="unitObj.role" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="hidden" name="role" required ng-model="unitObj.role">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+          <img ng-src="{{unitObj.fileObj.url}}" alt="" class="upload-avatar mb10">
+          <div>
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, unitObj)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]"
+              pl-max-file-size="5mb" pl-url="/api/org/units/avatars/ ">上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

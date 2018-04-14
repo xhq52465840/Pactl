@@ -1,0 +1,86 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body" style="max-height: 500px;overflow-y: auto;">
+		<div class="row">
+			<div class="col-sm-6 pd5">
+				<div class="row content-nameRefer-left">
+					<div class="content-nameRefer-left-1">
+						<div class="row">
+							<div class="refer-name">状态</div>
+							<div class="status" ng-model="refer.status" ng-class="{'add':refer.status==='101','ask':refer.status==='103','answer':refer.status==='104','quotable':refer.status==='105','forbidden':refer.status==='106'}">
+								{{refer.status| showStatus: statusData}}
+							</div>
+						</div>
+						<div class="row">
+							<div class="refer-name"><span class="red">*</span>可能出运航空公司</div>
+							<span>{{refer.airLine1.airCode}}</span>
+							<span>{{refer.airLine2.airCode}}</span>
+							<span>{{refer.airLine3.airCode}}</span>
+						</div>
+						<div class="row">
+							<div class="refer-name"><span class="red">*</span>目的港</div>
+							<span>{{refer.dest.airportCode}}</span>
+							<small class="mr5">{{refer.dest && refer.dest.airportName}}</small>
+							<small>{{refer.dest && refer.dest.countryCode}}</small>
+						</div>
+						<div class="row">
+							<div class="refer-name"><span class="red">*</span>英文品名</div>
+							<div class="refer-value">
+								<span ng-show="!btn.showSave">{{refer.namesEn}}</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="refer-name">中文品名</div>
+							<div class="refer-value">
+								<span>{{refer.namesCn}}</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="refer-name">产品说明</div>
+							<div class="refer-value">
+								<i class="i-pdf" ng-if="refer.remoteFilename1.name"></i>
+								<span class="upload" title="{{refer.remoteFilename1.name}}" ng-click="downloadFile(refer.remoteFilename1.id)" >{{refer.remoteFilename1.name}}</span>
+								<a target="_blank" href="#/pactlAssist/online?goodsId={{refer.goodsId}}" ng-if="refer.productDesc&&refer.productDesc!=''">查看在线产品说明</a>
+							</div>
+						</div>
+						<div class="row">
+							<div class="refer-name">补充文档</div>
+							<div class="refer-value"><i class="i-pdf" ng-show="refer.remoteFilename2.name "></i>
+								<span class="upload" title="{{refer.remoteFilename2.name}}" ng-click="downloadFile(refer.remoteFilename2.id)">{{refer.remoteFilename2.name}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="content-nameRefer-left-3">
+						<div class="row mb10">
+							<span class="verdict">结论</span>
+							<div class="mr5 btn padding" ng-repeat="result in results" ng-class="{'condition':result.id=='101','backletter':result.id=='102','unpack':result.id=='104','dangerous':result.id=='105','other':result.id=='all','active':true}"
+							ng-click="select(result)" ng-model="refer.result">{{result.name}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 pd5">
+				<div class="content-nameRefer-right">
+					<div class="content-nameRefer-right-content" ng-repeat="rdData in records track by $index">
+						<div class="content-line wrap" ng-repeat="record in rdData track by $index">
+							<div ng-class="{'avatar-img': record.type==='1','pactl-img':record.type==='2'}"></div>
+							<div ng-class="{'question-body':record.type==='1', 'answer-body':record.type==='2'}">{{record.contents}}</div>
+							<div class="question-foot">{{record.createdDate |date:'MM/dd HH:mm'}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+		<button class="btn btn-default" ng-click="save()" ng-if="!isSonBill">继续退回</button>
+	</div>
+</div>

@@ -1,0 +1,173 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+
+      <div class="content-main-tab" ng-show="isedit">
+        <ul class="nav nav-tabs" style="border-bottom: 1px solid #ddd;">
+          <li ng-class="{'active': tabType==='base'}" ng-click="select('base')">
+            <a role="button">基本信息</a>
+          </li>
+          <li ng-class="{'active': tabType==='en'}" ng-click="select('en')">
+            <a role="button">英文名称管理</a>
+          </li>
+        </ul>
+      </div>
+      <div style="margin-top: 30px;" ng-show="isedit"></div>
+      <div class="row" ng-show="tabType==='base'">
+        <div class="col-sm-7">
+          <div class="row" ng-show="!isedit">
+            <div class="modal-body-name">代码<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="code" required ng-model="unitObj.code" ng-change="changeText('code')">
+            </div>
+          </div>
+          <div class="row" ng-show="isedit">
+            <div class="modal-body-name">代码</div>
+            <div class="modal-body-value">
+              <label class="label-checkbox">{{unitObj.code}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">中文名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="name" required ng-model="unitObj.name">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">英文名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="ename" required ng-model="unitObj.ename">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">简称</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="aliase" ng-model="unitObj.aliase">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">类别<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <div ui-select ng-model="unitObj.unitType" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.description}}</div>
+                <div ui-select-choices repeat="item in typeData | filter: {description:$select.search}">
+                  <div ng-bind-html="item.description | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">权限方案</div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="unitObj.plan" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in planData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">机构角色</div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="unitObj.role" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<div class="row">
+            <div class="modal-body-name">描述</div>
+            <div class="modal-body-value">
+              <textarea rows="3" class="form-control" ng-model="unitObj.description"></textarea>
+            </div>
+          </div>-->
+          <div class="row">
+            <div class="modal-body-name">排序</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="sort" ng-model="unitObj.sort">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">状态</div>
+            <div class="modal-body-value">
+              <label class="label-checkbox">
+                  <input type="radio" ng-model="unitObj.isvalid" value="1">启用
+                </label>
+              <label class="label-checkbox">
+                  <input type="radio" ng-model="unitObj.isvalid" value="0">停用
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+          <img ng-src="{{unitObj.fileObj.url}}" alt="" class="upload-avatar mb10">
+          <div>
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, unitObj)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]"
+              pl-max-file-size="5mb" pl-url="/api/org/units/avatars/ ">上传</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" ng-show="tabType==='en'">
+
+        <div class="content-main-title">
+          <div class="title">
+
+          </div>
+          <div class="pull-right">
+            <button class="btn btn-default" ng-click="add()">
+                <i class="i-add"></i>新增
+              </button>
+          </div>
+        </div>
+        <div class="content-main-body">
+          <table class="table content-main-table">
+            <thead>
+              <tr>
+                <th class="w15">序号</th>
+                <th class="w65">英文名</th>
+                <th class="w20">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in unitEnData track by $index" ng-show="$index > showItem.start && $index < showItem.end" ng-class-even="'even'">
+                <td>
+                  {{$index+1}}
+                </td>
+                <td>{{item.ename}}</td>
+                <td>
+                  <div class="btn-img" ng-click="edit(item)">
+                    <i class="btn-edit"></i>
+                  </div>
+                  <div class="btn-img" ng-click="remove(item,$index)">
+                    <i class="btn-del"></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div ng-include="'pageInside.html'" class="row"></div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="modal-footer" style="padding-left:100px">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

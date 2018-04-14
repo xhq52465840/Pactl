@@ -1,0 +1,129 @@
+<div ng-repeat="item in rows track by $index" ng-class="{'nextPage':$index+1<rows.length}">
+	<div class="content-main-title print-width" style="border-bottom:none;height: 30px;line-height: 30px;">
+		<div class="sub_title" style="font-size: 14px;">AIR CARGO MANIFEST</div>
+	</div>
+	<div class="content-main-body print-width" style="padding: 0px 30px;">
+		<div class="business-content-info">
+			<div class="border2 clearfix">
+				<div class="w100">
+					<div class="info-value-1 fontSize10">AWB INFO:</div>
+				</div>
+				<div class="row">
+					<div class="fl mr5">
+						<div class="info-name fontSize10">AWB:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.waybillNo}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">FLIGHT:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.flightNo}} {{item.pAirWaybillInfo.fltDate| date:'MM/dd'}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">ORG:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.dept}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">DEST:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.airportDest}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">PCS:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.rcpNo}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">SLAC:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.slac}}</div>
+					</div>
+					<div class="fl mr5">			
+						<div class="info-name fontSize10">WEIGHT:</div>
+						<div class="info-value-1 fontSize10">{{item.pAirWaybillInfo.grossWeight}}</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="fl mr5">
+						<div class="info-name fontSize10">SHIPPER:</div>
+						<div class="info-value-1 fontSize10">
+							{{item.pAirWaybillInfo.spName}}
+						</div>
+					</div>
+					<div class="fl mr5">
+						<div class="info-name fontSize10">CONSIGNEE:</div>
+						<div class="info-value-1 fontSize10">
+							{{item.pAirWaybillInfo.csName}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 0px;">
+				<div class="info-value-1 fontSize10">HAWB INFO：{{item.airWayBillInfoVos.length}} HAWBS</div>
+			</div>
+			<div ng-class="{'print-page':row.showLine}" ng-repeat="row in item.airWayBillInfoVos track by $index" id="{{'printPage' + $index}}">
+				<table class="table content-main-table border2">
+					<thead>
+						<tr>
+							<th class="w10 fontSize10" style="padding-right: 0px;padding-left: 0px;">HAWB</th>
+							<th class="w5 fontSize10" style="padding-right: 0px;padding-left: 0px;">DATE</th>
+							<th class="w6 fontSize10" style="padding-right: 0px;padding-left: 0px;">ORG</th>
+							<th class="w14 fontSize10" style="padding-right: 0px;padding-left: 0px;">DEST</th>
+							<th class="w9 fontSize10" style="padding-right: 0px;padding-left: 0px;">PCS./SLAC</th>
+							<th class="w5 fontSize10" style="padding-right: 0px;padding-left: 0px;">WEIGHT</th>
+							<th class="w28 fontSize10" style="padding-right: 0px;padding-left: 0px;">COMMODITY</th>
+							<th class="w14 fontSize10" style="padding-right: 0px;padding-left: 0px;">PAYMENT</th>
+							<th class="w9 fontSize10" style="padding-right: 0px;padding-left: 0px;">CURRENCY</th>
+						</tr>
+					</thead>
+					<tbody class="sublist-commodity">
+						<tr class="border2">
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.waybillNo}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.createdDate| date:'MM/dd'}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.dept}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.dest1}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.rcpNo}}/{{row.pAirWaybillInfo.slac}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.grossWeight}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.goodsDesc}}<br/>{{row.pAirWaybillInfo.remark}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.wtVal}}</label></td>
+							<td class="border2"><label class="fontbold">{{row.pAirWaybillInfo.currency}}</label></td>
+						</tr>
+						<tr class="border2"></tr>
+						<tr class="border2">
+							<td class="border2 h25" colspan="5"><label class="fontbold">SHIPPER</label></td>
+							<td class="border2 h25" colspan="4"><label class="fontbold">CONSIGNEE</label></td>
+						</tr>
+						<tr class="border2">
+							<td class="border2"></td>
+							<td class="border2" colspan="4">SHP:<label class="fontbold">{{row.pAirWaybillInfo.spName}}</label></td>
+							<td class="border2"></td>
+							<td class="border2" colspan="3">CNS:<label class="fontbold">{{row.pAirWaybillInfo.csName}}</label></td>
+						</tr>
+						<tr class="border2">
+							<td class="border2"></td>
+							<td class="border2" colspan="4">ADR:<label class="fontbold">{{row.pAirWaybillInfo.spAddress}}</label></td>
+							<td class="border2"></td>
+							<td class="border2" colspan="3">ADR:<label class="fontbold">{{row.pAirWaybillInfo.csAddress}}</label></td>
+						</tr>
+						<tr class="border2">
+							<td class="border2"></td>
+							<td class="border2" colspan="2">CITY:<label class="fontbold">{{row.pAirWaybillInfo.spCity}}</label></td>
+							<td class="border2">COUNTRY CODE:<label class="fontbold">{{row.pAirWaybillInfo.spCountry}}</label></td>
+							<td class="border2">STATE:<label class="fontbold">{{row.pAirWaybillInfo.spState}}</label></td>
+							<td class="border2"></td>
+							<td class="border2">CITY:<label class="fontbold">{{row.pAirWaybillInfo.csCity}}</label></td>
+							<td class="border2">COUNTRY CODE:<label class="fontbold">{{row.pAirWaybillInfo.csCountry}}</label></td>
+							<td class="border2">STATE:<label class="fontbold">{{row.pAirWaybillInfo.csState}}</label></td>
+						</tr>
+						<tr class="border2">
+							<td class="border2"></td>
+							<td class="border2" colspan="2">TEL:<label class="fontbold">{{row.pAirWaybillInfo.spTel}}</label></td>
+							<td class="border2">FAX:<label class="fontbold">{{row.pAirWaybillInfo.spFax}}</label></td>
+							<td class="border2">ZIPCODE:<label class="fontbold">{{row.pAirWaybillInfo.spZipcode}}</label></td>
+							<td class="border2"></td>
+							<td class="border2">TEL:<label class="fontbold">{{row.pAirWaybillInfo.csTel}}</label></td>
+							<td class="border2">FAX:<label class="fontbold">{{row.pAirWaybillInfo.csFax}}</label></td>
+							<td class="border2">ZIPCODE:<label class="fontbold">{{row.pAirWaybillInfo.csZipcode}}</label></td>
+						</tr>
+					</tbody>
+				</table>
+				{{showPage(item,$index)}}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <label class="reBillNo">运单号</label>
+      <label class="reBillVal">{{itemObj.waybillNo}}</label>
+    </div>
+    <div class="row">
+      <div class="reBillNo">现场检查类型</div>
+      <label class="label-checkbox" ng-repeat="item in itemObj.checkTypeData">
+        <input type="checkbox" ng-model="item.checked" ng-disabled="item.checkId === '102'">{{item.checkName}}
+      </label>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="reBillNo">移入现场检查原因列表</div>
+        <div class="recheck-reason-left form-control">
+          <ul>
+            <li class="receiptPass" ng-repeat="row in reasonData track by $index">
+              <label><input class="reBillVal" type="checkbox" ng-click="check($event, row)">{{row.name}}</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        其他
+        <div>
+          <textarea class="form-control reBillVal" cols="30" rows="10" ng-model="itemObj.actionComments"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="receiptPass" ng-show="!itemObj.fileObj">
+        <div class="upload" ngf-max-size="20MB" ng-model="itemObj.file" ngf-select="upload(itemObj)" ngf-pattern="'.pdf'" ngf-accept="'.pdf'">
+          <i class="i-upload"></i> 上传文件
+        </div>
+      </div>
+      <div class="receiptPass" ng-show="itemObj.fileObj">
+        <span class="upload" title="{{itemObj.fileObj.name}}" ng-click="downloadFile(this)" ng-model="itemObj.fileObj.newName">{{itemObj.fileObj.newName}}</span>
+        <div class="dib" ng-click="removeFile(this)">
+          <i class="btn-close"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">{{btnName}}</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

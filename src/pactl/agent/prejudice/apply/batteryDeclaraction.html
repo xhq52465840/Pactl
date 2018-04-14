@@ -1,0 +1,226 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+    	<!--PACTL关闭打印按钮  -->
+      <div class="dropdown pull-right" ng-if=printFlag>
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          打印
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a role="button" ui-sref="agentPrejudice.print({awId:awId,waybillNo:waybillNo,lang:'CN'})" target="_blank">中文</a>
+          </li>
+          <li>
+            <a role="button" ui-sref="agentPrejudice.print({awId:awId,waybillNo:waybillNo,lang:'EN'})" target="_blank">英文</a>
+          </li>
+          <li ng-if="aircode==='CA'">
+            <a role="button" ui-sref="agentPrejudice.printCA({awId:awId,waybillNo:waybillNo})" target="_blank">CA</a>
+          </li>
+          <li ng-if="aircode==='QR'">
+            <a role="button" ui-sref="agentPrejudice.printQR({awId:awId,waybillNo:waybillNo})" target="_blank">QR</a>
+          </li>
+          <li ng-if="aircode==='Y8'">
+            <a role="button" ui-sref="agentPrejudice.printY8({awId:awId,waybillNo:waybillNo,lang:'CN'})" target="_blank">Y8中文</a>
+            <a role="button" ui-sref="agentPrejudice.printY8({awId:awId,waybillNo:waybillNo,lang:'EN'})" target="_blank">Y8英文</a>
+          </li>                
+        </ul>
+      </div>
+    </div>
+    <div class="content-declare-title">
+      关于锂电池 Section II 空运声明 {{aircode}}
+    </div>
+    <div class="content-declare-main">
+      <div class="row line3">
+        <span class="content-1">主运单号：</span>
+        <span class="content-2">{{waybillNo}}</span>
+      </div>
+      <div class="row line4">
+        警告: 因为安全隐患原因而被厂家召回的锂电池禁止空运
+      </div>
+      <div class="row line5">
+        本包装件内含有如下所列的锂电池或电池芯，该电池/芯已通过了联合国《危险品运输建议-实验和标准手册》第 38.3 章节测试； 该锂电池的生产符合了 IATA《危险品规则》59 版 3.9.2.6(e)中规定的质量管理程序；被测试的包装件能够承受
+        1.2 米跌落试验（除 PI967 和 PI970 外）
+      </div>
+      <div class="row line4">
+        操作及包装要求：
+      </div>
+      <div class="row">
+        • 应小心操作，如包装件破损，有易燃危险性;
+      </div>
+      <div class="row">
+        • 如该包装件在运输中损坏，在未确定内部物品状态前不能装载。该包装件中的电池必须检查是否有损坏，只有确认电池完好无损且做好短路防护时才能再次包装它。
+      </div>
+      <div class="row">
+        • 应按货物实际要求在外包装上粘贴经久耐用且清晰可辨的锂电池操作标签。
+      </div>
+      <div class="row">
+        • 对于 PI966/PI969，每个包装件内含有的锂电池数不超过设备限制数量（包括2个备用件）
+      </div>
+      <div class="row" ng-if="aircode !== 'CA' && aircode !== 'Y8'">
+        • 对于 PI968 PI965，每个包装件上都要贴有“CARGO AIRCRAFT ONLY”（仅限货机）标签
+      </div>
+      <div class="row">
+        • 已按要求在合成包装件上注明“OVERPACK” 字样（如适用）
+        <label><input type="checkbox" ng-model="obj.overpack" ng-checked="obj.overpack" ng-disabled="!editAble"></label>
+      </div>
+      <!--bug3568-->
+      <!--<div class="row" ng-if="aircode === 'Y8'">
+        • 已按要求PI966/PI967/PI969/PI970 Section II,单个包装件内锂电池或锂电池芯的净重不超过5KG
+        <label><input type="checkbox" ng-model="obj.lessthen5kg" ng-checked="obj.lessthen5kg" ng-disabled="!editAble"></label>
+      </div>-->
+      <div class="row" ng-if="aircode === 'CA'">
+        • 电池型号: <input type="text" class="content-2" style="width:190px;" ng-model="obj.litype" ng-disabled="!editAble">
+        设备型号:   <input type="text" class="content-2" style="width:190px;" ng-model="obj.unittype" ng-disabled="!editAble">
+        设备数量:   <input type="text" class="content-2" style="width:100px;" ng-model="obj.unitamount" ng-disabled="!editAble">
+      </div>
+      <div class="row">
+        • 如果需要更多该包装中电池的信息，请联系以下电话
+        <input type="text" class="content-2" ng-model="obj.phone" ng-disabled="!editAble"> （电话号码需含国家区号）
+      </div>
+      <div class="content-main-tab line6">
+        <ul class="nav nav-tabs" style="border-bottom: 1px solid #ddd;">
+          <li ng-class="{'active': declare.type==='ELI'}" ng-click="select('ELI')">
+            <a role="button">ELI</a>
+          </li>
+          <li ng-class="{'active': declare.type==='ELM'}" ng-click="select('ELM')">
+            <a role="button">ELM</a>
+          </li>
+        </ul>
+      </div>
+      <div ng-show="declare.type==='ELI'">
+        <div class="row line7">
+          锂离子电池
+        </div>
+        <div class="row line8">
+          • 每个电池芯额定能量不超过 20 瓦时; 且 • 每个电池额定能量不超过 100 瓦时
+        </div>
+        <div class="row line8" ng-if="aircode !== 'CA' && aircode !== 'Y8'">
+          <label>
+            <input type="checkbox" ng-model="obj.eliIiOnly" ng-checked="obj.eliIiOnly"  ng-disabled="!editAble">
+            纯运输电池或电池芯且本票含锂电池的包装件仅有一件（ICAO/IATA 包装说明 965,Section II）– 包装件内只有电池或电池芯，没有设备包装件限量:
+          </label>
+          <p>≤ 2.7 Wh = 2.5 kg; 或</p>
+          <p>&gt;2.7 Wh but ≤ 20 Wh = 8 电池芯; 或</p>
+          <p>&gt;2.7 Wh but ≤ 100 Wh = 2 电池</p>
+        </div>
+        <div class="row line8">
+          <label>
+          <input type="checkbox" ng-model="obj.eliIiPack" ng-checked="obj.eliIiPack" ng-disabled="!editAble">
+          和设备包装在一起(ICAO/IATA  包装说明 966, Section II) –电池或电池芯作为附件和电子设备包装在一个包 装件内，该设备由电池驱动，且电池没有安装在设备内(2009.1.1之后生产的电池需在外箱上显示瓦时数)
+        </label>
+        </div>
+        <div class="row">
+          <label>
+          <input type="checkbox" ng-model="obj.eliRelation" ng-checked="obj.eliRelation" ng-change="eli967(obj)"  ng-disabled="!editAble">
+          安装在设备中(ICAO/IATA 包装说明 967, Section II) –电池或电池芯安装在设备中(2009.1.1之后生产的电池需在外箱上显示瓦时数)。
+        </label>
+        </div>
+        <div class="row line8">
+          <p>
+            对于PI967，单个包装件内所含的锂电池芯和锂电池数量：<input type="text" class="form-control dib" style="width:200px;" ng-model="obj.eliBatteryCellNo" 
+              ng-disabled="!obj.eliRelation || !editAble" ng-change='EliBatteryCellNo(obj)'> 锂电池芯（和/或）
+            <input type="text" class="form-control dib" style="width:200px;" ng-model="obj.eliBatteryNo" ng-change='EliBatteryNo(obj)' ng-disabled="!obj.eliRelation || !editAble">锂电池
+          </p>
+          <p>
+         货物外包装上无需粘贴锂电池操作标签<input type="checkbox"  ng-model="obj.noeli" ng-checked="obj.noeli" ng-disabled="!obj.eliRelation || !((obj.eliBatteryCellNo || obj.eliBatteryNo)&&obj.eliCountLimit) && !((obj.eliBatteryCellNo || obj.eliBatteryNo)&&(obj.eliButtonFlag&&obj.eliCountLimit)) && !((!obj.eliBatteryCellNo && !obj.eliBatteryNo)&&obj.eliButtonFlag)">
+          </p>
+          <!--（！obj.eliBatteryCellNo || ！obj.eliBatteryNo）&& ！obj.eliCountLimit-->
+          <p>
+           （1） 包装件中仅含有装在设备或主板中的纽扣电池<input  type="checkbox" ng-model="obj.eliButtonFlag" ng-checked="obj.eliButtonFlag" ng-change = 'flagEli967(obj)' ng-disabled="!obj.eliRelation || !editAble">
+          </p>
+                  <p>
+           （2） 含锂电池包装件不超过两件，且每个包装件中的设备内含有不超过四个锂电池芯或两个锂电池<input type="checkbox" ng-model="obj.eliCountLimit" ng-checked="obj.eliCountLimit" ng-change = 'flagsEli967(obj)' ng-disabled="!obj.eliRelation || !editAble">
+          </p>
+        </div>
+      </div>
+      <div ng-show="declare.type==='ELM'">
+        <div class="row line7">
+          锂金属电池
+        </div>
+        <div class="row line8">
+          • 每个电池芯锂含量不超过 1 克; 且 • 每个电池锂含量不超过 2 克
+        </div>
+
+        <div class="row line8" ng-if="aircode !== 'CA' && aircode !== 'Y8'">
+          <label>
+          <input type="checkbox" ng-model="obj.elmIiOnly" ng-checked="obj.elmIiOnly" ng-disabled="!editAble" >
+          纯运输电池或电池芯（ICAO/IATA 包装说明 968, Section II）– 包装件内只有电池或电池芯，没有设备包装件限量:
+        </label>
+          <p>≤0.3 g = 2.5 kg; 或</p>
+          <p>&gt;0.3 g but ≤1 g = 8 电池芯; 或</p>
+          <p>&gt;0.3 g but ≤ 2 g = 2 电池</p>
+        </div>
+        <div class="row line8">
+          <label>
+          <input type="checkbox" ng-model="obj.elmIiPack" ng-checked="obj.elmIiPack" ng-disabled="!editAble">
+          和设备包装在一起(ICAO/IATA  包装说明 969, Section II)–电池或电池芯作为附件和电子设备包装在一个包装件 内，该设备由电池驱动，且电池没有安装在设备内(2009.1.1之后生产的电池需在外箱上显示瓦时数)
+        </label>
+        </div>
+        <div class="row">
+          <label>
+          <input type="checkbox" ng-model="obj.elmRelation" ng-checked="obj.elmRelation" ng-change="elm970(obj)" ng-disabled="!editAble">
+          安装在设备中( ICAO/IATA 包装说明 970, Section II) –电 池或电池芯安装在设备中(2009.1.1之后生产的电池需在外箱上显示瓦时数)。
+        </label>
+        </div>
+        <div class="row line8">
+          <p>
+            对于PI970，单个包装件内所含的锂电池芯和锂电池数量：<input type="text" class="form-control dib" style="width:200px;" ng-model="obj.elmBatteryCellNo"
+              ng-disabled="!obj.elmRelation || !editAble" ng-change='ElmBatteryCellNo(obj)'> 锂电池芯（和/或）
+            <input type="text" class="form-control dib" style="width:200px;" ng-model="obj.elmBatteryNo" ng-change='ElmBatteryNo(obj)' ng-disabled="!obj.elmRelation || !editAble">锂电池
+          </p>
+         <p>
+         货物外包装上无需粘贴锂电池操作标签<input type="checkbox" ng-model="obj.noelm" ng-checked="obj.noelm" ng-disabled="!obj.elmRelation || !((obj.elmBatteryCellNo || obj.elmBatteryNo)&&obj.elmCountLimit) && !((obj.elmBatteryCellNo || obj.elmBatteryNo)&&(obj.elmButtonFlag&&obj.elmCountLimit)) && !((!obj.elmBatteryCellNo && !obj.elmBatteryNo)&&obj.elmButtonFlag)">
+          </p>
+          <p>
+           （1） 包装件中仅含有装在设备或主板中的纽扣电池<input type="checkbox" ng-model="obj.elmButtonFlag" ng-checked="obj.elmButtonFlag" ng-change = 'flagElm970(obj)' ng-disabled="!obj.elmRelation || !editAble">
+          </p>
+                  <p>
+           （2） 含锂电池包装件不超过两件，且每个包装件中的设备内含有不超过四个锂电池芯或两个锂电池<input type="checkbox" ng-model="obj.elmCountLimit" ng-checked="obj.elmCountLimit" ng-change = 'flagsElm970(obj)' ng-disabled="!obj.elmRelation || !editAble">
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 line9">
+          我司特别声明：上述运输专用名称完整、准确地描述了 货物的内装物品，并进行了分类、包装，粘贴标记和标 签，各方面完好适合运输，且符合国际及国家的有关规定。我申明所有适用的空运要求均已符合。
+        </div>
+        <div class="col-sm-6 line10">
+          <div class="col-sm-12">
+            托运人名称/地址<input  style="width: 43%;"  type="text" class="form-control input1" ng-model="obj.nameAddress" ng-disabled="!editAble">
+            <!--/联系人对应地址/-->
+        <select id="box" ng-if="!unitType&&printFlag" ng-click="changexhq()"  name="liPhone" style="width: 66px;position: absolute;height:32px;right:22px;border-left: none;top: 1px;outline: none;" ng-model="addressFlag">
+					<option ng-repeat = 'x in xianghq' value = "{{x.token}}">{{x.name}}</option>
+				</select>
+				 <select id="box" ng-if="unitType&&printFlag" ng-click="changexhq()"  name="liPhone" style="width: 66px;position: absolute;height:32px;right:22px;border-left: none;top: 1px;outline: none;" ng-model="addressFlag">
+					<option ng-repeat = 'x in xianghq1' value = "{{x.token}}">{{x.name}}</option>
+				</select>
+				
+        <span style="color: red;position: absolute;left: 105px;top: 11px;">*</span>
+          </div>       
+          <div class="col-sm-12">
+            托运人或其代理人签名<input type="text" class="form-control input2" ng-model="obj.signName" ng-disabled="!editAble">
+          </div>
+          <div class="col-sm-12">
+            日期<input type="text" class="form-control input2" pikaday="myPickerObject" ng-model="obj.createTime" ng-disabled="!editAble">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" ng-if="editAble">保存</button>
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

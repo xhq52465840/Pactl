@@ -1,0 +1,123 @@
+<div class="content-main-title">
+  <div class="title">分单列表</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新建分单
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">分单状态关联</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.parentNoFlag" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">主单号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.parentNo" maxlength="11">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">分单号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.waybillNo" maxlength="12">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">子账户</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.agentSales" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+              <small>{{item.description}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">英文品名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.goodsDesc">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">目的港</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.dest1" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w5">编号</th>
+        <th class="w15">分单号</th>
+        <th class="w15">总单号</th>
+        <th class="w5">目的港</th>
+        <th class="w5">件数</th>
+        <th class="w7">重量(KG)</th>
+        <th class="w10">英文品名</th>
+        <th class="w8">关联状态</th>
+        <th class="w10">子账户</th>
+        <th class="w10">退回原因</th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in billData track by $index" ng-class-even="'even'">
+        <td>{{$index+1}}</td>
+        <td>
+          <i class="i-no" ng-if="item.refStatus==='1'"></i>
+          <!--<i class="i-yes" ng-if="item.refStatus==='0'"></i>-->
+          <a role="button" ui-sref="agentWaybill.newBill({awId: item.awId})" target="_blank">
+            {{item.waybillNo}}
+          </a>
+        </td>
+        <td>
+          {{item.parentNo}}
+          <i class="i-link2" ng-click="connect(item.awId)"></i>
+        </td>
+        <td>{{item.dest1}}</td>
+        <td>{{item.rcpNo}}</td>
+        <td>{{item.grossWeight}}</td>
+        <td>{{item.goodsDesc}}</td>
+        <td>
+          <span ng-if="item.parentNo">已关联</span>
+          <span ng-if="!item.parentNo">未关联</span>
+        </td>
+        <td>{{item.agentSales}}</td>
+        <td>{{item.subBillAuditRemarks}}</td>
+        <td>
+          <div class="btn-img" ng-click="remove(item.awId, item.waybillNo)" ng-if="!item.parentNo">
+            <i class="btn-del"></i>
+          </div>          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

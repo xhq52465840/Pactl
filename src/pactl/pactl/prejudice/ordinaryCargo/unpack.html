@@ -1,0 +1,20 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save('1')" ng-show="obj.type==='0'">确定需要开箱检查</button>
+		<button class="btn btn-primary" ng-click="save('0')" ng-show="obj.type==='1'">取消开箱检查</button>
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

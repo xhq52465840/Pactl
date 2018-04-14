@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide {
+			display: none !important;
+		}
+
+		ng\:form {
+			display: block;
+		}
+
+		.ng-animate-block-transitions {
+			transition: 0s all!important;
+			-webkit-transition: 0s all!important;
+		}
+
+		.ng-hide-add-active,
+		.ng-hide-remove {
+			display: block!important;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>单票货物查询</title>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+
+<body ng-cloak>
+	<div ng-controller="airLineCtrl">
+		<header class="header">
+			<div class="Grid">
+				<div class="Grid-cell u-1of4">
+					<label class="weui-label" style="width: 60px;">运单号</label>
+				</div>
+				<div class="Grid-cell" style="position:relative;">
+					<input class="weui-input" placeholder="请输入运单号" ng-change="onlyEn()" ng-model="single.waybillNo">
+					<img src="../imges/scan.png" height="23" width="23" alt="img" ng-click="scanQRCode()">
+				</div>
+				<div class="Grid-cell u-1of3">
+					<a style="font-weight: bold; font-size: 16px;" ng-click="search(single.waybillNo)">查询</a>
+				</div>
+			</div>
+		</header>
+		<div class="main-content" ng-if="btn.detail">
+			<div style="border-bottom:1px solid #ddd">
+				<div class="weui-cell__hd singleBarcode" style="margin-top: 10px;">
+					<div style="display:inline-block;position:relative;">
+						<img style="width:50%;height:75px;padding:0px" ng-src="{{barCode}}" alt="code">
+						<br>
+						<div style="display: inline-block;text-align: center;font-size: 24px;font-weight: 700;">{{single.waybillInfo.waybillNo}}</div>
+						<a ng-if="single.subWayBill.length >0" role="button" style="position: absolute;top: 23px;" class="btn btn-success" ng-href="airSubList.html?waybillNo={{single.waybillNo}}">分单</a>
+						<a ng-if="single.subWayBill.length <=0" role="button" style="position: absolute;top: 23px;background-color: #ddd;" class="btn btn-default"
+						  ng-disabled="true">分单</a>
+					</div>
+				</div>
+			</div>
+			<div class="box">
+				<div class="weui-cell__hd" style="margin: 10px 10px 0;">
+					<span class="label" ng-if="single.waybillStatus.wStatus === '000'" ng-class="{'commitOrNot': single.waybillStatus.wStatus === '000'}">未提交</span>
+					<span class="label" ng-if="single.waybillStatus.wStatus === '100'" ng-class="{'commitOrNot': single.waybillStatus.wStatus === '100'}">已提交</span>
+					<span class="label" ng-if="single.waybillStatus.wStatus === '102'" ng-class="{'BackOrNotReceive': single.waybillStatus.wStatus === '102'}">预审退回</span>
+					<span class="label" ng-if="single.waybillStatus.wStatus === '302'" ng-class="{'BackOrNotReceive': single.waybillStatus.wStatus === '302'}">收单不通过</span>
+					<span class="label" ng-if="single.waybillStatus.wStatus === '101'" ng-class="{'pass': single.waybillStatus.wStatus === '101'}">预审通过</span>
+					<span class="label" ng-if="single.waybillStatus.wStatus === '301'" ng-class="{'receive': single.waybillStatus.wStatus === '301'}">收单完成</span>
+					<span class="label" ng-if="single.waybillStatus.aStatus === '210'" ng-class="{'notSe': single.waybillStatus.aStatus === '210'}">不可安检</span>
+					<span class="label" ng-if="single.waybillStatus.aStatus === '202'" ng-class="{'lien': single.waybillStatus.aStatus === '202'}">安检扣押</span>
+					<span class="label" ng-if="single.waybillStatus.aStatus === '211'" ng-class="{'canSe': single.waybillStatus.aStatus === '211'}">可安检</span>
+					<span class="label" ng-if="single.waybillStatus.aStatus === '201'" ng-class="{'passSe': single.waybillStatus.aStatus === '201'}">安检通过</span>
+					<span ng-if="single.waybillStatus.wbEle === '1'"><img src="../imges/e.png" height="23" width="24" alt="e"></span>
+					<span ng-repeat="item in single.localCheck.rows">
+						<img src="../imges/hdw.png" height="23" width="24" alt="hdw" ng-if="item.checkId === '101' && item.checkFlag === 'true'">
+						<img src="../imges/wxp.png" height="23" width="24" alt="wxp" ng-if="item.checkId === '102' && item.checkFlag === 'true'">
+						<img src="../imges/yp.png" height="23" width="24" alt="yp" ng-if="item.checkId === '103' && item.checkFlag === 'true'">
+						<img src="../imges/ldc.png" height="23" width="24" alt="ldc" ng-if="item.checkId === '104' && item.checkFlag === 'true'">
+						<img src="../imges/gb.png" height="23" width="24" alt="gb" ng-if="item.checkId === '105' && item.checkFlag === 'true'">
+					</span>
+					<span ng-if="single.waybillStatus.shipmentFlag === '1'">						
+						<img src="../imges/fj.png" height="23" width="24" alt="fj"></span>
+				</div>
+			</div>
+			<div class="box">
+				<div class="weui-cell__hd" style="margin: 10px;">
+					<span class="label" ng-if="single.waybillStatus.localeCheckFlag === '1'" ng-class="{'passSe':single.waybillStatus.wStatus === '101', 'passSe1':single.waybillStatus.wStatus !== '101'}">现场检查</span>
+					<span class="label" ng-if="single.waybillStatus.ckReBook === '1'" ng-class="{'passSe':single.waybillStatus.reBook === '1','passSe1':single.waybillStatus.reBook !== '1'}">交正本</span>
+					<span class="label" ng-class="{'passSe':single.waybillStatus.approachFlag === '1','passSe1':single.waybillStatus.approachFlag !== '1'}">进场</span>
+					<span class="label" ng-if="single.waybillStatus.eleUpdateFlagAfterCheck === '1'" ng-class="'passSe1':single.waybillStatus.eleUpdateFlagAfterCheck === '1'}">电子运单数据修改</span>
+					<span class="label" ng-if="single.waybillStatus.eleUpdateFlagAfterCheck === '1'" ng-class="{'passSe1':single.waybillStatus.eleUpdateFlagAfterCheck === '1'}">电子运单数据修改</span>
+					<span class="label" ng-if="single.waybillStatus.cargoDeclareError === '1'" ng-class="{'passSe1':single.waybillStatus.cargoDeclareError === '1'}">货物申报不正确</span>
+					<span class="label" ng-if="single.waybillStatus.eleUpdateFlag === '1'" ng-class="{'passSe1':single.waybillStatus.eleUpdateFlag === '1'}">电子运单变更</span>
+					<span class="label" ng-if="single.waybillStatus.ckOpenFlag === '1'" ng-class="{'passSe':single.waybillStatus.openFlag === '1','passSe1':single.waybillStatus.openFlag !== '1'}">开箱检查</span>
+				</div>
+			</div>
+		</div>
+		<div class="weui-cells weui-cells_form" style="margin-top:0" ng-if="btn.detail">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">航班号</label></div>
+				{{single.waybillInfo.flightNo}}
+			</div>
+			<div class="weui-cell weui-cell_vcode">
+				<div class="weui-cell__hd">
+					<label class="weui-label">航班日期</label>
+				</div>
+				{{single.waybillInfo.fltDate}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">件数</label></div>
+				{{single.waybillInfo.totalCount}}件
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">重量(KG)</label></div>
+				{{single.waybillInfo.grossWeight}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">计费重量(KG)</label></div>
+				{{single.waybillInfo.chargeWeight}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">体积</label></div>
+				{{single.waybillInfo.vol}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">目的港</label></div>
+				{{single.waybillInfo.dest1}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">品名</label></div>
+				{{single.waybillInfo.goodsDesc}}
+			</div>
+		</div>
+		<div class="singleBarcode" ng-if="btn.showimg">
+			<img src="../imges/noresult.png" height="89" width="102" alt="无搜索结果">
+		</div>
+	</div>
+</body>
+
+</html>

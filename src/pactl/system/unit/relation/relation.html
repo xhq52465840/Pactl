@@ -1,0 +1,91 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>机构管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">机构用户角色</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    机构用户角色
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增关系
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="relationObj.unit" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in unitData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">用户组</div>
+        <div class="search-value">
+          <div ui-select ng-model="relationObj.group" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in groupData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">用户</div>
+        <div class="search-value">
+          <div ui-select ng-model="relationObj.people" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.fullname}}</div>
+            <div ui-select-choices repeat="item in peopleData | filter:{fullname:$select.search}">
+              <div ng-bind-html="item.fullname | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+  </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="">机构</th>
+        <th class="">操作对象</th>
+        <th class="">对象类型</th>
+        <th class="">角色名称</th>
+        <th class="">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in relationData track by $index" ng-class-even="'even'">
+        <td>{{ item.unit.name}}</td>
+        <td>{{ item.authObjName}}</td>
+        <td>{{ item.authObjTypeName}}</td>
+        <td> {{ item.role.name }}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>

@@ -1,0 +1,64 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">货站管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    货站管理
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">货站名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="stationObj.name" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w20">货站编号</th>
+        <th class="w20">货站名称</th>
+        <th class="w40">备注</th>
+        <th class="w20">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in stationData track by $index" ng-class-even="'even'">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.remark}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="enable(item.id)" ng-if="item.deleted==='1'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="disable(item.id)" ng-if="item.deleted==='0'">
+            <i class="i-yx"></i>
+          </div>
+          <!-- <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

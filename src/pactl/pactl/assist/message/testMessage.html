@@ -1,0 +1,45 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">测试报文功能</li>
+</ol>
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="sentForm">
+	<div class="content-main-title">
+		<div class="title">测试报文功能</div>
+		<div class="pull-right">
+			<button class="btn btn-default" w5c-form-submit="search()">查询</button>
+		</div>
+	</div>
+	<div class="content-main-body">
+		<div class="content-main-search">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="search-name">报文类型</div>
+					<div class="search-value">
+						<input type="text" class="form-control" ng-model="sentInfo.type" name="type" required auto-focus="true">
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="search-name">发报地址</div>
+					<div class="search-value">
+						<input type="text" class="form-control" ng-model="sentInfo.origin" name="address" required>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="search-name">内容包含</div>
+				<div class="search-value" style="width:88%;">
+					<textarea class="form-control mb20 content-main-search"  style="height:800px;"
+					placeholder="此区域内显示报文内容...." ng-model="sentInfo.text" name="text" required>
+				</textarea>
+			</div>
+		</div>
+	</div>
+	<div>
+		<textarea class="form-control mb20 content-main-search" 
+		placeholder="此区域内显示报文内容...." ng-model="data" ng-disabled="true"></textarea>
+	</div>
+</div>
+</form>

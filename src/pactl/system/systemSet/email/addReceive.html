@@ -1,0 +1,46 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<div class="row mt10">
+				<div class="col-sm-2">收件类型</div>
+				<div class="col-sm-10">
+					<div ui-select ng-model="receive.receiveTypeDid" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in receiveTypes | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">收件箱</div>
+				<div class="col-sm-10">
+					<div ui-select ng-model="receive.emailId" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.emailAddr}}</div>
+						<div ui-select-choices repeat="item in receiveEmails | filter: {emailAddr:$select.search}">
+							<div ng-bind-html="item.emailAddr | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt10">
+				<div class="col-sm-2">备注</div>
+				<div class="col-sm-10"> 
+					<textarea name="" id="" cols="30" rows="10" class="form-control" ng-model="receive.remark"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" w5c-form-submit="save()">确定</button>
+			<button class="btn btn-default" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,132 @@
+<div class="mainInfo-index">
+  <div class="row">
+    <div class="col-sm-2 index-row-right">
+      <div class="indexA-left-chart mb10">
+        <div class="indexA-left-chart-head">进场指数</div>
+        <div class="indexA-left-chart-body">
+          <div class="row progress-title">
+            <span class="fl">运单百分比</span>
+            <span class="fr">{{lineObj.waybillPercentage}}</span>
+          </div>
+          <div class="row progress">
+            <div class="progress-bar" ng-style="lineObj.waybill" role="progressbar">
+            </div>
+          </div>
+          <div class="row progress-title">
+            <span class="fl">重量百分比</span>
+            <span class="fr">{{lineObj.weightPercentage}}</span>
+          </div>
+          <div class="row progress">
+            <div class="progress-bar" ng-style="lineObj.weight" role="progressbar">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="indexA-left-chart">
+        <div class="indexA-left-chart-head">排队指数</div>
+        <div class="indexA-left-chart-body">
+          <div ng-include="'gaugeChart/queuingAir.html'" class="chart-main-body"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8 chart-right">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="chart-main">
+            <div class="chart-main-head">运单-今天</div>
+          </div>
+          <div class="chart-main-body">
+            <div air-waybill awb-date="{{date.today}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="chart-main">
+            <div class="chart-main-head">运单-明天</div>
+          </div>
+          <div class="chart-main-body">
+            <div air-waybill awb-date="{{date.tommorrow}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="chart-main">
+            <div class="chart-main-head">运单-后天</div>
+          </div>
+          <div class="chart-main-body">
+            <div air-waybill awb-date="{{date.tommorrow2}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="chart-main">
+            <div class="chart-main-head">运单-昨天</div>
+          </div>
+          <div class="chart-main-body">
+            <div air-waybill awb-date="{{date.yesterday}}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 index-row-right">
+      <div class="row row-right row-right-1">
+        <a ui-sref="airline.airOperation" target="_blank">
+          <div class="row-right-icon">
+            <i class="icon-b-13"></i>
+          </div>
+          <div class="row-right-text">
+            <div class="row-right-text1"></div>
+            <div class="row-right-text2">综合操作</div>
+          </div>
+        </a>
+      </div>
+      <div class="row row-right row-right-2">
+        <a ui-sref="airline.airOperation({wStatus: '102'})" target="_blank">
+          <div class="row-right-icon">
+            <i class="icon-b-7"></i>
+          </div>
+          <div class="row-right-text">
+            <div class="row-right-text1">{{staticObj.preBack}}</div>
+            <div class="row-right-text2">预审退回</div>
+          </div>
+        </a>
+      </div>
+      <div class="row row-right row-right-3">
+        <a ui-sref="airline.airOperation({littleTask: true})" target="_blank">
+          <div class="row-right-icon">
+            <i class="icon-b-8"></i>
+          </div>
+          <div class="row-right-text">
+            <div class="row-right-text1">{{staticObj.littleTask}}</div>
+            <div class="row-right-text2">额外小任务</div>
+          </div>
+        </a>
+      </div>
+      <div class="row row-right row-right-4">
+        <a ui-sref="airline.airOperation({wStatus: '302'})" target="_blank">
+          <div class="row-right-icon">
+            <i class="icon-b-9"></i>
+          </div>
+          <div class="row-right-text">
+            <div class="row-right-text1">{{staticObj.notPass}}</div>
+            <div class="row-right-text2">交单不通过</div>
+          </div>
+        </a>
+      </div>
+      <div class="row row-right row-right-5">
+        <a ui-sref="airline.airOperation({wbFocus: true})" target="_blank">
+          <div class="row-right-icon">
+            <i class="icon-b-12"></i>
+          </div>
+          <div class="row-right-text">
+            <div class="row-right-text1">{{staticObj.focus.count}}</div>
+            <div class="row-right-text2">关注运单</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

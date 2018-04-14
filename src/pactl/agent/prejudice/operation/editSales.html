@@ -1,0 +1,33 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<div class="row">
+				<div class="search-value">
+					<div ui-select ng-model="proxyObj.agentSales" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+						<div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+							<div ng-bind-html="item.code | highlight: $select.search"></div>
+							<small>{{item.description}}</small>
+						</div>
+					</div>
+					<input type="hidden" name="agentSales" required ng-model="proxyObj.agentSales">
+				</div>
+			</div>
+			<div class="row">
+				<small>{{proxyObj.agentSales.description}}</small>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" w5c-form-submit="save()">确定更换</button>
+			<button class="btn btn-default" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+</form>

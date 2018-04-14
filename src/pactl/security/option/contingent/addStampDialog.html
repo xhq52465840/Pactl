@@ -1,0 +1,51 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-sm-3">				
+				<div class="search-name">安检章类型</div>
+			</div>
+			<div class="col-sm-9">
+				<div ui-select ng-model="infos.type" theme="select2" class="form-control">
+					<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+					<div ui-select-choices repeat="item in stampData | filter: {name:$select.search}">
+						<div ng-bind-html="item.name | highlight: $select.search"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">				
+				<div class="search-name">正常状态图章</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="modal-body-value">
+					<img ng-src="{{infos.fileObj1.url}}" alt="" class="air-img" ng-show="infos.fileObj1&&infos.fileObj1.url">
+					<button class="btn btn-primary" on-file-uploaded="uploadCallback1($response, infos)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]" pl-max-file-size="5mb" pl-url="/api/pactl/uploadfile">上传</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">				
+				<div class="search-name">注销状态图章</div>
+			</div>
+			<div class="col-sm-9">
+				<div class="modal-body-value">
+					<img ng-src="{{infos.fileObj2.url}}" alt="" class="air-img" ng-show="infos.fileObj2&&infos.fileObj2.url">
+					<button class="btn btn-primary" on-file-uploaded="uploadCallback2($response, infos)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]" pl-max-file-size="5mb" pl-url="/api/pactl/uploadfile">上传</button>					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">确定</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

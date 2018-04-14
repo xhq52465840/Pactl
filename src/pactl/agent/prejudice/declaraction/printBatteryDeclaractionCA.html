@@ -1,0 +1,167 @@
+<div class="declare-content print-width">
+  <div class="print-declare-title">
+    托运人声明
+  </div>
+  <div class="row print-declare-line2">
+    <p style="font-size: 18px;">
+      中国国际货运航空有限公司:
+    </p>
+    <p style="font-size: 18px;">
+      我公司运输符合PI966-967、PI969-970 Section Ⅱ 的锂电池货物
+    </p>
+  </div>
+  <div class="row print-declare-line3">
+    <p>
+      我司特别声明：运单号：<span class="content-2">{{obj.waybillNo}}</span>内锂电池货物不含有因安全隐患原因而被厂家召回的锂电池。包装件内含有如下所列的锂电池或电池芯（检查是否适用，在下表相应项下打“√”），电池/芯已通过了联合国《危险品运输建议-实验和标准手册》第38.3章节测试；该锂电池的生产符合了IATA《危险品规则》59版3.9.2.6(e)中规定的质量管理程序；被测试的包装件能够承受1.2米跌落试验（除PI967 &nbsp; 和 &nbsp; PI970外）
+    </p>
+    <p>
+      电池型号：<span class="content-2">{{obj.litype}}</span>
+    </p>
+  </div>
+  <div class="print-declare-main">
+    <div class="row print-declare-line4 bt">
+      <div class="row print-declare-line4-1 br">
+        <div class="print-declare-line3">锂离子电池</div>
+        <div class="print-declare-line3"><i>&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 每个电池芯额定能量不超过20瓦时; 且</i></div>
+        <div class="print-declare-line3"><i>&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 每个电池额定能量不超过100瓦时</i></div>
+      </div>
+      <div class="row print-declare-line4-2">
+        <div class="print-declare-line3">锂金属电池</div>
+        <div class="print-declare-line3"><i>&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 每个电池芯锂含量不超过1克; 且</i></div>
+        <div class="print-declare-line3"><i>&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 每个电池锂含量不超过2克</i></div>
+      </div>
+    </div>
+    <div class="row print-declare-line5 bt">
+      <div class="row print-declare-line5-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left">
+            <span class="font-bold">{{obj.eliIiPack?"√":"□"}}</span>
+          </div>
+          <p class="print-declare-line3">和设备包装在一起(IATA 包装说明966, Section II) –电池或电池芯与被驱动的电子设备包装在一个包装件内，且未被安装在设备中</p>
+        </div>
+      </div>
+      <div class="row print-declare-line5-2">
+        <div class="row print-declare-line5-2-1">
+          <div class="pl10">
+            <div class="print-declare-line-left font-bold">
+              {{obj.elmIiPack?"√":"□"}}
+            </div>
+            <p class="print-declare-line3">和设备包装在一起(IATA 包装说明969, Section II) –电池或电池芯与被驱动的电子设备包装在一个包装件内，且未被安装在设备中</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row print-declare-line7">
+      <div class="row print-declare-line7-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.eliRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">
+            安装在设备中(IATA包装说明967, Section II) – 电池或电池芯安装在设备中。
+          </p>
+        </div>
+      </div>
+      <div class="row print-declare-line7-2">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.elmRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">
+            安装在设备中( IATA 包装说明 970, Section II) –电池或电池芯安装在设备中。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <p>
+      • 应小心操作，如包装件破损，有易燃危险性；
+    </p>
+    <p>
+      • 如该包装件在运输中损坏，在未确定内部物品状态前不能装载。该包装件中的电池必须是否有损坏，只有确认电池完好无损且做好短路防护时才能再次包装它。
+    </p>
+    <div style="margin-bottom: 10px;">
+      <span class="print-declare-line3 dib">• 对于PI967，单个包装件内所含的锂电池芯和锂电池数量：</span>
+      <div class="content-3 dib">{{obj.eliBatteryCellNo}}</div>
+      <span class="print-declare-line3 dib">锂电池芯（和/或）</span>
+      <div class="content-3 dib">{{obj.eliBatteryNo}}</div>
+      <span class="print-declare-line3 dib">锂电池。</span>
+    </div>
+        <div style="margin-bottom: 10px;">
+      <span class="print-declare-line3 dib">• 对于PI970，单个包装件内所含的锂电池芯和锂电池数量：</span>
+      <div class="content-3 dib">{{obj.elmBatteryCellNo}}</div>
+      <span class="print-declare-line3 dib">锂电池芯（和/或）</span>
+      <div class="content-3 dib">{{obj.elmBatteryNo}}</div>
+      <span class="print-declare-line3 dib">锂电池。</span>
+    </div>
+    <p>
+      • 【请根据货物实际情况，在（ ）内打“√”】
+    </p>
+    <p>
+      <span>已遵守有关空运规则，包括国际和国内法规。（√）。</span>
+      <span>已按要求载合成包装件上注明“OVERPACK”字样。</span>
+      <span ng-class="{'mr20':!(overpack)}">(</span>
+      <span class="font-bold" ng-class="{'pd10':overpackg}">
+        {{obj.overpack?"√":" "}}
+      </span>
+      <span>)</span>
+    </p>
+    <p>
+      <span>已在货物外包装上粘贴经久耐用且清晰可辨的锂电池操作标签</span>
+      <span ng-class="{'mr20':((obj.eliRelation&&!obj.elmRelation&&obj.noeli)||(obj.elmRelation&&!obj.eliRelation&&obj.noelm)||(obj.elmRelation&&obj.noeli&&obj.eliRelation&&obj.noelm))}">(</span>
+      <span class="font-bold" ng-class="{'pd10':!((obj.eliRelation&&!obj.elmRelation&&obj.noeli)||(obj.elmRelation&&!obj.eliRelation&&obj.noelm)||(obj.elmRelation&&obj.noeli&&obj.eliRelation&&obj.noelm))}">
+      {{((obj.eliRelation&&!obj.elmRelation&&obj.noeli)||(obj.elmRelation&&!obj.eliRelation&&obj.noelm)||(obj.elmRelation&&obj.noeli&&obj.eliRelation&&obj.noelm)) ? " ":"√"}}
+      </span>
+      <span>)</span>
+      <span>或货物外包装上无需粘贴锂电池操作标签</span>
+      <span ng-class="{'mr20':!(obj.noeli ||obj.noelm)}">(</span>
+      <span class="font-bold" ng-class="{'pd10':obj.noeli ||obj.noelm}">
+        {{obj.noeli ||obj.noelm?"√":" "}}
+      </span>
+      <span>)</span>
+    </p>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    <p style="font-size: 18px;">我公司运输安装在设备中的纽扣锂电池货物</p>
+    <p>我司声明：<span style="font-size: 18px;">运单号：</span><span class="content-2">{{obj.eliButtonFlag||obj.elmButtonFlag?obj.waybillNo:''}}</span>货物中含有装有纽扣锂电池的设备。<span style="font-size: 18px;">设备型号：</span><span class="content-2">{{obj.unittype}}</span></p>
+    <br>
+    <p><span style="font-size: 18px;">设备数量：</span><span class="content-2">{{obj.unitamount}}</span>上述设备及安装的纽扣电池不会产生危险的热量，不会对飞机及飞行设备产生影响。这些设备在运输中一定不能发出干扰信号。（如蝉鸣报警器、闪光灯等）</p>
+  </div>
+  <br>
+  <div class="print-declare-main">
+    <div class="row print-declare-line10">
+      <div class="row print-declare-line6-1" style="height: 184px;border-right: 1px solid black;">
+        <div class="pl10">
+          <p class="print-declare-line3" style="line-height: 40px;">我司特别声明：上述运输专用名称完整、准确地描述了货物的内装物品，并进行了分类、包装，粘贴标记和标签，各方面完好适合运输，且符合国际及国家的有关规定。我申明所有适用的空运要求均已符合。</p>
+        </div>
+      </div>
+      <div class="row print-declare-line10-2">
+        <div class="row print-declare-line10-2-1 bt">
+          <div><span class="print-declare-line3 dib">托运人 名称/地址: </span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.nameAddress}}</span></div>
+        </div>
+        <div class="row print-declare-line10-2-1 bt" style="height: 59px;padding: 0;">
+          <div class="row print-declare-line10-2-2 br">
+            <div><span class="print-declare-line3 dib">托运人或其代理人签名: </span></div>
+            <div class="font-bold"><span class="print-declare-line3 dib">{{obj.signName}}</span></div>
+          </div>
+          <div class="row print-declare-line10-2-3">
+            <span class="print-declare-line3 dib">日期:</span>
+            <div class="font-bold"><span class="print-declare-line3 dib">{{obj.createTime}}</span></div>
+          </div>
+        </div>
+        <div class="row print-declare-line10-2-2 br">
+          <div><span class="print-declare-line3 dib">销售代理人签名盖章</span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib"></span></div>
+        </div>
+        <div class="row print-declare-line10-2-3">
+          <span class="print-declare-line3 dib">日期:</span>
+          <div class="font-bold"><span class="print-declare-line3 dib"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

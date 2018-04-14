@@ -1,0 +1,65 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-12 modal-body-name" style="text-align: left;"><span class="text-danger">1、请使用 标签名 颜色 和格式填写,不同标签之间请换行</span></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 modal-body-name" style="text-align: left;"><span class="text-danger">2、只有能正常预览的系统才会处理,标签名不存在的会添加，已经存在的会更新颜色</span></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 modal-body-name" style="text-align: left;">
+            <a class="btn btn-default" href="../../../../down/LableExampleV1.0.xls">
+              <i class="i-down"></i>颜色列表下载
+            </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 modal-body-name" style="text-align: left;"><span class="text-danger">标签</span></div>
+        <div class="col-sm-6 modal-body-name" style="text-align: left;"><span class="text-danger">预览</span></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 modal-body-value">
+          <textarea required class="form-control" required rows="30" ng-model="tagsObj.names" ng-change="previewTags()"></textarea>
+          <div class="modal-body-name" style="text-align: right;"><span class="text-danger">总行数:&nbsp;&nbsp;{{amount}}</span></div>
+        </div>
+        <div class="col-sm-6 modal-body-value">
+          <div class="content-main-body">
+            <table class="table content-main-table">
+              <thead>
+                <tr>
+                  <th class="w25">序号</th>
+                  <th class="w60">标签名称</th>
+                  <th class="w15">颜色</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in tags track by $index" ng-show="$index > showItem.start && $index < showItem.end" ng-class-even="'even'">
+                  <td>
+                    {{$index+1}}
+                  </td>
+                  <td>{{item.name}}</td>
+                  <td>
+                    <span class="tagColor" ng-style="item.styleObj"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div ng-include="'pageInside.html'" class="row"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+      </div>
+    </div>
+</form>

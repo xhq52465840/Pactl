@@ -1,0 +1,72 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">微信昵称</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.nickname">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">员工工号</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.employeeAccount">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">员工姓名</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.employeeName">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">机构代码</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.agentCode">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">申请时间</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.created">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">身份证号码</div>
+        <div class="col-sm-10 modal-body-value">
+        <input type="text" class="form-control" ng-model="wechat.idCard">
+
+        </div>
+      </div>
+            <div class="row">
+        <div class="col-sm-2 modal-body-name">用户</div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="wechat.pactlAccount" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.fullname}}</div>
+            <div ui-select-choices repeat="item in userData | filter: {fullname:$select.search}">
+              <div ng-bind-html="item.fullname | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="wechat.pactlAccount" required name="pactlAccount">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

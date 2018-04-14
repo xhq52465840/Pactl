@@ -1,0 +1,64 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w3"></th>
+					<th class="w6">已退运</th>
+					<th class="w18" style="text-align: center;">运单号</th>
+					<th class="w25">品名</th>
+					<th class="w6">件数</th>
+					<th class="w9">重量</th>
+					<th class="w7">打印次数</th>
+					<th class="w26" style="text-align: center;">备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<input type="checkbox" ng-disabled="disableSon(parentBill.editable,'parentBill')" ng-click="singleCheck1($event, parentBill)" ng-checked="checkedSon(parentBill)">
+					</td>
+					<td><i class="i-yes" ng-show="parentBill.returnFlag === '1'"></i></td>
+					<td><span style="padding-left: 30px;">{{parentBill.waybillNo}}</span></td>
+					<td>{{parentBill.goodsDesc}}</td>
+					<td>{{parentBill.rcpNo}}</td>
+					<td>{{parentBill.grossWeight}}</td>
+					<td>{{parentBill.count}}</td>
+					<td><textarea class="form-control" style="height:47px" ng-disabled="!parentBill.checked" ng-model="parentBill.returnReMarks" maxlength="2000"></textarea></td>
+				</tr>
+				<tr ng-repeat="rowobj in rows track by $index" ng-class-even="'even'">
+					<td>
+						<input type="checkbox" ng-disabled="disableSon(rowobj.editable,'childBill',rowobj.childBill)" ng-click="singleCheck2($event, rowobj)" ng-checked="checkedSon(rowobj)">
+					</td>
+					<td><i class="i-yes" ng-show="rowobj.childBill.returnFlag === '1'"></i></td>
+					<td>
+						<i class="i-no" ng-show="rowobj.childBill.refStatus === '1'"></i>
+						<i ng-show="rowobj.childBill.refStatus !== '1'"></i>
+						<span>{{rowobj.childBill.waybillNo}}</span>
+					</td>
+					<td>{{rowobj.childBill.goodsDesc}}</td>
+					<td>{{rowobj.childBill.rcpNo}}</td>
+					<td>{{rowobj.childBill.grossWeight}}</td>
+					<td>{{rowobj.childBill.count}}</td>
+					<td><textarea class="form-control" style="height:47px" ng-disabled="!rowobj.checked" ng-model="rowobj.childBill.returnReMarks" maxlength="2000"></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save1()">打印退库单</button>
+		<button class="btn btn-primary" ng-click="save2()">取消退库</button>
+		<button class="btn btn-primary" ng-click="cancel()">取消</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

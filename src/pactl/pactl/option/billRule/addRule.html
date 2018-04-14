@@ -1,0 +1,60 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">货站<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="itemObj.goodsStation" theme="select2" class="form-control" on-select="getAirData($select.selected.id)">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" required name="goodsStation" ng-model="itemObj.goodsStation">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">组名<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" name="littleGroup" required ng-model="itemObj.littleGroup">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">小组成员<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="itemObj.member" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$item.fullname+'('+$item.account+')'}}</div>
+            <div ui-select-choices repeat="item in peopleData | filter: {fullname:$select.search}">
+              <div ng-bind-html="item.fullname+'('+item.account+')' | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" required name="member" ng-model="itemObj.member">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">航空公司</div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="itemObj.fltCode" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$item.fltCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {fltCode:$select.search}">
+              <div ng-bind-html="item.fltCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" required name="fltCode" ng-model="itemObj.fltCode">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

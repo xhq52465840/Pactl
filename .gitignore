@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+src/js/
+public/
+.jsbeautifyrc
+src/css/sprite.css
+src/image/pactl/sprite.png
+/.idea/
+.vscode/
+/wechat/

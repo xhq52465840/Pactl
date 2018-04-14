@@ -1,0 +1,62 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">证书类型</th>
+					<th class="w15">鉴定机构</th>
+					<th class="w25">证书编号</th>
+					<th class="w20">证书电子档</th>
+					<th class="w15">在线审核通过</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rowobj in rows" ng-class-even="'even'">
+					<td>{{rowobj.book.bookType | showStatus: typeData }}</td>
+					<td>{{rowobj.book.officeName}}</td>
+					<td>{{rowobj.book.bookNo}}</td>
+					<td class="imgShow">
+						<i class="i-pdf" ng-mouseover="rowobj.imgShow=true" ng-mouseleave="rowobj.imgShow=false" ng-click="openDialog({
+						officeName:rowobj.book.officeName,
+						bookNo: rowobj.book.bookNo,
+						src:rowobj.pdfPath,
+						goodsNameEn: item.goodsNameEn,
+						goodsNameCn: item.goodsNameCn,
+						goodsDesc: item.goodsDesc,
+						srcArr: rowobj.srcArr
+					})" ng-if="rowobj.pdfPath"></i>
+						<div ng-show="rowobj.imgShow" ng-style="rowobj.style1">
+							<img ng-src="{{rowobj.filePath}}" ng-style="rowobj.style2">
+						</div>
+						<span class="label goodsType-puhuo1" ng-if="rowobj.book.goodsType === '101'">普货</span>
+						<span class="label goodsType-ldc1" ng-if="rowobj.book.goodsType === '102'">锂电池</span>
+					</td>
+					<td>
+						<i ng-if="rowobj.book.deviceId!=='1' && rowobj.book.status==='1'" class="i-yes1"></i>
+						<i ng-if="rowobj.book.deviceId!=='1' &&rowobj.book.status==='2'" class="i-no1"></i>
+						<span ng-if="!rowobj.book.status && rowobj.book.deviceId!=='1'">待审核</span>
+						<span ng-if="rowobj.book.deviceId==='1'">安检添加 
+						<input ng-if="isChildBill!=='1' && item.wStatus === '301'" type="checkbox" ng-checked="rowobj.book.status === '1'" ng-disabled="item.wStatus === '301'">
+						<input ng-if="isChildBill!=='1' && item.wStatus !== '301'" type="checkbox" ng-click="addSe($event,rowobj.book,item.parentawId)" ng-checked="rowobj.book.status === '1'"><br/>
+						<span ng-if="isChildBill!=='1' && rowobj.book.status === '1'">(确认适用本运单)</span>
+						<span ng-if="isChildBill!=='1' && rowobj.book.status !== '1'">(是否适用本运单)</span></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

@@ -1,0 +1,23 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+		<input type="hidden" ng-model="wFlag">
+	</div>
+	<div class="modal-body">
+		<div class="receiptPass">
+			<div class="reBillNo">注意：取消进场标记以后重新打印载货清单会再次标为已进场</div>
+			<div class="reBillNo">备注</div>
+			<div><textarea class="form-control receipthei reBillVal" ng-model="remark.comment"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">确认标记为未进场</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

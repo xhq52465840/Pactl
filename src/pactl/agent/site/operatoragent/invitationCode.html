@@ -1,0 +1,40 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="modal-body-name">原邀请码</div>
+            <div class="modal-body-value">
+              <label class="label-checkbox">{{unitObj.invitationCode}}</label>
+            </div>
+          </div>
+          <div class="row" ng-show="!isedit">
+            <div class="modal-body-name">新邀请码<span class="text-danger">*</span></div>
+            <div class="modal-body-value" >
+              <input type="text" class="form-control" name="invitationCode" required ng-model="unitObj.code">
+            </div>
+          </div>
+          <div class="row" ng-show="!isedit">
+            <div class="modal-body-name"><span class="text-danger">&nbsp; </span></div>
+            <div class="modal-body-value" style="text-align: right;" >
+              <button class="btn btn-primary" ng-click="query()">生成邀请码</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">更新</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

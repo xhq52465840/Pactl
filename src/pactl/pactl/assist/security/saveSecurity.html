@@ -1,0 +1,37 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">{{items.title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body" style="padding: 20px 1px;">
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w14">代理</th>
+          <th class="w19">运单号</th>
+          <th class="w15">退运件数</th>
+          <th class="w9">件数</th>
+          <th class="w19">退运操作员</th>
+          <th class="w29">退运时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in items.refundData track by $index" ng-class-even="'even'">
+          <td>{{item.agentOprn}}</td>
+          <td>{{item.waybillNo}}</td>
+          <td>{{item.returnCount}}</td>
+          <td>{{item.rcpNo}}</td>
+          <td>{{item.returnName}}</td>
+          <td>{{item.returnTime + ' ' + ((item.hour+"").length==1?"0"+item.hour:item.hour) + ":" + ((item.minute+"").length==1?"0"+item.minute:item.minute) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">确认</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>

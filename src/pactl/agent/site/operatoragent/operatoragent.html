@@ -1,0 +1,138 @@
+<ol class="bread" ng-if="ismanager">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>门户</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">我的子账户</li>
+</ol>
+<div class="content-main-title" ng-if="ismanager">
+  <div class="title">
+    我的子账户
+  </div>
+  <div class="pull-right" ng-if="operunitid==unitId">
+    <button class="btn btn-default" ng-click="invotationCode()" ng-if="ismanager">
+      <i class="i-add"></i>查看/修改邀请码
+    </button>
+    <button class="btn btn-default" ng-click="add()" ng-if="isSuper">
+      <i class="i-add"></i>添加子账户
+    </button>
+  </div>
+</div>
+<div class="content-main-body" ng-if="ismanager">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="agentObj.applystatus" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in applystatus | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">中文名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">英文名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.ename">
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="content-right-card" ng-repeat="item in agentData track by $index">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-4 card-body-name">图标</div>
+            <div class="col-sm-8 card-body-value ellipsis" style="width:40px;height:40px;">
+              <img ng-src="{{item.avatarUrl}}" alt="" class="air-img">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">子账户代码</div>
+            <div class="col-sm-8 card-body-value ellipsis">{{item.code}}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">IATA代码</div>
+            <div class="col-sm-8 card-body-value ellipsis">
+              <span ng-repeat="row in item.unitPropertyDO" ng-if="row.propName=='IATACode'">{{row.propValue}}</span>
+            </div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">英文名称</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.ename}}</div>'>{{item.ename}}</div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">中文名称</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.description}}</div>'>{{item.description}}</div>
+          </div>
+          <!--<div class="row">
+            <div class="col-sm-4 card-body-name">管理员</div>
+            <div class="col-sm-8 card-body-value ellipsis">
+              <span class="label label-primary mr5" ng-repeat="row in item.unitmanager">{{row.user.fullname}}</span>
+            </div>
+          </div>-->
+          <!--<div class="row">
+            <div class="col-sm-4 card-body-name">权限方案</div>
+            <div class="col-sm-8 card-body-value ellipsis">
+              <span class="label label-primary mr5" ng-repeat="row in item.unitSchemeDO">{{row.pScheme.name}}</span></div>
+          </div>-->
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">角色</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.roleText}}</div>'>{{item.roleText}}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">申请状态</div>
+            <div class="col-sm-8 card-body-value ellipsis">
+              <span ng-repeat="row in applystatus" ng-if="row.status==item.agentRelationDO.status">{{ row.name }}</span>
+            </div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">申请原因</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.agentRelationDO.applyDescription}}</div>'>{{item.agentRelationDO.applyDescription}}</div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">审批说明</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.agentRelationDO.returnDescription}}</div>'>{{item.agentRelationDO.returnDescription}}</div>
+          </div>
+          <!--<div class="row">
+            <div class="col-sm-4 card-body-name">修改人</div>
+            <div class="col-sm-8 card-body-value ellipsis">
+              <span class="label label-primary mr5">{{item.auditUser.fullname}}</span></div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">最后修改时间</div>
+            <div class="col-sm-8 card-body-value ellipsis">{{item.lastUpdate}}</div>
+          </div>-->
+        </div>
+        <div class="card-footer">
+          <div ng-if="item.id!=agentObj.unit && operunitid==unitId && ismanager">
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==1" ng-click="edit(item)">编辑</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==2 || item.agentRelationDO.status==3" ng-click="manageOper(1,item)">启用</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==4" ng-click="agree(item)">同意</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==4" ng-click="refuse(item)">退回</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==1" ng-click="manageOper(2,item)">冻结</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==1||item.agentRelationDO.status==2" ng-click="manageOper(3,item)">禁用</button>
+            <button class="btn btn-default" ng-if="item.agentRelationDO.status==5 || item.agentRelationDO.status==6" ng-click="manageOper(-1,item)">删除</button>
+          </div>
+          <div ng-if="item.id==agentObj.unit">
+            <span class="">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>
+</div>

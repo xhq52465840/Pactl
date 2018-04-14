@@ -1,0 +1,13 @@
+{
+  "HEAD": {
+    "personal_info": "personal info",
+    "logout": "logout",
+    "user": "user",
+    "unit": "unit",
+    "base": "base",
+    "sys": "system",
+    "switch_lang": "switch lang",
+    "chinese": "chinese",
+    "english": "english"
+  }
+}

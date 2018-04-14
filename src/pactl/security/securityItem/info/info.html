@@ -1,0 +1,164 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>安检</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">运单信息详情</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    运单信息详情
+  </div>
+  <div class="title fr">
+  <button class="btn btn-default" ng-click="showHistory(detailObj.airwaybill)">历史记录</button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="row content-info-title">
+    <span class="info-title-1">主单号</span>
+    <span ng-if="detailObj.waybillStatus.isFormal === '1' && detailObj.waybillStatus.showWord && detailObj.waybillStatus.showWord && detailObj.waybillStatus.showWord !== ''" class="waybill-formal">{{detailObj.waybillStatus.showWord}}</span>
+    <span ng-if="detailObj.waybillStatus.isFormal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+    <span class="info-title-2">{{detailObj.airwaybill.waybillNo}}</span>
+
+    <i class="i-e" ng-if="detailObj.airwaybill.wbEle==='1'"></i>
+    <span ng-if="changeWaybillData" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">{{changeWaybillData}}</span>
+    <div class="pull-right">
+      <pre ng-if="angetInfo.directorPhone" style="float: left;margin-right: 50px;padding: 2px;font-size: 14px;background-color: white;">{{angetInfo.directorPhone}}</pre>
+      <span class="info-title-1">操作代理</span>
+      <span class="info-title-3">{{detailObj.airwaybill.agentOprn}}</span>
+    </div>
+  </div>
+  <table class="table content-info-table">
+    <tbody>
+      <tr>
+        <td class="info-name w10">航班</td>
+        <td class="info-value w10">{{detailObj.airwaybill.flightNo}}</td>
+        <td class="info-name w10">日期</td>
+        <td class="info-value w10">{{detailObj.airwaybill.fltDate}}</td>
+        <td class="info-name w10">目的港</td>
+        <td class="info-value w10">{{detailObj.airwaybill.airportDest}}</td>
+        <td class="info-name w10">品名</td>
+        <td class="info-value w10">{{detailObj.airwaybill.goodsDesc}}</td>
+        <td class="info-name w10">发货人</td>
+        <td class="info-value w10">{{detailObj.airwaybill.spName}}</td>
+      </tr>
+      <tr>
+        <td class="info-name">件数</td>
+        <td class="info-value">{{detailObj.airwaybill.rcpNo}}</td>
+        <td class="info-name">重量(KG)</td>
+        <td class="info-value">{{detailObj.airwaybill.grossWeight}}</td>
+        <td class="info-name">计费重量(KG)</td>
+        <td class="info-value">{{detailObj.airwaybill.chargeWeight}}</td>
+        <td class="info-name">体积({{detailObj.airwaybill.volumeCode}})</td>
+        <td class="info-value">{{detailObj.airwaybill.vol}}</td>
+        <td class="info-name">收货人</td>
+        <td class="info-value">{{detailObj.airwaybill.csName}}</td>
+      </tr>
+      <tr>
+        <td class="info-name">特货代码</td>
+        <td class="info-value">{{detailObj.airwaybill.holdCode}}</td>
+        <td class="info-name">handing Information</td>
+        <td class="info-value" colspan="6">
+          {{detailObj.airwaybill.osi1}}
+          <br>
+          {{detailObj.airwaybill.ssr}}
+        </td>
+        <td class="info-value">
+          <i class="i-noflag" ng-if="detailObj.count==0" ng-click="showRemark(detailObj.airwaybill,detailObj)"></i>
+          <i class="i-flag" ng-if="detailObj.count!=0" ng-click="showRemark(detailObj.airwaybill,detailObj)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">分单号</th>
+        <th class="w12">件数</th>
+        <th class="w12">重量</th>
+        <th class="w12">目的港</th>
+        <th class="w16">品名</th>
+        <th class="w12">鉴定书</th>
+        <th class="w12">备注</th>
+        <th class="w12">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in detailObj.waybill track by $index" ng-class-even="'even'" ng-class="{'gray-bg': item.ref_status === '1'}">
+        <td>
+          <i class="i-no" ng-if="item.ref_status === '1'"></i>
+          {{item.waybill_no}}<i class="i-e" ng-show="item.wb_ele==='1'" style="margin-left: 5px;"></i></td>
+          <td>{{item.total_count}}</td>
+          <td>{{item.gross_weight}}</td>
+          <td>{{item.dest1}}</td>
+          <td>{{item.goods_desc}}</td>
+          <td>
+            <div ng-repeat="book in item.books" class="tal">
+              <a role="button" ng-click="showPdfDialog(book)">
+                <i class="i-pdf"></i>{{book.bookNo}}
+              </a>
+            </div>
+          </td>
+          <td>
+            <i class="i-flag" ng-if="item.count_remark !== '0'" ng-click="showRemark(item)"></i>
+            <i class="i-noflag" ng-if="item.count_remark === '0'"  ng-click="showRemark(item)"></i>
+          </td>
+          <td>
+            <button class="btn btn-default" ng-show="item.ref_status==='1' && item.refFlag==='1'" ng-click="pullUp(item)">恢复</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-sm-2 pd5">
+        <div class="panel panel-primary">
+          <div class="panel-heading">证书</div>
+          <div class="panel-body">
+            <div class="row" ng-repeat="item in detailObj.books track by $index">
+              <a role="button" ng-click="showPdfDialog(item)">
+                <i class="i-pdf"></i>{{item.bookNo}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-7 pd5">
+        <div class="panel panel-primary">
+          <div class="panel-heading">安检状态</div>
+          <div class="panel-body">
+            <div class="row" ng-repeat="row in detailObj.check track by $index">
+              <div class="col-sm-4 pd5">
+                {{row.a_status | showStatus: showAdatas}}
+                <span class="status ask" ng-if="row.type==='1'">件数{{row.aislecount}}</span>
+                <span class="status ask" ng-if="row.type==='0'">件数{{row.machine24 || row.total_count}}</span>
+              </div>
+              <div class="col-sm-4 pd5">
+                {{row.operatdate}}
+              </div>
+              <div class="col-sm-4 pd5" style="word-wrap: break-word;word-break: break-word;">
+                <span ng-if="row.type==='1'" class="label dangerGoods">24H</span>
+                {{row.machine | showStatus: machineData}}{{row.machine?'号安检机/':''}}{{row.account}}&nbsp;&nbsp;{{row.personid}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-sm-3 pd5">
+        <div class="panel panel-primary">
+          <div class="panel-heading">退运信息</div>
+          <div class="panel-body">
+          </div>
+        </div>
+      </div> -->
+      <div class="col-sm-3 pd5">
+        <div class="panel panel-primary">
+          <div class="panel-heading">安检章图片</div>
+          <div class="panel-body">
+            <div ng-repeat="row in detailObj.files track by $index" class="mb10">
+              <img ng-src="{{row.fileHttpPath}}" alt="" style="max-width: 100%;max-height: 240px;">
+            </div>
+          </div>
+        </div>
+      </div>    
+    </div>
+  </div>

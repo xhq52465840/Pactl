@@ -1,0 +1,80 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">目录类型<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="itemObj.catalogType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in typeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" class="form-control" ng-model="itemObj.catalogType" name="catalogType" required>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">目录地址<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.catalogAddr" name="catalogAddr" required>
+        </div>
+      </div>      
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">说明</div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="itemObj.remark" name="remark"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">FTP</div>
+        <div class="col-sm-1 modal-body-value">
+          <input type="checkbox" ng-checked="itemObj.ftp" ng-model="itemObj.ftp">
+        </div>
+        <div class="col-sm-2 modal-body-name">端口<span ng-if="itemObj.ftp" class="text-danger">*</span></div>
+        <div class="col-sm-7 modal-body-value">
+          <input ng-if="!itemObj.ftp" type="text" class="form-control" ng-model="itemObj.port" ng-disabled="!itemObj.ftp">
+          <input ng-if="itemObj.ftp" type="text" class="form-control" ng-model="itemObj.port" name="port" w5c-dynamic-element required>
+        </div>
+      </div>  
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">用户名<span ng-if="itemObj.ftp" class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" ng-if="!itemObj.ftp" class="form-control" ng-model="itemObj.username" ng-disabled="!itemObj.ftp">
+          <input type="text" ng-if="itemObj.ftp" class="form-control" ng-model="itemObj.username"  name="username" w5c-dynamic-element required>
+        </div>
+      </div>  
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">密码<span ng-if="itemObj.ftp" class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="password" ng-if="!itemObj.ftp" class="form-control" ng-model="itemObj.password" ng-disabled="!itemObj.ftp">
+          <input type="password" ng-if="itemObj.ftp" class="form-control" ng-model="itemObj.password" name="password" w5c-dynamic-element required>
+        </div>
+      </div>  
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">文件夹<span ng-if="itemObj.ftp" class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" ng-if="!itemObj.ftp"class="form-control" ng-model="itemObj.folder" ng-disabled="!itemObj.ftp">
+          <input type="text" ng-if="itemObj.ftp" class="form-control" ng-model="itemObj.folder" name="folder" w5c-dynamic-element required>
+        </div>
+      </div>  
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">备份文件夹</div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.folder2">
+        </div>
+      </div>  
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,24 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      请选择组织机构
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>      
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div ui-select ng-model="orgObj.org" theme="select2" class="form-control">
+        <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+        <div ui-select-choices repeat="item in orgData | filter: {code:$select.search}">
+          <div ng-bind-html="item.code | highlight: $select.search"></div>
+          <small>{{item.description}}-{{item.type}}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">确定</button>
+  </div>
+</div>

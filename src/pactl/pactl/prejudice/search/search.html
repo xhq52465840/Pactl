@@ -1,0 +1,27 @@
+<div class="modal-content modal-add-people">
+  <div class="modal-header">
+    <div class="modal-title">
+      单票运单预审
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div tabset>
+      <div tab>
+        <div tab-heading>
+          <i class="i-search"></i>主运单查询
+        </div>
+        <div class="input-group bill-content-body-info">
+          <input type="text" class="form-control info-input-1" id="pre_srh_code" ng-model="billObj.srh_code" do-search="search()" auto-focus="true">
+          <input type="text" class="form-control info-input-2" id="pre_srh_no" maxlength="8" ng-model="billObj.srh_no" do-search="search()">
+          <button class="btn info-btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

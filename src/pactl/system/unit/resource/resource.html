@@ -1,0 +1,66 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>机构管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">资源管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    资源管理
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增资源
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">资源名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="resourceObj.resName">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w15">资源ID</th>
+        <th class="w10">资源类型</th>
+        <th class="w30">资源名称</th>
+        <th class="w35">url</th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in resourceData track by $index" ng-class-even="'even'">
+        <td>{{item.resId}}</td>
+        <td>{{item.resTypeName}}</td>
+        <td>
+          {{item.resName}}
+        </td>
+        <td>
+            <a href="{{item.url}}" target="_blank">{{item.url}}</a>
+          </td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

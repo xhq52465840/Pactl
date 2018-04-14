@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide {
+			display: none !important;
+		}
+
+		ng\:form {
+			display: block;
+		}
+
+		.ng-animate-block-transitions {
+			transition: 0s all!important;
+			-webkit-transition: 0s all!important;
+		}
+
+		.ng-hide-add-active,
+		.ng-hide-remove {
+			display: block!important;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>证书查询</title>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+
+<body ng-cloak ng-controller="listCtrl">
+	<!-- 	<div class="wechat-content" infinite-scroll="scrollList()" infinite-scroll-disabled="paused()" infinite-scroll-distance="0"> -->
+	<div class="wechat-content">
+		<div class="wechat-header">
+			<span style="font-weight: 600;">切换门户</span>
+			<div class="wechat-title" style="width: 20rem;padding-top: 0.6rem;display: inline-block;">
+				<select style="-webkit-appearance: none;font-size: 13px" ng-options="sel.name for sel in agentList" ng-model="agentTitle"
+				  ng-change="selectAgent(agentTitle)" class="form-control">
+			</select>
+			</div>
+		</div>
+
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label for="" class="weui-label">标签:</label></div>
+			<div class="weui-cell__bd form-control" ng-click="focusInput()" style="min-height: 34px;height:auto;">
+				<span class="label label-mg" style="background-color:{{item.style}};display: inline-block;white-space: normal;word-break: break-all;word-wrap: break-word;"
+				  ng-repeat="item in selectedItems">{{item.name}}</span>
+			</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd"><label for="" class="weui-label">编号:</label></div>
+			<div class="weui-cell__bd" style="border:none">
+				<input class="form-control" type="text" ng-model="bookNo">
+			</div>
+		</div>
+		<div class="weui-cell__ft" style="margin-right:1em">
+			<button type="button" class="btn btn-primary" ng-click="scrollList()">查询</button>
+		</div>
+
+		<div class="searchList" ng-show="displayDialog.dataList">
+			<table class="searchTable table table-striped">
+				<thead>
+					<tr style="background-color: #ccdaee;height: 5rem;">
+						<th style="padding-left: 0.5rem;">鉴定机构</th>
+						<th>鉴定书编号</th>
+						<th>条形码</th>
+						<th>货物类型</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="list in searchListData track by $index">
+						<td>
+							<span class="label label-mg colorDefault" ng-class="{'color1':list.pOfficeInfo.officeCode === '2','color2':list.pOfficeInfo.officeCode ==='GBG','color3':list.pOfficeInfo.officeCode ==='LLL','color4':list.pOfficeInfo.officeCode ==='1','color5':list.pOfficeInfo.officeCode ==='SHY','color6':list.pOfficeInfo.officeCode === 'FFF','color7':list.pOfficeInfo.officeCode ==='2016','color8':list.pOfficeInfo.officeCode ==='${JDG}','color9':list.pOfficeInfo.officeCode ==='AAA'}">{{list.pOfficeInfo.shortName}}</span></td>
+						<td><a ng-href="{{'./showPDF.html?pdf='+list.exceptPdf}}" target="_blank">{{list.pAgentShareBook.bookNo}}</a>
+						</td>
+						<td>
+							<a ng-click="watchCode(list.pOfficeInfo,list.pAgentShareBook)">
+								<img src="../imges/barcode.png" height="24px" width="24px" alt="条形码"></a>
+						</td>
+						<td>{{list.pAgentShareBook.goodsType=='101'?'普货':'锂电池'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- 没有默认的机构时，弹框，下拉展示所有的机构 -->
+	<div class="modal-content" ng-show="displayDialog.hasNoagent">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="modal-title">
+					请选择组织机构
+					<div class="modal-close" ng-click="cancel()">
+						<i class="i-close">X</i>
+					</div>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="weui-cell__bd">
+						<select class="weui-select" name="select1" ng-model="agentId">
+								<option value="{{row.id}}" ng-repeat="row in agentList track by $index">
+									{{row.name}}
+								</option>
+							</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" ng-click="selectAgentInit()">确定</button>
+				<button class="btn btn-primary" ng-click="cancel()">关闭</button>
+			</div>
+		</div>
+	</div>
+	<!-- 点击“标签”输入框，弹出所有标签列表供用户多选 -->
+	<div class="js_dialog" ng-show="labelObj.showLabel">
+		<div class="weui-mask"></div>
+		<div class="weui-dialog">
+			<div class="weui-dialog__bd">
+				<input class="form-control" ng-model="query" style="font-size:12px;margin-bottom:10px;">
+				<span class="label label-mg" style="color:{{row.style}};background-color:#fff;border:1px solid #ddd;display:inline-block;white-space: normal;"
+				  ng-repeat="row in agentLabel | filter:query" ng-click="select(row)" ng-style="row.bgk">{{row.name}}</span>
+			</div>
+			<div class="weui-dialog__ft">
+				<a class="weui-dialog__btn weui-dialog__btn_default" ng-click="ok()">确定</a>
+				<a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">关闭</a>
+			</div>
+		</div>
+	</div>
+	<!-- 点击“查看”按钮，条形码生成接口 -->
+	<div class="js_dialog" ng-show="displayDialog.hasBarcode">
+		<div class="weui-mask"></div>
+		<div class="weui-dialog" style="width: 100%;max-width: 1024px;">
+			<div class="weui-dialog__hd">
+				<strong class="weui-dialog__title" style="font-size:14px">
+						<span class="label label-mg" ng-class="{'color1':pOfficeInfo.officeCode === '2','color2':pOfficeInfo.officeCode ==='GBG','color3':pOfficeInfo.officeCode ==='LLL','color4':pOfficeInfo.officeCode ==='1','color5':pOfficeInfo.officeCode ==='SHY','color6':pOfficeInfo.officeCode === 'FFF','color7':pOfficeInfo.officeCode ==='2016','color8':pOfficeInfo.officeCode ==='${JDG}','color9':pOfficeInfo.officeCode ==='AAA','color10':pOfficeInfo.officeCode === 'SDD'}" style="float:left">{{pOfficeInfo.shortName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{pAgentShareBook.bookNo}}
+						<span class="label label-mg" style="background-color: red;float:right;display:inline-block" ng-show="pAgentShareBook.goodsType!=='101'">锂</span>
+						<span class="label label-mg" style="background-color: green;float:right;display:inline-block" ng-show="pAgentShareBook.goodsType==='101'">普</span></strong>
+			</div>
+			<div class="weui-dialog__bd"><img style="width:100%;height:75px;padding:0px" ng-src="{{barCode}}" alt="code"></div>
+			<div class="weui-dialog__ft">
+				<a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">关闭</a>
+			</div>
+		</div>
+	</div>
+	<div class="page loadmore js_show" ng-show="displayDialog.loadBusy">
+		<div class="page__bd">
+			<div class="weui-loadmore">
+				<i class="weui-loading"></i>
+				<span class="weui-loadmore__tips">正在加载</span>
+			</div>
+		</div>
+	</div>
+	<div class="weui-loadmore weui-loadmore_line" ng-show="displayDialog.noMoreData">
+		<span class="weui-loadmore__tips">没有数据啦</span>
+	</div>
+</body>
+
+</html>

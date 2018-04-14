@@ -1,0 +1,46 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="onlineForm">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <label class="reBillNo">运单号</label>
+      <label class="reBillVal">{{itemObj.waybillNo}}</label>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        备注
+        <div style="width:200%">
+          <textarea class="form-control reBillVal" cols="70" rows="8" ng-model="itemObj.comment" required name="comment"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="receiptPass" ng-show="!itemObj.fileObj">
+        <div class="upload" ngf-max-size="20MB" ng-model="itemObj.file" ngf-select="upload(itemObj)" ngf-pattern="'.pdf'" ngf-accept="'.pdf'">
+          <i class="i-upload"></i> 上传文件
+        </div>
+      </div>
+      <div class="receiptPass" ng-show="itemObj.fileObj">
+        <span class="upload" title="{{itemObj.fileObj.name}}" ng-click="downloadFile(this)" ng-model="itemObj.fileObj.newName">{{itemObj.fileObj.newName}}</span>
+        <div class="dib" ng-click="removeFile(this)">
+          <i class="btn-close"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" w5c-form-submit="save()">{{btnName}}</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>
+</form>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

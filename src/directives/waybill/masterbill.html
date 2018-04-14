@@ -1,0 +1,766 @@
+<div class="content-main-body">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="search-text">
+        <i class="i-public"></i>主单号
+      </div>
+      <div class="search-input">
+        {{billObj.waybillNo}}
+      </div>
+    </div>
+    <div class="col-sm-2">
+      {{billObj.agentOprn}}/{{billObj.agentSales}}
+    </div>
+  </div>
+  <div class="content-main-body-bill row">
+    <!--line-1  start -->
+    <div class="row">
+      <div class="line-left line-left-1">
+        <div class="line-left-1-1">
+          <div class="line-left line-left-1-1-1">
+            Shipper's Name and Address*
+            <div class="line-left-1-1-1-2">
+            </div>
+          </div>
+          <div class="line-left-1-1-2">
+            Shipper's Account Number
+            <div class="form-control">{{billObj.spAccountNumber}}</div>
+          </div>
+        </div>
+        <div class="line-left-1-2">
+          <div class="line-row">
+            <div class="form-control">{{billObj.spName}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control">{{billObj.spAddress}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control line-row-1-1">{{billObj.spZipcode}}</div>
+            <div class="form-control line-row-1-1">{{billObj.spCity}}</div>
+            <div class="form-control line-row-1-1">{{billObj.spState}}</div>
+            <div class="form-control line-row-1-2">{{billObj.spCountry}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control line-row-1-3">{{billObj.spTel}}</div>
+            <div class="form-control line-row-1-3">{{billObj.spFax}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right line-right-2">
+        <div class="line-right-1-1">
+          <div class="line-right-1-1-1">
+            <div class="text1">Not Negotiable</div>
+            <div class="text2">AIR WAYBILL</div>
+            <div class="text1">Issued by</div>
+          </div>
+          <div class="line-right-1-1-2">
+            <div class="form-control line-row-issuedBy">
+              {{billObj.issuedBy}}
+            </div>
+          </div>
+        </div>
+        <div class="line-right-1-2">
+          Copies 1,2 and 3 of this Air Waybill are originals and have the same validity.
+        </div>
+      </div>
+    </div>
+    <!-- line-1 end -->
+    <!-- line-2 start -->
+    <div class="row">
+      <div class="line-left line-left-2">
+        <div class="line-left-2-1">
+          <div class="line-left line-left-2-1-1">
+            Consignee's Name and Address*
+            <div class="line-left-2-1-1-2">
+            </div>
+          </div>
+          <div class="line-left-2-1-2">
+            Consignee's Account Number
+            <div class="form-control">{{billObj.csAccountNumber}}</div>
+          </div>
+        </div>
+        <div class="line-left-2-2">
+          <div class="line-row">
+            <div class="form-control">{{billObj.csName}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control">{{billObj.csAddress}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control line-row-1-1">{{billObj.csZipcode}}</div>
+            <div class="form-control line-row-1-1">{{billObj.csCity}}</div>
+            <div class="form-control line-row-1-1">{{billObj.csState}}</div>
+            <div class="form-control line-row-1-2">{{billObj.csCountry}}</div>
+          </div>
+          <div class="line-row">
+            <div class="form-control line-row-1-3">{{billObj.csTel}}</div>
+            <div class="form-control line-row-1-3">{{billObj.csFax}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right line-right-2" style="position: relative;">
+        <div class="line-right-2-1">
+          It is agreed that the goods described herein are accepted in apparent good order and condition (except as noted) for carriage
+          SUBJECT TO THE CONDITIONS OF CONTRACT ON THE REVERSE HEREOF, ALL GOODS MAY BE CARRIED BY ANY OTHER MEANS. INCLUDING
+          ROAD OR ANY OTHER CARRIER UNLESS SPECIFIC CONTRARY INSTRUCTIONS ARE GIVEN HEREON BY THE SHIPPER. THE SHIPPER’S
+          ATTENTION IS DRAWN TO THE NOTICE CONCERNING CARIER’S LIMITATION OF LIABILITY.Shipper may increase such limitation
+          of liability by declaring a higher value of carriage and paying a supplemental charge if required. INSURANCE-If
+        </div>
+        <div style="position: absolute;bottom: 0;right: 80px;" ng-if="showImg">
+          <div ng-if="personCode" class="dib" style="color:#1e4caa;padding: 10px;border: 4px solid #1e4caa;font-size: 44px;">{{personCode}}</div>
+          <img ng-src="{{imgSrc}}" alt="" style="width: 303px;height: 205px;" ng-if="imgSrc">
+        </div>
+      </div>
+    </div>
+    <!-- line-2 end-->
+    <!-- line-3 start-->
+    <div class="row">
+      <div class="line-left line-left-3">
+        <div class="line-left-3-1">
+          <div class="line-left-3-1-1">
+            Issuing Carrier’s Agent Name and City
+          </div>
+          <div class="line-left-3-1-2 line-row">
+            <div class="form-control line-row-3-1 line-row-3-1-1-1">{{billObj.agentName}}</div>
+            <div class="form-control line-row-1 line-row-3-1-1-2" ng-if="billObj.agentPartIdentifier">{{billObj.agentPartIdentifier}}</div>
+            <div class="form-control line-row-1 pull-right line-row-3-1-1-3">{{billObj.agentCity}}</div>
+          </div>
+          <div class="line-row">
+            {{billObj.agentOprn}}
+          </div>
+        </div>
+        <div class="line-left-3-2">
+          <div class="line-left-3-2-1">
+            <div class="line-left-3-2-1-1">
+              Agents IATA Code
+            </div>
+            <div class="line-left-3-2-1-2 line-row">
+              <div class="form-control line-row-3-2">{{billObj.agentIataCode}}</div>
+              <div class="form-control line-row-3-2">{{billObj.agentCassAddress}}</div>
+            </div>
+          </div>
+          <div class="line-left-3-2-2">
+            <div class="line-left-3-2-2-1">
+              Account No.
+            </div>
+            <div class="line-left-3-2-2-2 line-row">
+              <div class="form-control">{{billObj.accountNo}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-3-3">
+          <div class="line-left-3-3-1">
+            Airport of Departure(Add. of First Carrier) and Requested Routing
+          </div>
+          <div class="line-left-3-3-2 line-row">
+            <div class="form-control line-row-1">{{billObj.dept}}</div>
+            <div class="form-control line-row-2">{{billObj.deptDesc}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right line-right-3">
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid}}</div>
+        </div>
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif1}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid1}}</div>
+        </div>
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif2}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid2}}</div>
+        </div>
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif3}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid3}}</div>
+        </div>
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif4}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid4}}</div>
+        </div>
+        <div class="line-row">
+          <div class="form-control line-right-3-1">{{billObj.accounInforIdentif5}}</div>
+          <div class="form-control line-right-3-2">{{billObj.freightPrepaid5}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- line-3 end-->
+    <!-- line-4 start-->
+    <div class="row">
+      <div class="line-left-4">
+        <div class="line-left-4-1 w7">
+          <div class="line-left-4-1-1">To</div>
+          <div class="line-left-4-1-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.dest1}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-2 w7">
+          <div class="line-left-4-2-1">By First Carrier</div>
+          <div class="line-left-4-2-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.carrier1}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-3 w7">
+          <div class="line-left-4-3-1">To</div>
+          <div class="line-left-4-3-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.dest2}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-4 w7">
+          <div class="line-left-4-4-1">By</div>
+          <div class="line-left-4-4-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.carrier2}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-5 w7">
+          <div class="line-left-4-5-1">To</div>
+          <div class="line-left-4-5-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.dest3}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-6 w7">
+          <div class="line-left-4-6-1">By</div>
+          <div class="line-left-4-6-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.carrier3}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-13 w7">
+          <div class="line-left-4-13-1">To</div>
+          <div class="line-left-4-13-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.dest4}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-14 w7">
+          <div class="line-left-4-14-1">By</div>
+          <div class="line-left-4-14-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.carrier4}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-7 w7">
+          <div class="line-left-4-7-1">Currency</div>
+          <div class="line-left-4-7-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.currency}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-8 w7">
+          <div class="line-left-4-8-1">CHGS Code</div>
+          <div class="line-left-4-8-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.chargeCode}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-9 w7">
+          <div class="line-left-4-9-1">WT/VAL</div>
+          <div class="line-left-4-9-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.wtVal}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-10 w7">
+          <div class="line-left-4-10-1">Other</div>
+          <div class="line-left-4-10-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.other}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-11 w7">
+          <div class="line-left-4-11-1">Declared Value for Carriage</div>
+          <div class="line-left-4-11-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.carriageValue}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-4-12 w9">
+          <div class="line-left-4-12-1">Declared Value for Customs</div>
+          <div class="line-left-4-12-2">
+            <div class="line-row-4">
+              <div class="form-control">{{billObj.customsValue}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- line-4 end-->
+    <!-- line-5 start-->
+    <div class="row">
+      <div class="line-left-5">
+        <div class="line-left-5-1 w15">
+          <div class="line-left-5-1-1">
+            Airport of Destination
+          </div>
+          <div class="line-left-5-1-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.airportDest}}</div>
+            </div>
+            <div class="line-row">{{showText.airPort}}</div>
+          </div>
+        </div>
+        <div class="line-left-5-2 w23">
+          <div class="line-left-5-2-1">
+            Flight No/Flight Date
+          </div>
+          <div class="line-left-5-2-2">
+            <div class="line-row">
+              <div class="form-control line-row-5-1">{{billObj.flightNo}}</div>
+              <div class="form-control line-row-5-2">{{billObj.fltDate}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-5-3 w23">
+          <div class="line-left-5-3-1">
+            Flight No/Flight Date
+          </div>
+          <div class="line-left-5-3-2">
+            <div class="line-row">
+              <div class="form-control line-row-5-1">{{billObj.flightNo2}}</div>
+              <div class="form-control line-row-5-2">{{billObj.fltDate2}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-5-4 w18">
+          <div class="line-left-5-4-1">
+            Amount of Insurance
+          </div>
+          <div class="line-left-5-4-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.insuranceValue}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-5-5 w21">
+          <div class="line-left-5-5-1">
+            INSURANCE-If carrier offers insurance and such insurance is requested in accordance with the conditions thereof indicate
+            amount to be insured in figures in box marked”Amount of Insurance”
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- line-5 end-->
+    <!-- line-6 start-->
+    <div class="row line-row-6">
+      <div class="line-row">
+        <div class="col-sm-12">Handling Information</div>
+      </div>
+      <div class="line-row">
+        <div class="col-sm-2">SSR (SPECIAL SERVICE REQUEST)</div>
+        <div class="col-sm-8">
+          <div class="form-control line-row-6-1">{{billObj.ssr}}</div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="line-row">
+        <div class="col-sm-2">OSI (OTHER SERVICE REQUEST)</div>
+        <div class="col-sm-8">
+          <div class="form-control line-row-6-2">{{billObj.osi1}}</div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+      <div class="line-row">
+        <div class="col-sm-2">SHC (SPECIAL HANDLING CODE)</div>
+        <div class="col-sm-8">
+          <div class="form-control line-row-6-3">{{billObj.holdCode}}</div>
+        </div>
+        <div class="col-sm-2">
+        </div>
+      </div>
+      <div class="line-row">
+        <div class="col-sm-2">Also notify</div>
+        <div class="col-sm-8">
+          <div class="form-control line-row-6-4">{{billObj.alsoNotify}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- line-6 end-->
+    <!-- line-7 start-->
+    <div class="row">
+      <div class="line-left-7">
+        <div class="line-left-7-1 w13">
+          <div class="line-left-7-1-1">
+            No. of Pieces RCP
+          </div>
+          <div class="line-left-7-1-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.rcpNo}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-2 w13">
+          <div class="line-left-7-2-1">
+            Gross Weight (KG)
+          </div>
+          <div class="line-left-7-2-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.grossWeight}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-9 w9">
+          <div class="line-left-7-9-1">
+            kg lb
+          </div>
+          <div class="line-left-7-9-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.weightCode}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-3 w10">
+          <div class="line-left-7-3-1">
+            Rate Class
+          </div>
+          <div class="line-left-7-3-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.rateClass}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-4 w13">
+          <div class="line-left-7-4-1">
+            Commodity Item No.
+          </div>
+          <div class="line-left-7-4-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.commodityNo}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-5 w13">
+          <div class="line-left-7-5-1">
+            Chargeable Weight (KG)
+          </div>
+          <div class="line-left-7-5-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.chargeWeight}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-6 w13">
+          <div class="line-left-7-6-1">
+            Rate/Charge
+          </div>
+          <div class="line-left-7-6-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.rateCharge}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-7 w16">
+          <div class="line-left-7-7-1">
+            Total
+          </div>
+          <div class="line-left-7-7-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalCount}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-7-8">
+          <div class="line-left-7-8-1">
+            <div class="line-left-7-8-1-1">SLAC</div>
+            <div class="line-left-7-8-1-2">
+              <div class="line-row">
+                <div class="form-control">{{billObj.slac}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-8-2">
+            <div class="line-row">
+              <div class="line-row-7-1">REMARK</div>
+              <div class="form-control line-row-7-2">{{billObj.remark}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right-7">
+        <div class="line-right-7-1">
+          Nature and Quantity of Goods (incl. Dimensions or Volume)
+        </div>
+        <div class="line-right-7-2">
+          <div class="line-right-7-2-1">
+            <div class="line-right-7-2-1-1">
+            Goods Description
+            </div>
+            <div class="line-right-7-2-1-2">
+              <div class="form-control line-row-7-2">{{billObj.goodsDesc}}</div>
+            </div>
+            <div class="line-right-7-2-1-3">
+            </div>
+          </div>
+          <div class="line-right-7-2-2">
+            <div class="line-right-7-2-2-1">
+              Vol
+            </div>
+            <div class="line-right-7-2-2-2">
+              <div class="form-control w65 dib">{{billObj.vol}}</div>
+              <div class="form-control w30 dib">{{billObj.volumeCode}}</div>
+            </div>
+            <div class="line-right-7-2-2-3">
+            </div>
+          </div>
+          <div class="line-right-7-2-3" ng-if="billObj.densityGroup">
+            <div class="line-right-7-2-3-1">
+              Density group
+            </div>
+            <div class="line-right-7-2-3-2">
+              <div class="form-control">{{billObj.densityGroup}}</div>
+            </div>
+            <div class="line-right-7-2-3-3">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- line-7 end-->
+    <!-- line-8 start-->
+    <div class="row">
+      <div class="line-left-8">
+        <div class="line-left-8-1">
+          <div class="line-left-8-1-1">Prepaid</div>
+          <div class="line-left-8-1-2">Weight Charge</div>
+          <div class="line-left-8-1-3">Collect</div>
+        </div>
+        <div class="line-left-8-2">
+          <div class="line-left-8-2-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.prepaid || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-2-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.collect || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-3">
+          <div class="line-left-8-3-1">&nbsp;</div>
+          <div class="line-left-8-3-2">Valuation Charge</div>
+          <div class="line-left-8-3-3">&nbsp;</div>
+        </div>
+        <div class="line-left-8-4">
+          <div class="line-left-8-4-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.valuationCharge || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-4-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.valuationCharge2 || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-5">
+          <div class="line-left-8-5-1">&nbsp;</div>
+          <div class="line-left-8-5-2">Tax</div>
+          <div class="line-left-8-5-3">&nbsp;</div>
+        </div>
+        <div class="line-left-8-6">
+          <div class="line-left-8-6-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.tax || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-6-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.tax2 || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-7">
+          <div class="line-left-8-7-1">&nbsp;</div>
+          <div class="line-left-8-7-2">Total Other Charges Due Agent</div>
+          <div class="line-left-8-7-3">&nbsp;</div>
+        </div>
+        <div class="line-left-8-8">
+          <div class="line-left-8-8-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalAgent || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-8-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalAgent2 || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-9">
+          <div class="line-left-8-9-1">&nbsp;</div>
+          <div class="line-left-8-9-2">Total Other Charges Due Carrier</div>
+          <div class="line-left-8-9-3">&nbsp;</div>
+        </div>
+        <div class="line-left-8-10">
+          <div class="line-left-8-10-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalCarrier || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-10-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalCarrier2 || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-11">
+          <div class="line-left-8-11-1">
+            <div class="line-row">
+              &nbsp;
+            </div>
+          </div>
+          <div class="line-left-8-11-2">
+            <div class="line-row">
+              &nbsp;
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-12">
+          <div class="line-left-8-12-1">
+            Total Prepaid
+          </div>
+          <div class="line-left-8-12-2">
+            Total Collect
+          </div>
+        </div>
+        <div class="line-left-8-13">
+          <div class="line-left-8-13-1">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalPrepaid || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-13-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.totalCollect || ''}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-left-8-14">
+          <div class="line-left-8-14-1">
+            Currency Conversion Rates
+          </div>
+          <div class="line-left-8-14-2">
+            CC Charges in des. Currency
+          </div>
+        </div>
+        <div class="line-left-8-15">
+          <div class="line-left-8-15-1">
+            <div class="line-row">
+              <div class="form-control w30 fl mr10">{{billObj.destCurrency || ''}}</div>
+              <div class="form-control w55 fl">{{billObj.rates || ''}}</div>
+            </div>
+          </div>
+          <div class="line-left-8-15-2">
+            <div class="line-row">
+              <div class="form-control">{{billObj.ccChargesDes || ''}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right-8">
+        <div class="line-right-8-1">
+          <div class="line-right-8-1-1 row">
+            <div class="w10">Other Fee</div>
+            <div class="w20">Code</div>
+            <div class="w20">Owner</div>
+            <div class="w45">Fee</div>
+          </div>
+          <div class="line-right-8-1-div row" ng-repeat="item in otherFeeData track by $index">
+            <div class="w10"></div>
+            <div class="w20">
+              <div class="form-control">{{item.code}}</div>
+            </div>
+            <div class="w20">
+              <div class="form-control">{{item.owner}}</div>
+            </div>
+            <div class="w45">
+              <div class="form-control">{{item.fee}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line-right-8-2">
+          <div class="line-right-8-2-1">
+            Shipper certifies that the particulars on the face hereof are correct and that insofar as any part of the consignment contains
+            dangerous goods, such part is properly described by name and is in proper condition for carriage by air according
+            to the applicable Dangerous Goods Regulations
+          </div>
+          <div class="line-right-8-2-2">
+            <div class="line-right-8-2-2-check" name="m_agreedFlag">
+              <label>
+                <input type="checkbox" ng-checked="billObj.agreedFlag === '1'" ng-disabled="true">
+                <span>I agreed with above all terms</span>
+              </label>
+            </div>
+          </div>
+          <div class="line-right-8-2-3">
+            <div class="form-control">{{billObj.signatureAgent}}</div>
+          </div>
+          <div class="line-right-8-2-4">
+            Signature of Shipper or his agent
+          </div>
+        </div>
+        <div class="line-right-8-3">
+          <div class="line-right-8-3-1">
+            <div>
+              <div class="form-control">{{billObj.executed}}</div>
+              <div>Executed on(Date)</div>
+            </div>
+            <div>
+              <div class="form-control">{{billObj.place}}</div>
+              <div>at(Place)</div>
+            </div>
+            <div>
+              <div class="form-control">{{billObj.signatureIssuing}}</div>
+              <div>Signature of issuing Carrier or its Agent</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- line-8 end-->
+    <!-- line-9 start-->
+    <div class="row line-last">
+      <div class="line-left-9">
+        <div class="line-left-9-1">
+          For Carrier's Use Only at Destinationes at Destination
+        </div>
+        <div class="line-left-9-2">
+          <div class="line-left-9-2-1">
+            Charges at Destination
+          </div>
+          <div class="line-left-9-2-2">
+            <div class="form-control">{{billObj.chargesDestination || ''}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="line-right-9">
+        <div class="line-right-9-1">
+          Total Collect Charges
+        </div>
+        <div class="line-right-9-2">
+          <div class="form-control">{{billObj.totalCollectCharges || ''}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- line-9 end-->
+  </div>
+</div>

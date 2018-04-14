@@ -1,0 +1,129 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="content-declare-title">货物申报</div>
+      <div class="content-declare-main">
+        <div class="row line1">
+          <span>致：</span>上海浦东国际机场货运站有限公司
+        </div>
+        <div class="row">
+          本公司需通过航空运输下述货物：航空主运单号：<span class="waybill">{{obj.checkAirWaybillInfo.waybillNo}}</span>
+        </div>
+        <div class="row line2">
+          有关《IATA 危险品规则》2.2章节中有关隐含危险品内容摘录（供参考）
+        </div>
+        <div class="row" style="max-height: 600px;overflow-y: auto;">
+          <div ng-include="'declaraction.html'"></div>
+        </div>
+        <div class="row" style="font-weight: bold;">
+          根据有关国家机构对该货物运输的鉴定结果和对比以上《IATA 危险品规则》2.2章节中有关隐含危险品的参考内容后，我司根据货物实际情况将该货物申报为：
+        </div>
+        <div class="row" style="margin-bottom: 0;">普货：</div>
+        <div class="row ml60">
+          <label class="label-checkbox">
+            <input type="radio" name="danger" ng-model="obj.cargoDeclare.dangerFlag" ng-value="'1'" ng-change="changeLocal('1')">须提供 《货物运输条件鉴定书》。
+          </label>
+          <small class="green" ng-if="obj.cargoDeclare.dangerFlag==='1'">我司确认该货物不含《IATA 危险品规则》2.2章节中规定的任何隐含危险品</small>
+        </div>
+        <div class="row ml73 red">
+          现场检查货物：
+          <label class="mr10" style="word-wrap: break-word;" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkId !== '102' && item.checkId !== '104'">
+            <input type="checkbox" ng-checked="item.checkFlag && obj.cargoDeclare.dangerFlag ==='1'" ng-disabled="obj.cargoDeclare.dangerFlag!=='1' || !editAble" ng-click="addLocalcheck($event, item.checkId)">{{item.checkName}}
+          </label>
+        </div>
+        <div class="row ml60">
+          <label class="label-checkbox">
+            <input type="radio" name="danger" ng-model="obj.cargoDeclare.dangerFlag" ng-value="'2'" ng-change="changeLocal('2')">无 《货物运输条件鉴定书》。
+          </label>
+          <small class="green" ng-if="obj.cargoDeclare.dangerFlag==='2'">我司确认该货物不含《IATA 危险品规则》2.2章节中规定的任何隐含危险品</small>
+        </div>
+        <div class="row ml73 red">
+          现场检查货物：
+          <label class="mr10" style="word-wrap: break-word;" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkId !== '102' && item.checkId !== '104'">
+            <input type="checkbox" ng-checked="item.checkFlag && obj.cargoDeclare.dangerFlag ==='2'" ng-disabled="obj.cargoDeclare.dangerFlag!=='2' || !editAble" ng-click="addLocalcheck($event, item.checkId)">{{item.checkName}}
+          </label>
+        </div>
+
+        <div class="row" style="margin-bottom: 0;">危险品：</div>
+        <div class="row ml60">
+          <label class="label-checkbox">
+            <input type="radio" name="danger" ng-model="obj.cargoDeclare.dangerFlag" ng-value="'0'" ng-change="changeLocal('0')">须提供《危险品申报单》，并提交现场检查。
+          </label>
+        </div>
+        <div class="row ml73 red">
+          现场检查货物：
+          <label class="mr10" style="word-wrap: break-word;" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkId !== '101' && item.checkId !== '102'">
+            <input type="checkbox" ng-checked="item.checkFlag && obj.cargoDeclare.dangerFlag ==='0'" ng-disabled="obj.cargoDeclare.dangerFlag!=='0' || !editAble" ng-click="addLocalcheck($event, item.checkId)">{{item.checkName}}
+          </label>
+        </div>
+        <div class="row ml60">
+          <label class="label-checkbox">
+            <input type="radio" name="danger" ng-model="obj.cargoDeclare.dangerFlag" ng-value="'3'" ng-change="changeLocal('3')">无 《危险品申报单》，须提交现场检查。
+          </label>
+        </div>
+        <div class="row ml73 red">
+          现场检查货物：
+          <label class="mr10" style="word-wrap: break-word;" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkId !== '101' && item.checkId !== '102'">
+          <input type="checkbox" ng-checked="item.checkFlag && obj.cargoDeclare.dangerFlag==='3'" ng-disabled="obj.cargoDeclare.dangerFlag!=='3' || !editAble" ng-click="addLocalcheck($event, item.checkId)">{{item.checkName}}
+        </label>
+        </div>
+
+        <div class="row" style="margin-bottom: 0;">锂电池：</div>
+        <div class="row ml60">
+          <label class="label-checkbox">
+            <input type="radio" name="danger" ng-model="obj.cargoDeclare.dangerFlag" ng-value="'4'" ng-change="changeLocal('4')">满足锂电池包装说明第二部分（Section II）
+          </label>
+        </div>
+        <div class="row ml73 red">
+          现场检查货物：
+          <label class="mr10" style="word-wrap: break-word;" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkId !== '102'">
+          <input type="checkbox" ng-checked="item.checkFlag && obj.cargoDeclare.dangerFlag==='4'" ng-disabled="obj.cargoDeclare.dangerFlag!=='4' || !editAble" ng-click="addLocalcheck($event, item.checkId)">{{item.checkName}}
+        </label>
+        </div>
+        <div class="row">
+          （以上5项必填，5选1）
+        </div>
+        <div class="row">
+          我司确认上述货主托运之货物内容及描述准确，愿意承担因向浦东机场货运站有限公司不实申报所引起的所有责任和法律后果。
+        </div>
+        <div class="row">
+          <div class="col-sm-1">
+            销售代理人
+          </div>
+          <div class="col-sm-3">
+            {{obj.checkAirWaybillInfo.agentSales}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1" style="line-height: 34px;">
+            联系人<span style="color: red; position: absolute;left: 45px;bottom: -2px;">*</span>
+          </div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" ng-model="obj.cargoDeclare.contact">
+          </div>
+          <div class="col-sm-3 tel24" style="line-height: 34px;margin-left: 47px;">
+            24小时应急联系电话<span style="color: red;position: absolute;bottom: -2px;right: 7px">*</span>
+          </div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" ng-model="obj.cargoDeclare.emergencyPhone">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()" ng-if="editAble">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    </div>
+  </div>
+</form>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

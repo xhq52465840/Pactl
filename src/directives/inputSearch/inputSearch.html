@@ -1,0 +1,8 @@
+<div style="position: relative;">
+  <input type="text" class="form-control" ng-model="search">
+  <ul ng-show="open" class="ipt-ul">
+    <li ng-repeat="item in items | filter: search track by $index" ng-click="selectItem(item)">
+      {{item}}
+    </li>
+  </ul>
+</div>

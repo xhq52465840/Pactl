@@ -1,0 +1,114 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">品名大数据</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    品名大数据
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li ng-class="{'active': nameObj.type==='0'}" ng-click="select('0')">
+        <a role="button">品名白名单</a>
+      </li>
+      <li ng-class="{'active': nameObj.type==='1'}" ng-click="select('1')">
+        <a role="button">禁运品名</a>
+      </li>
+    </ul>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">目的港</div>
+        <div class="search-value">
+          <div ui-select multiple ng-model="nameObj.dest" theme="select2" class="form-control wd" autofocus="true">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">航空公司</div>
+        <div class="search-value">
+          <div ui-select multiple ng-model="nameObj.fltCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width: 120px;">不适用航空公司</div>
+        <div class="search-value">
+          <div ui-select multiple ng-model="nameObj.noFltCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">品名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="nameObj.goodsName">
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="">目的港</th>
+        <th class="">航空公司</th>
+        <th class="">不适用航空公司</th>
+        <th class="">品名</th>
+        <th class="">创建人</th>
+        <th class="">最后修改时间</th>
+        <th class="">修改人</th>
+        <th class="">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in nameData track by $index" ng-class-even="'even'">
+        <td>{{item.dest}}</td>
+        <td>{{item.fltCode}}</td>
+        <td>{{item.noFltCode}}</td>
+        <td>{{item.goodsName}}</td>
+        <td>{{item.creater}}</td>
+        <td>{{item.modifiedDate | date : 'yyyy-MM-dd'}}</td>
+        <td>{{item.modifier}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.goodsName)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

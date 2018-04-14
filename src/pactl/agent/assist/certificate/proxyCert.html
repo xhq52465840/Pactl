@@ -1,0 +1,231 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">共享证书查询</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">共享证书查询</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="addCert()" ng-if="unitType">
+      <i class="i-add"></i>新增证书共享
+    </button>
+    <div class="btn-group" ng-if="unitType">
+      <button type="button" class="btn btn-default" ng-click="authorize()">授权</button>
+      <button type="button" class="btn btn-default" ng-click="cancelAuthorize()">取消授权</button>
+    </div>
+    <div class="btn-group" ng-if="unitType">
+      <button type="button" class="btn btn-default" ng-click="addBatchTag()">添加标签</button>
+      <button type="button" class="btn btn-default" ng-click="changeBatchTag()">更换标签</button>
+    </div>
+    <button class="btn btn-default" ng-click="operate()" ng-if="unitType">
+      <i class="i-operate"></i>操作日志
+    </button>
+    <!-- <button class="btn btn-default" >
+      <span class="glyphicon glyphicon-list-alt mr5"></span>制作授权书
+    </button> -->
+    <div class="dropdown pull-right " ng-if="unitType">
+      <button class="glyphicon glyphicon-list-alt mr5 btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        制作授权书
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a role="button" ng-click="doAuthorize('A')">送样单位授权书</a>
+        </li>
+        <li>
+          <a role="button" ng-click="doAuthorize('B')">销售代理转授权</a>
+        </li>                            
+      </ul>
+    </div>
+
+
+    <button class="btn btn-default" ng-click="printBarCode()">
+      <span class="glyphicon glyphicon-barcode mr5"></span>打印条形码
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentAssist.proxyCert">
+          <i class="i-proxy"></i>代理证书共享库</a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentAssist.publicCert">
+          <i class="i-public"></i>公共证书共享库</a>
+      </li>
+    </ul>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="search-name">证书编号</div>
+        <div class="search-value" style="width: 600px;">
+          <div ui-select multiple tagging tagging-label="" ng-model="proxyObj.bookNo" theme="select2" class="form-control">
+            <div ui-select-match>{{$item}}</div>
+            <div ui-select-choices repeat="book in availableBookNo | filter: $select.search">
+              {{book}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">鉴定机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="proxyObj.officeCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.shortName}}</div>
+            <div ui-select-choices repeat="item in officeCodeData | filter: {shortName:$select.search}">
+              <div ng-bind-html="item.shortName | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">证书状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="proxyObj.auditFlag" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in auditFlagData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">标签</div>
+        <div class="search-value">
+          <div ui-select multiple ng-model="proxyObj.classes" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+            <div ui-select-choices repeat="item in classesData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4" ng-if="unitType">
+        <div class="search-name">授权子账户</div>
+        <div class="search-value">
+          <div ui-select ng-model="proxyObj.agentSales" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+              <small>{{item.description}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">证书有效年度</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="proxyObj.validityYear">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="proxyObj.goodType" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in goodTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w2">
+          <label>
+            <input type="checkbox" ng-checked="proxyObj.allselected" ng-click="allCheck($event)">
+          </label>
+        </th>
+        <th class="w7" style="min-width: 90px;" t-sort="OFFICE_NAME">鉴定机构</th>
+        <th class="w8" style="min-width: 130px;">鉴定书编号</th>
+        <th class="w3" style="min-width: 82px;">是否启用</th>
+        <th class="w8" style="min-width: 120px;" t-sort="AUDIT_STATUS">状态</th>
+        <th class="w7" style="min-width: 110px;">授权有效期</th>
+        <th class="w9" style="min-width: 110px;">证书PDF</th>
+        <th class="w10" style="min-width: 150px;" ng-if="unitType">已授权子账户</th>
+        <th class="w3" style="min-width: 90px;">货物类型</th>
+        <th class="w37">标签</th>
+        <th class="w3">延期</th>
+        <th class="w3" ng-if="unitType">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index" ng-class-even="'even'">
+        <td>
+          <input type="checkbox" ng-checked="isChecked(item.pAgentShareBook.bookId)" ng-click="singleCheck($event, item.pAgentShareBook)">
+        </td>
+        <td>{{item.pOfficeInfo.shortName}}</td>
+        <td>{{item.pAgentShareBook.bookNo}}</td>
+        <td>{{item.pAgentShareBook.disableFlag | isValid: '7'}}</td>
+        <td>{{item.pAgentShareBook.auditStatus | showStatus: auditFlagData2}}
+          <br/> {{item.pAgentShareBook.reReason}}
+        </td>
+        <td>{{item.validTime.endTime | date: 'yyyy-MM-dd'}}</td>
+        <td class="imgShow">
+          <i class="i-pdf" ng-mouseover="item.imgShow=!item.imgShow" ng-mouseleave="item.imgShow=!item.imgShow" ng-click="showPdfDialog({officeName:item.pOfficeInfo.shortName,bookNo:item.pAgentShareBook.bookNo,src:item.pdfPath,srcArr:item.srcArr})" ng-if="item.pdfPath"></i>
+          <div ng-show="item.imgShow" ng-style="item.style1">
+            <img ng-src="{{item.filePath}}" ng-style="item.style2">
+          </div>
+          <a ng-href="{{item.pOfficeInfo.url}}" target="_blank" ng-if="item.pOfficeInfo.url">
+            <i class="i-site"></i>
+          </a>
+        </td>
+        <td ng-if="unitType">
+          <span style="display: inline-block;" class="label label-primary mr5" ng-repeat="label in item.pAgentShareBookAccredits track by $index">
+            {{label.agentSales}}
+          </span>
+          <div class="btn-img" ng-click="addAgent(item)" ng-if="unitType">
+            <i class="i-edit3" ng-if="item.pAgentShareBook.disableFlag!=='1'"></i>
+          </div>
+        </td>
+        <td>
+          <span ng-class="{'cargo-type-1':item.pAgentShareBook.goodsType==='102','cargo-type-2':item.pAgentShareBook.goodsType==='101'}">
+            {{item.pAgentShareBook.goodsType | showStatus: goodTypeData}}
+          </span>
+        </td>
+        <td>
+          <div class="dib" ng-repeat="label in item.pAgentLabelInfos track by $index">
+            <span class="label-span spanWidth" ng-style="label.styleObj">{{label.name}}</span>
+          </div>
+          <div class="btn-img" ng-click="addTag(item)" ng-if="unitType">
+            <i class="i-edit3" ng-if="item.pAgentShareBook.disableFlag!=='1'"></i>
+          </div>
+        </td>
+        <td>
+          <button class="btn btn-default" style="padding:3px 5px ;font-size: 12px;" ng-if="(item.pOfficeInfoDelay && item.pOfficeInfoDelay.length>0) || (item.pBookAirDelay && item.pBookAirDelay.length>0)"
+           ng-click="showDelayDialog(item)">延期</button>
+        </td>
+        <td ng-if="unitType">
+          <div class="btn-img" ng-click="disable(item)" ng-if="item.pAgentShareBook.disable==='1'">
+            <i class="i-sx" ng-if="item.pAgentShareBook.disableFlag!=='1'"></i>
+          </div>
+          <div class="btn-img" ng-click="disable(item)" ng-if="item.pAgentShareBook.disable==='0'">
+            <i class="i-yx" ng-if="item.pAgentShareBook.disableFlag!=='1'"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)" ng-if="item.pAgentShareBook.auditStatus === '100' || item.pAgentShareBook.auditStatus === '101'">
+            <i class="btn-del" ng-if="item.pAgentShareBook.disableFlag!=='1'"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

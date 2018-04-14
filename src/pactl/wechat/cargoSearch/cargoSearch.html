@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide {
+			display: none !important;
+		}
+
+		ng\:form {
+			display: block;
+		}
+
+		.ng-animate-block-transitions {
+			transition: 0s all!important;
+			-webkit-transition: 0s all!important;
+		}
+
+		.ng-hide-add-active,
+		.ng-hide-remove {
+			display: block!important;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>卡车查询</title>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+
+<body ng-cloak>
+	<div ng-controller="cargoSearchCtrl">
+		<header>
+			<div class="Grid">
+				<div class="Grid-cell u-1of4">					
+					<label class="weui-label" style="width: 60px;">卡车VCT</label>
+				</div>
+				<div class="Grid-cell" style="position:relative;">
+					<input class="weui-input" ng-model="cargo.truckBill" ng-change="onlyEn()">
+					<img src="../imges/scan.png" height="23" width="23" alt="img" ng-click="scanQRCode()">
+				</div>
+				<div class="Grid-cell u-1of3">
+					<a style="font-weight: bold; font-size: 16px;" ng-click="search(cargo.truckBill)">确认</a>
+				</div>
+			</div>
+		</header>
+		<div class="result" ng-if="btn.detail">查询结果</div>
+		<div class="searchList" ng-if="btn.detail">		
+			<table class="searchTable table table-striped">
+				<tbody>
+					<tr ng-repeat="item in cargo.simpleInfoVoList track by $index">
+						<td>				
+							<a ng-if="item.isView === '1'" target="_blank" ng-href="singleWaybill.html?waybillNo={{item.waybillNo}}">{{item.waybillNo}}</a>
+							<label ng-if="item.isView !== '1'">{{item.waybillNo}}</label>
+						</td>
+						<td>{{item.totalCount}}/{{item.grossWeight}}</td>
+						<td>{{item.iataCode}}</td>
+						<td>
+							<span ng-if="item.aStatus === '210'" class="notSecurity">不可安检</span>
+							<span ng-if="item.aStatus === '211'" class="canSecurity">可安检</span>
+							<span ng-if="item.aStatus === '200'" class="Securiting">安检中</span>
+							<span ng-if="item.aStatus === '201'" class="passSecurity">安检通过</span>
+							<span ng-if="item.aStatus === '202'" class="kouSecurity">安检扣押</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="margin:10px;">汇总：{{cargo.simpleInfoVoList.length}}票&nbsp;&nbsp;{{totalObj.totalCount}}/{{totalObj.grossWeight}}K
+			</div>
+		</div>
+		<div class="singleBarcode" ng-if="btn.showimg">
+			<img src="../imges/noresult.png" height="89" width="102" alt="无搜索结果">
+		</div>
+	</div>
+</body>
+</html>

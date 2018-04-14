@@ -1,0 +1,36 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      操作日志
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w25">操作状态</th>
+          <th class="w35">操作内容</th>
+          <th class="w10">操作人员</th>
+          <th class="w30">操作时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in hisData track by $index" ng-class-even="'even'">
+          <td>{{row.oprnType}}</td>
+          <td ng-if="row.oprnType === '证书修改'">
+            修改前证书：{{row.pdfObj.oldName}}<i class="i-pdf" ng-click="showPdfDialog(row.pdfObj.fileHttpPath)"></i>
+          </td>         
+          <td ng-if="row.oprnType !== '证书修改'">{{row.remarks || row.source}}</td>
+          <td>{{row.creatorName}}</td>
+          <td>{{row.createdDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

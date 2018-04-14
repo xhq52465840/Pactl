@@ -1,0 +1,336 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">综合操作</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">综合操作</div>
+  <div class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" data-toggle="dropdown" id="awb">
+        <i class="i-print"></i>打印运单
+      </button>
+      <ul class="dropdown-menu awb-dropdown-right" role="awb" aria-labelledby="awb">
+        <li ng-click="print('A4')">
+          <a role="button">A4</a>
+        </li>
+        <li ng-click="print('FWB')">
+          <a role="button">运单</a>
+        </li>
+        <li ng-click="print('airLine')">
+          <a role="button">航空公司运单</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="search-name">运单状态</div>
+      <label class="label-checkbox" ng-repeat="waybillData in waybillDatas">
+        <input type="checkbox" ng-model="waybillData.checked" ng-checked="waybillData.checked===true">{{waybillData.name}}
+      </label>
+    </div>
+    <div class="row">
+      <div class="search-name">安检状态</div>
+      <label class="label-checkbox" ng-repeat="aData in aDatas">
+        <input type="checkbox" ng-model="aData.checked">{{aData.name}}
+      </label>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">航班号</div>
+        <div class="search-value">
+          <div input-search ng-model="operation.flightNo" placeholder="请输入如CA921" on-select="getFlightNo($data)" result="flightNoData"></div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">航班日期</div>
+        <div class="search-value"><input type="text" class="form-control" pikaday="myPickerObject1" ng-model="operation.fltDate"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">代理</div>
+        <div class="search-value">
+          <div ui-select ng-model="operation.agentSales" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">目的港</div>
+        <div class="search-value">
+          <div ui-select ng-model="operation.dest" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">主单号</div>
+        <div class="search-value">
+          <input type="text" class="form-control dib" ng-model="operation.waybillNo" maxlength="11">
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-left: 50px;">
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.aFlag" ng-checked="operation.aFlag===true">安检注销</label>
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.returnFlag" ng-checked="operation.returnFlag===true">退运</label>
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.wbEle" ng-checked="operation.wbEle===true">电子运单</label>
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.wbFocus" ng-checked="operation.wbFocus===true">已收藏运单</label>
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.littleTask" ng-checked="operation.littleTask===true">小任务</label>
+      <label class="label-checkbox"><input type="checkbox" ng-model="operation.approachFlag">已进场</label>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-default" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-dialog-table agent-op-content-dialog">
+    <thead>
+      <tr>
+        <th class="w2"></th>
+        <th class="w2">
+          <input type="checkbox" ng-checked="operation.allselected" ng-click="allCheck($event)">
+        </th>
+        <th class="w15" t-sort="t.WAYBILL_NO">运单号</th>
+        <th class="w5" t-sort="t.FLIGHT_NO">代理</th>
+        <th class="w5" t-sort="t.FLIGHT_NO">航班</th>
+        <th class="w8" t-sort="t.FLT_DATE">航班日期</th>
+        <th class="w8"></th>
+        <th class="w5" t-sort="t.AIRPORT_DEST">目的港</th>
+        <th class="w5" t-sort="t.RCP_NO">件数</th>
+        <th class="w7" t-sort="t.GROSS_WEIGHT">重量(KG)</th>
+        <th class="w8" t-sort="t.CHARGE_WEIGHT">计费重量(KG)</th>
+        <th class="w5" t-sort="t.VOL">体积</th>
+        <th class="w9" t-sort="t.GOODS_DESC">品名</th>
+        <th class="w8" t-sort="t.W_STATUS">运单状态</th>
+        <th class="w8" t-sort="t.A_STATUS">安检状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in opData track by $index" ng-show="item.hasOwnProperty('pAirWaybillDetails')" ng-class="{'childbill':item.pAirWaybillInfo.parentNo,'even': item.evenClass}">
+        <td>
+          <i ng-click="doFocus(item)" ng-class="{'btn-nostart': !item.pAirWaybillFocus, 'btn-start': item.pAirWaybillFocus}" ng-if="item.hasOwnProperty('pAirWaybillFocus')"></i>
+        </td>
+        <td><input type="checkbox" ng-checked="isChecked(item.pAirWaybillInfo.waybillNo)" ng-click="singleCheck($event, item.pAirWaybillInfo)"
+            ng-if="item.pAirWaybillInfo && item.pAirWaybillInfo.type==='0'"></td>
+        <td>
+          <i class="i-yes" ng-show="item.pAirWaybillInfo.refStatus === '0' && item.pAirWaybillInfo.parentNo"></i>
+          <i class="i-no" ng-show="item.pAirWaybillInfo.refStatus ==='1' && item.pAirWaybillInfo.parentNo"></i>
+          <a ui-sref="airline.showMasterbill({waybillNo:item.pAirWaybillInfo.awId})" target="_blank" role="button" style="font-size: 18px" ng-if="item.pAirWaybillInfo.type==='0'">
+            {{item.pAirWaybillInfo.waybillNo.substr(0, 3)}}
+            <span class="">-</span>
+            {{item.pAirWaybillInfo.waybillNo.substr(3)}} 
+          </a>
+          <a class="billChild" role="button" ng-if="item.pAirWaybillInfo.type==='1'">
+            {{item.pAirWaybillInfo.waybillNo}}
+          </a>
+          <a role="button" class="list-cert" ng-show="showCert(item)" ng-click="showSub(item)"></a>
+        </td>
+        <td style="text-align: left;">
+          <span ng-show="!item.pAirWaybillInfo.parentNo" ng-class="{'grayBill':!item.pAirWaybillInfo.parentNo}" title="{{item.pAirWaybillDifference.flightNo?'预审数据:'+item.pAirWaybillDifference.flightNo:''}}">
+            <span ng-class="{'red-ft':item.pAirWaybillDifference.flightNo}">{{item.pAirWaybillInfo.agentOprn}}</span>
+          </span>
+        </td>
+        <td style="text-align: left;">
+          <span ng-show="!item.pAirWaybillInfo.parentNo" ng-class="{'grayBill':!item.pAirWaybillInfo.parentNo}" title="{{item.pAirWaybillDifference.flightNo?'预审数据:'+item.pAirWaybillDifference.flightNo:''}}">
+            <span ng-class="{'red-ft':item.pAirWaybillDifference.flightNo}">{{item.pAirWaybillInfo.flightNo}}</span>
+          </span>
+        </td>
+        <td style="text-align: left;">
+          <span ng-show="!item.pAirWaybillInfo.parentNo" ng-class="{'grayBill':!item.pAirWaybillInfo.parentNo}" title="{{item.pAirWaybillDifference.fltDate?'预审数据:'+item.pAirWaybillDifference.fltDate:''}}">
+            <span ng-class="{'red-ft':item.pAirWaybillDifference.fltDate}">{{item.pAirWaybillInfo.fltDate}}</span>
+          </span>
+        </td>
+        <td style="text-align: left;position: relative;">
+          <i class="i-e" ng-show="!item.pAirWaybillInfo.parentNo && (item.pAirWaybillInfo.wbEle==='1' || (item.pAirWaybillInfo.wbEle!=='1' && item.pAirWaybillDifference.wbEle==='1'))"
+            ng-mouseover="item.isShowWbEle=true" ng-mouseleave="item.isShowWbEle=!item.isShowWbEle"></i>
+          <i class="i-car" ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.approachFlag==='1'" ng-mouseover="item.isShowCar=true"
+            ng-mouseleave="item.isShowCar=!item.isShowCar"></i>
+          <i class="i-huiji" ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.shipmentFlag==='1'"></i>
+          <span ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.wFlag==='1'" class="label-span ng-binding" ng-style="label.styleObj"
+            style="background-color: rgb(232, 26, 26);">无效</span>
+          <span ng-show="!item.pAirWaybillInfo.parentNo && item.taskCount>0" class="label-span ng-binding" ng-style="label.styleObj"
+            style="background-color: rgb(232, 26, 26);border-radius: 50%;width: 18px;height:18px;padding:1px;" ng-mouseover="item.isShowCount=true"
+            ng-mouseleave="item.isShowCount=!item.isShowCount">{{item.taskCount}}</span>
+
+          <div class="info-1" ng-show="item.isShowWbEle" style="left: -236px;position: absolute;background-color:rgb(252,251,181);z-index: 10;top: -6px;width: 230px;">
+            <div class="info-content" style="padding:3px;">
+              <div class="info-content-border">
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib">电子运单</div>
+                  <div class="info-content-row-line-2 dib fr mr10">{{item.pAirWaybillStatus.createdDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-1" ng-show="item.isShowCar" style="left: -236px;position: absolute;background-color:rgb(252,251,181);z-index: 10;top: -6px;width: 230px;">
+            <div class="info-content" style="padding:3px;">
+              <div class="info-content-border">
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib">卡车进场</div>
+                  <div class="info-content-row-line-2 dib fr mr10">{{item.pAirWaybillStatus.approachDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-1" ng-show="item.isShowCount" style="left: -236px;position: absolute;background-color:rgb(252,251,181);z-index: 10;top: -6px;width: 230px;">
+            <div class="info-content" style="padding:3px;">
+              <div class="info-content-border">
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib" ng-if="item.pAirWaybillStatus.eleUpdateFlag=== '1'">有电子运单更新，请撤回预审</div>
+                  <div class="info-content-row-line-1 dib" ng-if="item.pAirWaybillStatus.ckReBook==='1' && item.pAirWaybillStatus.reBook==='0'">证书需要交正本</div>
+                  <div class="info-content-row-line-1 dib" ng-if="item.pAirWaybillStatus.eleUpdateFlagAfterCheck=== '1'">申报不正确，需完成数据修改</div>
+                  <div class="info-content-row-line-1 dib" ng-if="item.pAirWaybillStatus.ckOpenFlag==='1' && item.pAirWaybillStatus.openFlag==='0'">运单需要完成开箱检查</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td ng-if="item.pAirWaybillInfo.type==='0'" title="{{item.pAirWaybillDifference.airportDest?'预审数据:'+item.pAirWaybillDifference.airportDest:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.airportDest}">{{item.pAirWaybillInfo.airportDest}}</span></td>
+        <td ng-if="item.pAirWaybillInfo.type==='1'" title="{{item.pAirWaybillDifference.dest1?'预审数据:'+item.pAirWaybillDifference.dest1:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.dest1}">{{item.pAirWaybillInfo.dest1}}</span></td>
+        <td title="{{item.pAirWaybillDifference.rcpNo?'预审数据:'+item.pAirWaybillDifference.rcpNo:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.rcpNo}">{{item.pAirWaybillInfo.rcpNo}}</span></td>
+        <td title="{{item.pAirWaybillDifference.grossWeight?'预审数据:'+item.pAirWaybillDifference.grossWeight:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.grossWeight}">{{item.pAirWaybillInfo.grossWeight}}</span></td>
+        <td title="{{item.pAirWaybillDifference.chargeWeight?'预审数据:'+item.pAirWaybillDifference.chargeWeight:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.chargeWeight}">{{item.pAirWaybillInfo.chargeWeight}}</span></td>
+        <td title="{{item.pAirWaybillDifference.vol?'预审数据:'+item.pAirWaybillDifference.vol:''}}"><span ng-class="{'red-ft':item.pAirWaybillDifference.vol}">{{item.pAirWaybillInfo.vol}}</span></td>
+        <td class="listCert"><span class="textWidth" tooltip-placement="left" tooltip-html-unsafe="{{item.div}}" role="button" ng-class="{'red-ft':item.pAirWaybillDifference.goodsDesc}">{{item.pAirWaybillInfo.goodsDesc1}}</span></td>
+        <td>
+          <a role="button" ng-show="!item.pAirWaybillInfo.parentNo">
+            <span class="label" ng-class="{'wstatus1':item.pAirWaybillStatus.wStatus ==='000',
+            'wstatus2':item.pAirWaybillStatus.wStatus === '100',
+            'wstatus3':item.pAirWaybillStatus.wStatus === '101',
+            'wstatus4':item.pAirWaybillStatus.wStatus === '102',
+            'wstatus5':item.pAirWaybillStatus.wStatus === '301',
+            'wstatus6':item.pAirWaybillStatus.wStatus === '302',
+            'wstatus7':item.pAirWaybillStatus.wStatus === '401'}">
+            {{item.pAirWaybillStatus.wStatus | showStatus: waybillDatas}}
+          </span></a>
+        </td>
+        <td style="position: relative;">
+          <span ng-if="item.pAirWaybillStatus.aFlag==='1'" class="label wstatus6" ng-mouseover="item.isShow=true" ng-mouseleave="item.isShow=!item.isShow">安检注销</span>
+          <span ng-if="item.pAirWaybillStatus.aFlag==='0'" class="label" ng-class="{'wstatus1':item.pAirWaybillStatus.aStatus ==='210',
+          'wstatus2':item.pAirWaybillStatus.aStatus === '211',
+          'wstatus3':item.pAirWaybillStatus.aStatus === '200',
+          'wstatus4':item.pAirWaybillStatus.aStatus === '201',
+          'wstatus5':item.pAirWaybillStatus.aStatus === '202'}" ng-mouseover="item.isShow=true" ng-mouseleave="item.isShow=!item.isShow">{{item.pAirWaybillStatus.aStatus | showStatus: aDatas}}</span>
+          <div class="info-1" ng-show="item.isShow" style="left: -236px;position: absolute;background-color:rgb(252,251,181);z-index: 10;top: -121px;width: 230px;">
+            <div class="info-content" style="padding:3px;">
+              <div class="info-content-border">
+                <!-- 制单 -->
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib"> {{item.progressObj.create.operationName}}</div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.create.flag === 'true'">{{item.progressObj.create.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <!-- 提交预审 -->
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib">提交预审</div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.agentTrial.flag === 'true'">
+                    {{item.progressObj.agentTrial.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.waybillStatus.wStatus === '102' && type==='agent'">
+                    {{item.progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.waybillStatus.wStatus === '102' && type==='pactl'">
+                    {{item.progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <!-- 预审通过 -->
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib">{{item.progressObj.pactlTrial.operationName}}</div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.pactlTrial.flag  === 'true'">
+                    {{item.progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <!-- 可安检 -->
+                <div class="info-content-row" ng-if="!item.progressObj.reBook && !item.progressObj.openFlag && !item.progressObj.approachFlag">
+                  <div class="info-content-row-line-1">可安检</div>
+                  <div class="info-content-row-line-2 fr mr10" ng-if="item.progressObj.beforeCheck.flag  === 'true'">
+                    {{item.progressObj.beforeCheck.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <div class="info-content-row" ng-if="item.progressObj.reBook || item.progressObj.openFlag || item.progressObj.approachFlag">
+                  <div class="">
+                    <div class="info-content-row-line-1">可安检</div>
+                    <div ng-if="item.progressObj.openFlag">
+                      <div class="info-content-row-line-1 ml10 dib">开箱检查</div>
+                      <div ng-if="item.progressObj.openFlag.flag==='true'" class="text-success dib">已完成</div>
+                      <div ng-if="item.progressObj.openFlag.flag==='false'" class="text-danger dib">未完成</div>
+                    </div>
+                    <div ng-if="item.progressObj.reBook">
+                      <div class="info-content-row-line-1 ml10 dib">交证书正本</div>
+                      <div ng-if="item.progressObj.reBook.flag==='true'" class="info-content-row-line-2 dib fr mr10">{{item.progressObj.reBook.operationDate | date:'MM/dd HH:mm'}}</div>
+                    </div>
+                    <div ng-if="item.progressObj.approachFlag">
+                      <div class="info-content-row-line-1 ml10 dib">进场</div>
+                      <div ng-if="item.progressObj.approachFlag.flag==='true'" class="info-content-row-line-2 dib fr mr10">{{item.progressObj.approachFlag.operationDate | date:'MM/dd HH:mm'}}</div>
+                    </div>
+                    <div class="curtaskdet" ng-if="item.progressObj.eleUpdateFlag.flag==='false'">
+                      <div class="info-content-row-line-1 ml10 dib">电子运单变更</div>
+                      <div ng-if="item.progressObj.eleUpdateFlag.flag==='true'" class="text-success dib">已完成</div>
+                      <div ng-if="item.progressObj.eleUpdateFlag.flag==='false'" class="text-danger dib">未完成</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- 安检 -->
+                <div class="info-content-row">
+                  <div class="info-content-row-line-1 dib" ng-if="item.progressObj.waybillStatus.checkCargoType !=='2'">{{item.progressObj.checkResult.operationName}}</div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.waybillStatus.checkCargoType !=='2'">
+                    {{item.progressObj.checkResult.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                  <div class="info-content-row-line-2 dib fr mr10" ng-if="item.progressObj.waybillStatus.checkCargoType ==='2'">
+                    24H{{item.progressObj.checkResult.operationName}} {{item.progressObj.checkResult.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <!-- 收单 -->
+                <div class="info-content-row" ng-if="item.progressObj.eleUpdateAfterCheckFlag.flag === 'true'">
+                  <div class="info-content-row-line-1 dib">{{item.progressObj.receiving.operationName}}</div>
+                  <div class="info-content-row-line-2 dib fr mr10">
+                    {{item.progressObj.receiving.operationDate | date:'MM/dd HH:mm'}}
+                  </div>
+                </div>
+                <div class="info-content-row" ng-if="progressObj.eleUpdateAfterCheckFlag.flag === 'false'">
+                  <div class="securitybor">
+                    <div class="info-content-row-line-1">收单</div>
+                    <div class="info-content-row-line-1 curtask">当前任务</div>
+                    <div class="curtaskdet" ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='false'">
+                      <div class="info-content-row-line-1 ml10">电子运单数据修改</div>
+                      <div ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='true'" class="text-success"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table" style="table-layout:fixed;position: absolute;bottom: 60px;width:97%">
+    <tbody>
+      <tr>
+        <td class="w45">&nbsp;</td>
+        <td class="w10" style="text-align:right">共{{totalObj.packages}}件</td>
+        <td class="w10" style="text-align:left">共{{totalObj.weight}}KG</td>
+        <td class="w35">&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row" style="position: relative;"></div>
+</div>
+<div ng-include="'foot.html'"></div>

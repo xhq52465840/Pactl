@@ -1,0 +1,105 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">报文地址授权</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    参数设置:
+  </div>
+</div>
+<div class="content-main-body" style="margin-bottom: 16px;">
+  <div class="content-main-search">
+    <div class="params">
+      <label>允许航空公司电子运单电报更新制单信息
+      <input type="checkbox" ng-click="isEWaybill($event)" ng-checked="allowable" ng-disabled="!sameAgent()">
+    </label>
+    </div>
+    <div class="params">
+      <label>报文发件地址:</label>
+      <div class="search-value">
+        <input type="text" class="form-control" ng-model="sendAddr">
+      </div>
+    </div>
+    <div class="params">
+      <label>报文收件地址:{{recAddr}}</label>
+    </div>
+    <div style="text-align: right;">
+      <button style="text-center:right" class="btn btn-primary" ng-click="save(allowable)">保存</button>
+    </div>
+  </div>
+</div>
+<div class="content-main-title" ng-if="sameAgent()">
+  <div class="title">报文地址授权:
+</div>
+<div class="pull-right">
+  <button class="btn btn-default" ng-click="add()" ng-if="sameAgent()">
+    <i class="i-add"></i>
+  </button>
+</div>
+</div>
+<div class="content-main-body" ng-if="sameAgent()">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">地址类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="address.addrType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in addressData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">地址说明</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="address.addrExplain">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="pull-right">
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w10">地址类型</th>
+        <th class="w10">报文地址</th>
+        <th class="w10">地址说明</th>
+        <th class="w10">报文类型</th>
+        <th class="w10">状态</th>
+        <th class="w10">创建人</th>
+        <th class="w15">最后修改时间</th>
+        <th class="w25">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in rows track by $index" ng-class-even="'even'">
+        <td>{{row.addrType| showStatus: addressData}}</td>
+        <td>{{row.messageAddr}}</td>
+        <td>{{row.addrExplain}}</td>
+        <td>
+          <label ng-repeat="item in row.messageType" style="padding: 3px;">
+            {{item| showStatus: messageData}}</label>
+          </td>
+          <td>{{row.delStatus| showStatus: addressStatus}}</td>
+          <td>{{row.updater}}</td>
+          <td>{{row.updateTime | date:'yy/MM/dd HH:mm:ss'}}</td>
+          <td>
+            <button class="btn btn-default" ng-click="remove(row.id,row.messageAddr,'2')" ng-show="row.delStatus === '0'"  ng-if="sameAgent()">停用</button>
+            <button class="btn btn-default" ng-click="remove(row.id,row.messageAddr,'0')" ng-show="row.delStatus === '2'"  ng-if="sameAgent()">启用</button>
+            <button class="btn btn-default" ng-click="edit(row)"  ng-if="sameAgent()">编辑</button>
+            <button class="btn btn-default" ng-click="remove(row.id,row.messageAddr,'1')"  ng-if="sameAgent()">删除</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>

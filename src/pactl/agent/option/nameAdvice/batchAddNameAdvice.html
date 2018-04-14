@@ -1,0 +1,34 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+       <div class="row">
+        <div class="col-sm-12 modal-body-name" style="text-align: left;"><span class="text-danger">不同品名之间请换行</span></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">品名<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+           <textarea required class="form-control" rows="10" ng-model="nameAdviceObj.goodsName"
+            ng-change="changeText7('goodsName')"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">统一备注</div>
+        <div class="col-sm-10 modal-body-value">
+           <textarea class="form-control" rows="3" ng-model="nameAdviceObj.remark"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

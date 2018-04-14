@@ -1,0 +1,48 @@
+<a class="dropdown-toggle popover-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 0 20px;">
+<i  ng-if=showThis class="i-msg"  style="position: absolute!important;left: 12px;width: 14px;height: 16px;top: 27px;"></i>
+ <img  ng-if=!showThis class="i-msg2"  src="../../image/icon-msgGreen.gif" style="width: 14px;height: 16px;position: absolute!important;left: 12px;top: 27px;"/>
+  
+  <small class="msg-corner" ng-show="totalMsg>0">{{totalMsg}}</small>
+</a>
+<ul class="dropdown-menu menu-top msg popover bottom">
+  <div class="arrow"></div>
+  <div class="popover-inner" ng-show="!showContent">
+    <div class="popover-title">
+      系统消息
+    </div>
+    <div class="popover-content">
+      <ul>
+        <li role="button" ng-repeat="row in allMsg track by $index" ng-click="displayContent(row)">
+          <div class="little-dot" ng-show="row.isRead==='0'"></div>
+          {{row.titleContent}}
+          <div class="right-arr">
+            <i class="arr-right"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="popover-footer">
+      <div pagination total-items="page.totalItems" items-per-page="page.length" max-size="0" class="pagination-sm" previous-text="上一页"
+        next-text="下一页" ng-change="pageChanged()" ng-model="page.currentPage">
+      </div>
+      <a ng-click="delAllMsg()" ng-show="allMsg.length" role="button" style="position: absolute;left: 99px;top: 316px;" title="全部删除">
+        <i class="btn-del"></i>
+      </a>      
+    </div>
+  </div>
+  <div class="popover-inner" ng-show="showContent">
+    <div class="popover-content-title">
+      <a ng-click="backToList()" role="button">
+        <i class="arr-left"></i>返回
+      </a>
+    </div>
+    <div class="popover-content">
+      <div class="popover-content-detail" compile="contentDetail.content"></div>
+    </div>
+    <div class="popover-footer" style="text-align:center;">
+      <a ng-click="delMessage()" role="button">
+        <i class="btn-del"></i>删除
+      </a>
+    </div>
+  </div>
+</ul>

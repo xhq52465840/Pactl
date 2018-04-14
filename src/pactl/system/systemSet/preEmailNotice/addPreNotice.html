@@ -1,0 +1,68 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+			<div class="row">
+				<div class="col-sm-1 modal-body-name" style="text-align:left">货站<span class="text-danger">*</span></div>
+				<div class="col-sm-4 modal-body-value">
+					<div ui-select ng-model="preNoticeData.freightStation" theme="select2" class="form-control w100" ng-change="search()">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+					<input type="hidden" name="freightStation" ng-model="preNoticeData.freightStation" required>
+				</div>
+				<div class="col-sm-3 modal-body-name">无人审单提醒时间<span class="text-danger">*</span></div>
+				<div class="col-sm-4 modal-body-value">
+					<input type="text" class="form-control w60 mr10" style="display:inline-block" name="noOneRemTime" required ng-model="preNoticeData.noOneRemTime">分钟
+				</div>
+			</div>
+			<div class="row">
+				收件人(多人请用英文状态下的分号隔开)
+				<span class="text-danger">*</span>
+			</div>
+			<div class="row">
+				<textarea rows="3" class="form-control" name="address" required ng-model="preNoticeData.address"></textarea>
+			</div>
+			<div class="row">
+				邮件主题
+				<span class="text-danger">*</span>
+			</div>
+			<div class="row">
+				<textarea rows="3" class="form-control" name="mailTheme" required ng-model="preNoticeData.mailTheme"></textarea>
+			</div>  
+			<div class="row">
+				邮件内容
+				<span class="text-danger">*</span>
+			</div>
+			<div class="row">
+				<textarea rows="3" class="form-control" name="sendContent" required ng-model="preNoticeData.sendContent"></textarea>
+			</div>  
+			<div class="row">
+				<div class="col-sm-2 modal-body-name" style="text-align:left">发件箱<span class="text-danger">*</span></div>
+				<div class="col-sm-10 modal-body-value" style="margin-left: -40px;">
+					<div ui-select ng-model="preNoticeData.sendMail" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.emailAddr}}</div>
+						<div ui-select-choices repeat="item in sentEmails | filter: {emailAddr:$select.search}">
+							<div ng-bind-html="item.emailAddr | highlight: $select.search"></div>
+						</div>
+					</div>
+					<input type="hidden" name="sendMail" required ng-model="preNoticeData.sendMail">
+				</div>         
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" ng-click="sentTest()">发送测试邮件</button>
+				<button class="btn btn-primary" w5c-form-submit="save()">确定</button>
+				<button class="btn btn-default" ng-click="cancel()">取消</button>
+			</div>
+		</div>
+	</div>
+</form>

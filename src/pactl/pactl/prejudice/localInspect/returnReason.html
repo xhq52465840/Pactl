@@ -1,0 +1,40 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <label class="reBillNo">分单号：</label>
+        <label class="reBillVal">{{itemObj.waybillNo}}</label>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="reBillNo">退回原因列表</div>
+          <div class="recheck-reason-left form-control">
+            <ul>
+              <li class="receiptPass" ng-repeat="row in reasonData track by $index">
+                <label><input class="reBillVal" type="checkbox" ng-click="check($event, row)" ng-checked="isCheck(row)">{{row.name}}</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          其他
+          <div>
+            <textarea class="form-control reBillVal" cols="30" rows="10" ng-model="itemObj.actionComments"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">{{btnName}}</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

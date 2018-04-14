@@ -1,0 +1,33 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body modal-body-content">
+    <div class="row">
+      <div class="modal-body-name">中文品名补充</div>
+      <div class="modal-body-value">
+        {{obj.goodsNameCn}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="modal-body-name">英文品名补充</div>
+      <div class="modal-body-value">
+        {{obj.goodsNameEn}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="modal-body-name">申报品名与鉴定证书品名差异</div>
+      <div class="modal-body-value">
+        {{obj.goodsRemarks}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

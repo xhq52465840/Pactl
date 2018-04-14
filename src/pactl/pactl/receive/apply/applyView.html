@@ -1,0 +1,111 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>收单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">数据修改申请审批</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">数据修改申请审批</div>
+</div>
+<div class="content-main-body">
+  <div class="row">
+    <div class="search-text">主单号</div>
+    <div class="dib" ng-class="{'bill-border-red': checkTypeObj['102'] && checkTypeObj['102'].checkFlag === 'true'}">
+      <div class="dib" ng-class="{'bill-border-black': checkTypeObj['104'] && checkTypeObj['104'].checkFlag === 'true'}">
+        <div class="bill-text1">
+          {{billObj.waybillNo}}
+        </div>
+      </div>
+    </div>
+    <div class="pull-right pt10">
+      <div class="search-text">
+        数据修改申请编号
+      </div>
+      <span class="bill-text">
+        {{showText.version}}
+      </span>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w20">运单号</th>
+        <th class="w16">修改项目</th>
+        <th class="w16">修改前</th>
+        <th class="w16">修改后</th>
+        <th class="w16">审核结果</th>
+        <th class="w16">备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in billObj.auditData track by $index" ng-class-even="'even'">
+        <td>{{item.billNo}}</td>
+        <td>{{item.difference.diffFieldDescriptionCn}}</td>
+        <td ng-if="showCert(item.difference.oldValue)">
+          <span ng-if="item.book && item.book.bookNo">
+              {{item.book.officeName}}/{{item.book.bookNo}}
+          </span>
+          <span class="label goodsType-puhuo1" ng-if="item.book.goodsType === '101'">普货</span>
+					<span class="label goodsType-ldc1" ng-if="item.book.goodsType === '102'">锂电池</span>
+          <span ng-if="item.book.bookComment">{{item.book.bookComment}}</span>
+          <i class="i-pdf" ng-click="openDialog({src: item.difference.oldValue, srcArr: item.srcArr})" ng-if="item.difference.oldValue"></i>
+        </td>
+        <td ng-if="!showCert(item.difference.oldValue) && item.difference.diffClass !== 'cargoDeclare' && item.difference.diffClass !== 'liBattery'
+         && item.difference.diffField !== 'refStatus' &&  item.difference.diffField !== 'eliFlag' && item.difference.diffField !== 'elmFlag' && item.difference.diffField !== 'ckElectricFlag'">{{item.difference.oldValue}}</td>
+        <td ng-if="item.difference.diffField === 'refStatus'"><i ng-class="{'i-no':item.difference.oldValue==='1','i-yes':item.difference.oldValue!=='1'}"/></td>
+        <td ng-if="item.difference.diffField === 'eliFlag'">
+          <button class="btn mt5" style="width:36px;padding:7px 0px;" ng-class="{'btn-notselected':item.difference.oldValue !== '1','btn-Success': item.difference.oldValue === '1'}" role="button">ELI</button>
+        </td>
+        <td ng-if="item.difference.diffField === 'elmFlag'">
+          <button class="btn mt5" style="width:36px;padding:7px 0px;" ng-class="{'btn-notselected':item.difference.oldValue !== '1','btn-Success': item.difference.oldValue === '1'}" role="button">ELM</button>
+        </td>
+        <!--磁检证书-->
+        <td ng-if="item.difference.diffField === 'ckElectricFlag'">
+          <i class="i-ci-1 preIcon1" ng-show="item.difference.oldValue === '1'"></i>
+          <i class="i-ci-2 preIcon1" ng-show="item.difference.oldValue !== '1'"></i>
+        </td>
+        <td ng-if="showCert(item.difference.newValue)">
+          <span ng-if="item.book && item.book.bookNo">
+              {{item.book.officeName}}/{{item.book.bookNo}}
+          </span>
+          <span class="label goodsType-puhuo1" ng-if="item.book.goodsType === '101'">普货</span>
+					<span class="label goodsType-ldc1" ng-if="item.book.goodsType === '102'">锂电池</span>
+          <span ng-if="item.book.bookComment">{{item.book.bookComment}}</span>
+          <i class="i-pdf" ng-click="openDialog({src: item.difference.newValue, srcArr: item.srcArr})" ng-if="item.difference.newValue"></i>
+        </td>
+        <td ng-if="!showCert(item.difference.newValue) && item.difference.diffClass !== 'cargoDeclare' && item.difference.diffClass !== 'liBattery'
+         && item.difference.diffField !== 'refStatus' &&  item.difference.diffField !== 'eliFlag' && item.difference.diffField !== 'elmFlag' && item.difference.diffField !== 'ckElectricFlag'">{{item.difference.newValue}}</td>
+        <td ng-if="item.difference.diffField === 'refStatus'"><i ng-class="{'i-no':item.difference.newValue==='1','i-yes':item.difference.newValue!=='1'}"/></td>
+        <td ng-if="item.difference.diffField === 'eliFlag'">
+          <button class="btn mt5" style="width:36px;padding:7px 0px;" ng-class="{'btn-notselected':item.difference.newValue !== '1','btn-Success': item.difference.newValue === '1'}" role="button">ELI</button>
+        </td>
+        <td ng-if="item.difference.diffField === 'elmFlag'">
+          <button class="btn mt5" style="width:36px;padding:7px 0px;" ng-class="{'btn-notselected':item.difference.newValue !== '1','btn-Success': item.difference.newValue === '1'}" role="button">ELM</button>
+        </td>
+        <!--磁检证书-->
+        <td ng-if="item.difference.diffField === 'ckElectricFlag'">
+          <i class="i-ci-1 preIcon1" ng-show="item.difference.newValue === '1'"></i>
+          <i class="i-ci-2 preIcon1" ng-show="item.difference.newValue !== '1'"></i>
+        </td>
+        <td ng-if="item.difference.diffClass === 'cargoDeclare'">{{billObj.cargoDeclare.differenceLeft}}</td>
+        <td ng-if="item.difference.diffClass === 'cargoDeclare'">{{billObj.cargoDeclare.differenceRight}}</td>
+        <td ng-if="item.difference.diffClass === 'liBattery'">{{billObj.liBattery.differenceLeft}}</td>
+        <td ng-if="item.difference.diffClass === 'liBattery'">{{billObj.liBattery.differenceRight}}</td>
+        <td>
+          <label>{{item.difference.reviewResult | showStatus: statusData}}</label>
+          <label style="padding-left: 20px;" ng-if="item.difference.classType === 'onetime' && item.book.bookCheckType !== 'other'">
+            <input style="width:20px;height:20px;" disabled type="checkbox" name="rebook"   ng-checked="item.book.reBook==='1'">收正本证书
+          </label>
+        </td>
+        <td>
+          {{item.difference.reviewComment}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div co-waybill billno="waybillNo" bill-obj="billObj"></div>
+</div>

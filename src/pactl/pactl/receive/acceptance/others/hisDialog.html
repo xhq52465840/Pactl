@@ -1,0 +1,52 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">类型</th>
+					<th class="w32">文件名称</th>
+					<th class="w28">来源</th>
+					<th class="w15">来源时间</th>
+					<th class="w10">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in historysData track by $index" ng-if="row.suffix!=='jpeg'">
+					<td>{{row.type}}</td>
+					<td>{{row.oldName}}</td>
+					<td>{{row.remark}}</td>
+					<td>{{row.uploadDate | date: 'yyyy/MM/dd'}}</td>
+					<td ng-if="row.showType==='0'" ng-click="openDialog({srcArr:row.srcArr})">查看</td>
+					<td ng-if="row.showType==='1'"><a ng-href="{{row.fileHttpPath}}" target="_blank">查看</a></td> 
+					<td ng-if="row.showType==='2'" ng-click="openDialog1({row:row})">查看</td> 
+				</tr>
+				<tr ng-repeat="row in historysDataFEB track by $index" ng-if="row.suffix!=='jpeg'">
+					<td>{{row.type}}</td>
+					<td>{{row.filename}}</td>
+					<td>
+						<span ng-if="row.rs === 'R' && !row.isEmail">sita收报：{{row.origin}}</span>
+						<span ng-if="row.rs === 'S' && !row.isEmail">sita发报：{{row.destination}}</span>
+						<span ng-if="row.rs === 'R' && row.isEmail">邮箱收报：{{row.origin}}</span>
+						<span ng-if="row.rs === 'S' && row.isEmail">邮箱发报：{{row.destination}}</span>
+					</td>
+					<td>{{row.createTime | date: 'yyyy/MM/dd'}}</td>
+					<td ng-click="showMsg(row.text)">查看</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

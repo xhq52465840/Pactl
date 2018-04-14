@@ -1,0 +1,16 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>报表统计</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">{{title || '报表'}}</li>
+</ol>
+<!-- <div class="content-main-title">
+  <div class="title">
+    {{title || '报表'}}
+  </div>
+</div> -->
+<div class="content-main-body">
+  <iframe id="statement_iframe" iframe-onload="iframeCallBack()" ng-src="{{trustSrc(url)}}" frameborder="0" style="width:100%;min-height:768px;border: 1px solid #ddd;height:100%;">
+  </iframe>
+</div>

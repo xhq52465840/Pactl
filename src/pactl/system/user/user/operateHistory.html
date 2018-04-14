@@ -1,0 +1,39 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w20">用户名</th>
+					<th class="w15">操作</th>
+					<th class="w30">备注</th>
+					<th class="w15">操作人</th>
+					<th class="w20">操作时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in historysData track by $index">
+					<td>{{row.username}}</td>
+					<td>{{row.operateName}}</td>
+					<td><div class="popover-content-detail" compile="row.remark"></div></td>
+					<td>{{row.operator}}</td>
+					<td>{{row.operateTime | date: 'yyyy-MM-dd'}}</td>
+				</tr>
+			</tbody>
+        </table>
+        
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

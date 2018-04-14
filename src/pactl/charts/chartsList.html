@@ -1,0 +1,33 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      添加图表
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body modal-body-content">
+    <div class="input-group">
+      <span class="input-group-addon">关键字</span>
+      <input type="text" class="form-control" ng-model="obj.keywords">
+    </div>
+    <div class="row">
+      <ul class="slides">
+        <li ng-repeat="row in obj.data | filter: obj.keywords">
+          <a role="button" ng-click="add(row)">
+            <img ng-src="{{row.imgSrc}}" alt="chart">
+            <span>
+            <strong>{{row.title}}</strong>
+            <br>
+            {{row.description}}
+          </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

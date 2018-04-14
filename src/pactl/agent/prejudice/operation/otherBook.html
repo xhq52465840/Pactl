@@ -1,0 +1,64 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="row pull-right">
+			<button class="btn btn-primary" ng-click="addCert()" ng-show="item.wStatus">添加记录</button>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w25">电子文档</th>
+					<th class="w50">备注</th>
+					<th class="w25">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rowobj in rows" ng-class-even="'even'">
+					<td>
+						<i class="i-pdf" ng-click="openDialog(rowobj)" ng-if="rowobj.pdfPath"></i>
+					</td>
+					<td>{{rowobj.book.bookComment}}</td>
+					<td>
+						<a role="button" ng-click="remove(rowobj, $index)" ng-show="item.wStatus">
+							<i class="btn-del"></i>
+						</a>
+					</td>
+				</tr>
+				<tr ng-repeat="item in newItems track by $index">
+					<td>
+						<div ng-show="!item.pdfPath">
+							<button class="btn btn-primary" on-file-uploaded="uploadCallback($response, item)" pl-upload pl-progress-model="item.progress">上传</button>
+							<div progressbar value="item.progress" type="success"><b>{{item.progress}}%</b></div>							
+						</div>
+						<div ng-show="item.pdfPath">
+							<i class="i-pdf" ng-click="openDialog(item)"></i>
+							<div class="dib" ng-click="removeFile(item)">
+								<i class="btn-close"></i>
+							</div>
+						</div>
+					</td>
+					<td>
+						<textarea rows="3" ng-model="item.bookComment" class="form-control"></textarea>
+					</td>
+					<td>
+						<div class="btn-img" ng-click="removeCert(item, $index)">
+							<i class="btn-del"></i>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()" ng-show="item.wStatus">确定</button>
+		<button class="btn btn-default" ng-click="cancel()" ng-show="item.wStatus">取消</button>
+		<button class="btn btn-default" ng-click="cancel()" ng-show="!item.wStatus">关闭</button>
+	</div>
+</div>

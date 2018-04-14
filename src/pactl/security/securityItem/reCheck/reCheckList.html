@@ -1,0 +1,64 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>安检</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>安检复检</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">待复检列表</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    待复检
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="back()">
+      <i class="i-back"></i>返回
+    </button>
+    <button class="btn btn-default" ng-click="search()">
+      <i class="i-refresh"></i>刷新
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w15" t-sort="WAYBILL_NO">运单号</th>
+        <th class="w5">件数</th>
+        <th class="w7">数量(KG)</th>
+        <th class="w10">品名</th>
+        <th class="w7"  t-sort="AGENT_OPRN">代理</th>
+        <th class="w10" t-sort="DEST1">目的港</th>
+        <th class="w8" t-sort="CHECK_CARGO_TYPE">货物类型</th>
+        <th class="w8">首检人员</th>
+        <th class="w15"  t-sort="FCHECKTIME">首检时间</th>
+        <th class="w10">首检状态</th>
+        <th class="w5">备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in checkData track by $index" ng-class-even="'even'">
+        <td>
+          <i class="i-e" ng-if="item.wb_ele==='1'"></i> {{item.waybill_no}}
+        </td>
+        <td>{{item.total_count}}</td>
+        <td>{{item.gross_weight}}</td>
+        <td>{{item.goods_desc}}</td>
+        <td>{{item.agent_oprn}}</td>
+        <td>{{item.dest1}}</td>
+        <td>{{item.goods_class|showStatus: goodTypeData}}</td>
+        <td>{{item.fcheck}}</td>
+        <td>{{item.fchecktime}}</td>
+        <td>
+          <span class="label label-success" ng-if="item.fstatus==='1'">通过</span>
+          <span class="label label-white" ng-if="item.fstatus==='0'">待定</span>
+        </td>
+        <td>
+          <i class="i-flag" ng-if="item.count_remark !== '0'" ng-click="showRemark(item)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

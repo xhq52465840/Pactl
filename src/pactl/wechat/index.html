@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+  <style type="text/css">
+    @charset "UTF-8";
+    [ng\:cloak],
+    [ng-cloak],
+    [data-ng-cloak],
+    [x-ng-cloak],
+    .ng-cloak,
+    .x-ng-cloak,
+    .ng-hide {
+      display: none !important;
+    }
+    
+    ng\:form {
+      display: block;
+    }
+    
+    .ng-animate-block-transitions {
+      transition: 0s all!important;
+      -webkit-transition: 0s all!important;
+    }
+    
+    .ng-hide-add-active,
+    .ng-hide-remove {
+      display: block!important;
+    }
+  </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <title>微信绑定页面</title>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body ng-cloak>
+  <div ng-controller="bindCtrl">
+    <div class="wechat-content">
+      <div class="wechat-header">
+        <div class="wechat-title">
+          <span ng-if="btn.isShow">PACTL用户绑定</span>
+          <span ng-if="!btn.isShow">用户绑定</span>
+        </div>
+      </div>
+      <form name="myForm" novalidate>
+        <div class="weui-cells weui-cells_form">
+          <div class="weui-cell weui-cell_warn">
+            <div class="weui-cell__hd textr">
+              <label class="weui-label">员工工号<span class="needs">*</span></label>
+            </div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="weui input error" name="employeeAccount" required ng-model="bindingData.employeeAccount">
+            </div>
+            <span style="color:red" ng-show="myForm.employeeAccount.$dirty && myForm.employeeAccount.$invalid">
+              <span ng-show="myForm.employeeAccount.$error.required">员工工号必填</span>
+            </span>
+          </div>
+          <div class="weui-cell weui-cell_warn">
+            <div class="weui-cell__hd textr"><label class="weui-label">员工姓名<span class="needs">*</span></label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="weui input error" name="employeeName" required ng-model="bindingData.employeeName">
+              <span style="color:red" ng-show="myForm.employeeName.$dirty && myForm.user.$invalid"></span>
+            </div>
+            <span style="color:red" ng-show="myForm.employeeName.$dirty && myForm.employeeName.$invalid">
+              <span ng-show="myForm.employeeName.$error.required">员工姓名必填</span>
+            </span>
+          </div>
+          <div class="weui-cell weui-cell_warn">
+            <div class="weui-cell__hd textr"><label class="weui-label">机构代码<span class="needs">*</span></label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="weui input error" name="agentCode" required ng-model="bindingData.agentCode">
+            </div>
+            <span style="color:red" ng-show="myForm.agentCode.$dirty && myForm.agentCode.$invalid">
+              <span ng-show="myForm.agentCode.$error.required">机构代码必填</span>
+            </span>
+          </div>
+          <div class="weui-cell weui-cell_warn" ng-if="!btn.isShow">
+            <div class="weui-cell__hd textr"><label class="weui-label">平台用户名<span class="needs">*</span></label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="weui input error" name="pactlAccount" required ng-model="bindingData.pactlAccount">
+            </div>
+            <span style="color:red" ng-show="myForm.pactlAccount.$dirty && myForm.pactlAccount.$invalid">
+              <span ng-show="myForm.pactlAccount.$error.required">平台用户名必填</span>
+            </span>
+          </div>
+          <div class="weui-cell weui-cell_warn" ng-if="!btn.isShow">
+            <div class="weui-cell__hd textr"><label class="weui-label">平台密码<span class="needs">*</span></label></div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" value="weui input error" type="password" name="password" required ng-model="bindingData.password">
+            </div>
+            <span style="color:red" ng-show="myForm.password.$dirty && myForm.password.$invalid">
+              <span ng-show="myForm.password.$error.required">平台密码必填</span>
+            </span>
+          </div>
+        </div>
+        <div class="weui-btn-area">
+          <button class="weui-btn weui-btn_primary" style="background-color:rgb(233, 92, 28);" ng-click="submitBinding()">确认绑定</button>
+        </div>
+      </form>
+
+      <div class="js_dialog" ng-show="btn.isEmployeeAccount">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">员工工号必填</strong></div>
+          <div class="weui-dialog__ft">
+            <a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">确定</a>
+          </div>
+        </div>
+      </div>
+      <div class="js_dialog" ng-show="btn.isEmployeeName">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">员工姓名必填</strong></div>
+          <div class="weui-dialog__ft">
+            <a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">确定</a>
+          </div>
+        </div>
+      </div>
+      <div class="js_dialog" ng-show="btn.isAgentCode">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">机构代码必填</strong></div>
+          <div class="weui-dialog__ft">
+            <a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">确定</a>
+          </div>
+        </div>
+      </div>
+      <div class="js_dialog" ng-show="btn.isPactlAccount">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">平台用户名必填</strong></div>
+          <div class="weui-dialog__ft">
+            <a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">确定</a>
+          </div>
+        </div>
+      </div>
+      <div class="js_dialog" ng-show="btn.ispassword">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+          <div class="weui-dialog__hd"><strong class="weui-dialog__title">平台密码必填</strong></div>
+          <div class="weui-dialog__ft">
+            <a class="weui-dialog__btn weui-dialog__btn_default" ng-click="cancel()">确定</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

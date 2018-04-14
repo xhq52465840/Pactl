@@ -1,0 +1,353 @@
+<div class="content-main-title">
+  <div class="title">新建国际分单</div>
+  <div class="pull-right">
+    <div class="dib">底色说明：
+      <div class="color-inst"></div>预审必录字段</div>
+    <button type="button" class="btn btn-default" ng-click="addNew()">
+      <i class="i-add"></i>新增
+    </button>
+    <button type="button" class="btn btn-default" ng-click="save()">
+      <i class="i-save"></i>保存
+    </button>
+    <button type="button" class="btn btn-default" ng-click="connect()" ng-if="subBillObj.awId">
+      <i class="i-add"></i>关联主单号
+    </button>
+    <button class="btn btn-default" ng-click="history('1')" ng-if="subBillObj.awId">
+      <i class="i-history"></i>历史记录
+    </button>
+    <button type="button" class="btn btn-default" ng-click="sendFHL()" ng-if="subBillObj.awId">
+      发送FHL<span ng-if="timesFHL>0">({{timesFHL}}次)</span>
+    </button>
+    <button type="button" class="btn btn-default" ng-click="remove()" ng-if="subBillObj.awId && !subBillObj.parentNo">
+      <i class="i-remove"></i>删除
+    </button>
+    <button type="button" class="btn btn-default" ng-click="pickTemp()">
+      提取模板
+    </button>
+    <button type="button" class="btn btn-default" ng-click="saveTemp()">
+      保存到模板
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="row" ng-if="subBillObj.parentNo">
+    <div class="col-sm-12 content-main-body-bill-head-title">
+      <i class="i-public"></i>主单信息
+    </div>
+    <div class="col-sm-12 content-main-body-bill-head">
+      <div class="col-sm-2">
+        主单号
+        <span>{{billObj.waybillNo}}</span>
+      </div>
+      <div class="col-sm-2">
+        始发站
+        <span>{{billObj.dept}}</span>
+      </div>
+      <div class="col-sm-2">
+        目的站
+        <span>{{billObj.dest1}}</span>
+      </div>
+      <div class="col-sm-2">
+        件数
+        <span>{{billObj.rcpNo}}</span>
+      </div>
+      <div class="col-sm-2">
+        重量(KG)
+        <span>{{billObj.grossWeight}}</span>
+      </div>
+      <div class="col-sm-2">
+        分单合计
+        <span>{{billObj.subWaybillcount}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-cm-12">
+      <div class="content-main-body-bill-head-title dib">
+        <i class="i-public"></i>分单信息
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 pt10">
+      <div class="search-text">
+        分单号<span class="red">*</span>
+      </div>
+      <div class="search-input">
+        <input type="text" class="form-control" name="s_waybillNo" ng-model="subBillObj.waybillNo" maxlength="12" necessary="waybillNo"
+          necessary-data="necessarySubData">
+      </div>
+      <div class="search-text">
+        始发站<span class="red">*</span>
+      </div>
+      <div class="search-input" style="width: 100px;">
+        <div ui-select ng-model="subBillObj.dept" theme="select2" class="form-control" necessary="dept" necessary-data="necessarySubData">
+          <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+          <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+            <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="search-text">
+        目的站<span class="red">*</span>
+      </div>
+      <div class="search-input" style="width: 100px;">
+        <div ui-select ng-model="subBillObj.dest1" theme="select2" class="form-control" necessary="dest1" necessary-data="necessarySubData">
+          <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+          <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+            <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="search-text">
+        货物品名<span class="red">*</span>
+      </div>
+      <div class="search-input listCert" style="width: 40%;">
+        <input type="text" class="form-control" maxlength="200" name="s_goodsDesc" ng-model="subBillObj.goodsDesc" necessary="goodsDesc"
+          necessary-data="necessarySubData" tooltip-placement="center" tooltip-html-unsafe="<div class=&quot;pre-name&quot; style=&quot;width:100%;word-break:break-all &quot;>{{subBillObj.goodsDesc}}</div>">
+      </div>
+      <button class="btn btn-default" ng-click="selectName('sub')">选择</button>
+    </div>
+  </div>
+  <div class="content-main-body-subBill row">
+    <div class="row subBill-line-3">
+      <div class="subBill-line-3-1 w7">
+        件数<span class="red">*</span>
+      </div>
+      <div class="subBill-line-3-2 w17">
+        重量<span class="red">*</span>
+      </div>
+      <div class="subBill-line-3-3 w9">
+        SLAC件数
+      </div>
+      <div class="subBill-line-3-4 w11">
+        运输申明价值
+      </div>
+      <div class="subBill-line-3-5 w11">
+        运输保险价值
+      </div>
+      <div class="subBill-line-3-6 w11">
+        海关申明价值
+      </div>
+      <div class="subBill-line-3-7 w11">
+        付款方式
+      </div>
+      <div class="subBill-line-3-8 w12">
+        其他费用付款方式
+      </div>
+      <div class="subBill-line-3-9 w11">
+        币种
+      </div>
+    </div>
+    <div class="row subBill-line-4">
+      <div class="subBill-line-4-1 w7">
+        <input type="text" class="form-control" name="s_rcpNo" ng-model="subBillObj.rcpNo" maxlength="4" necessary="rcpNo" necessary-data="necessarySubData">
+      </div>
+      <div class="subBill-line-4-2 w17">
+        <input type="text" class="form-control w50 dib" name="s_grossWeight" ng-model="subBillObj.grossWeight" maxlength="7" necessary="grossWeight"
+          necessary-data="necessarySubData">
+        <div ui-select ng-model="subBillObj.weightCode" theme="select2" class="form-control w45" necessary="weightCode" necessary-data="necessarySubData">
+          <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+          <div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+            <div ng-bind-html="item.name | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="subBill-line-4-3 w9">
+        <input type="text" class="form-control" name="s_slac" ng-model="subBillObj.slac" maxlength="5" necessary="slac" necessary-data="necessarySubData">
+      </div>
+      <div class="subBill-line-4-4 w11">
+        <input type="text" class="form-control" name="s_carriageValue" ng-model="subBillObj.carriageValue" maxlength="11" necessary="carriageValue"
+          necessary-data="necessarySubData">
+      </div>
+      <div class="subBill-line-4-5 w11">
+        <input type="text" class="form-control" name="s_insuranceValue" ng-model="subBillObj.insuranceValue" maxlength="11" necessary="insuranceValue"
+          necessary-data="necessarySubData">
+      </div>
+      <div class="subBill-line-4-6 w11">
+        <input type="text" class="form-control" name="s_customsValue" ng-model="subBillObj.customsValue" maxlength="11" necessary="customsValue"
+          necessary-data="necessarySubData">
+      </div>
+      <div class="subBill-line-4-7 w11">
+        <div ui-select ng-model="subBillObj.wtVal" theme="select2" class="form-control" necessary="wtVal" necessary-data="necessarySubData">
+          <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+          <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+            <div ng-bind-html="item.name | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="subBill-line-4-8 w12">
+        <div ui-select ng-model="subBillObj.other" theme="select2" class="form-control" on-select="selectOwner()" necessary="other"
+          necessary-data="necessarySubData">
+          <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+          <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+            <div ng-bind-html="item.name | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="subBill-line-4-9 w11">
+        <div ui-select ng-model="subBillObj.currency" theme="select2" class="form-control" necessary="currency" necessary-data="necessarySubData">
+          <div ui-select-match placeholder="">{{$select.selected.currencyCode}}</div>
+          <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+            <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="subBill-line-left subBill-line-left-1">
+        <div class="line-row">
+          <div class="fl">发货人信息</div>
+          <div class="fr">
+            <i class="i-search" ng-click="searchUser('1', '1')"></i>
+            <i class="i-save" ng-click="saveUser('1', '1')"></i>
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">名称</div>
+          <div class="col-sm-11">
+            <input type="text" class="form-control" name="s_spName" ng-model="subBillObj.spName" maxlength="70" necessary="spName" necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">地址</div>
+          <div class="col-sm-11">
+            <input type="text" class="form-control" name="s_spAddress" ng-model="subBillObj.spAddress" maxlength="70" necessary="spAddress"
+              necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">城市</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_spCity" ng-model="subBillObj.spCity" maxlength="17" necessary="spCity" necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">国家</div>
+          <div class="col-sm-3">
+            <div ui-select ng-model="subBillObj.spCountry" theme="select2" class="form-control" necessary="spCountry" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+              <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1 pl10">州</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_spState" ng-model="subBillObj.spState" maxlength="9" necessary="spState"
+              necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">邮编</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_spZipcode" ng-model="subBillObj.spZipcode" maxlength="9" necessary="spZipcode"
+              necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">电话</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_spTel" ng-model="subBillObj.spTel" maxlength="25" necessary="spTel" necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">传真</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_spFax" ng-model="subBillObj.spFax" maxlength="25" necessary="spFax" necessary-data="necessarySubData">
+          </div>
+        </div>
+      </div>
+      <div class="subBill-line-right">
+        <div class="line-row">
+          <div class="fl">收货人信息</div>
+          <div class="fr">
+            <i class="i-search" ng-click="searchUser('0', '1')"></i>
+            <i class="i-save" ng-click="saveUser('0', '1')"></i>
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">名称</div>
+          <div class="col-sm-11">
+            <input type="text" class="form-control" name="s_csName" ng-model="subBillObj.csName" maxlength="70" necessary="csName" necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">地址</div>
+          <div class="col-sm-11">
+            <input type="text" class="form-control" name="s_csAddress" ng-model="subBillObj.csAddress" maxlength="70" necessary="csAddress"
+              necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">城市</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_csCity" ng-model="subBillObj.csCity" maxlength="17" necessary="csCity" necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">国家</div>
+          <div class="col-sm-3">
+            <div ui-select ng-model="subBillObj.csCountry" theme="select2" class="form-control" necessary="csCountry" necessary-data="necessarySubData">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+              <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1 pl10">州</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_csState" ng-model="subBillObj.csState" maxlength="9" necessary="csState"
+              necessary-data="necessarySubData">
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-1">邮编</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_csZipcode" ng-model="subBillObj.csZipcode" maxlength="9" necessary="csZipcode"
+              necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">电话</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_csTel" ng-model="subBillObj.csTel" maxlength="25" necessary="csTel" necessary-data="necessarySubData">
+          </div>
+          <div class="col-sm-1 pl10">传真</div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" name="s_csFax" ng-model="subBillObj.csFax" maxlength="25" necessary="csFax" necessary-data="necessarySubData">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row subBill-line-2">
+      <div class="line-row">
+        <div class="col-sm-1">英文品名补充</div>
+        <div class="col-sm-11">
+          <textarea rows="4" class="form-control" maxlength="585" name="s_remark" ng-model="subBillObj.remark" necessary="remark" necessary-data="necessarySubData"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row subBill-line-5">
+      <div class="subBill-line-5-left">
+        <div class="line-row">
+          <div class="col-sm-2">
+            特货代码<br> (代码间需用逗号","隔开)
+          </div>
+          <div class="col-sm-10">
+            <input type="text" class="hide" name="s_holdCode" ng-model="subBillObj.holdCode" maxlength="35" necessary="holdCode"
+              necessary-data="necessarySubData">
+            <div ui-select multiple tagging="tagTransform" tagging-label="" tagging-tokens="SPACE|,|/" ng-model="subBillObj.holdCodeList"
+              ng-change="tagTransform2str(subBillObj,'holdCodeList','holdCode')" theme="select2" class="form-control">
+              <div ui-select-match>{{$item.code}}</div>
+              <div ui-select-choices repeat="code in subBillObj.holdCodeList | filter: $select.search">
+                {{code.code || code}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="subBill-line-5-right">
+        <div class="line-row">
+          <div class="col-sm-2">
+            货物代码
+          </div>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="s_commodityCodes" ng-model="subBillObj.commodityCodes" maxlength="350" necessary="commodityCodes"
+              necessary-data="necessarySubData">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

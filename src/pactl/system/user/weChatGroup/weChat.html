@@ -1,0 +1,110 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>用户管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">微信用户管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    微信用户管理
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">微信昵称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="wechat.nickName">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">员工姓名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="wechat.employeeName">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">所属机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="wechat.agentCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentData |filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">申请时间</div>
+        <div class="search-value">
+          <input type="text" class="form-control" pikaday="myPickerObject1" ng-model="wechat.createDate">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">系统用户</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="wechat.pactlAccount">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="wechat.status" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="getAgent()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th colspan="6" class="w70">申请信息</th>
+        <th colspan="3" class="w30">审核信息</th>
+      </tr>
+      <tr>
+        <th class="w11" style="background-color: #E5E1D8;color: #4c647c;">微信头像</th>
+        <th class="w11" style="background-color: #E5E1D8;color: #4c647c;">微信昵称</th>
+        <th class="w11" style="background-color: #E5E1D8;color: #4c647c;">员工工号</th>
+        <th class="w11" style="background-color: #E5E1D8;color: #4c647c;">员工姓名</th>
+        <th class="w15" style="background-color: #E5E1D8;color: #4c647c;">申请时间</th>
+        <th class="w11" style="background-color: #E5E1D8;color: #4c647c;">系统用户</th>
+        <th class="w7"  style="background-color: #E5E1D8;color: #4c647c;">所属机构</th>
+        <th class="w8"  style="background-color: #E5E1D8;color: #4c647c;">状态</th>
+        <th class="w15" style="background-color: #E5E1D8;color: #4c647c;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in wechatData track by $index" ng-class-even="'even'">
+        <td><img ng-src="{{item.headImgUrl || ' '}}" alt="img" class="air-img"></td>
+        <td>{{item.nickname}}</td>
+        <td>{{item.employeeAccount}}</td>
+        <td>{{item.employeeName}}</td>
+        <td>{{item.created.substring(5,10)}}{{item.created.substring(10,16)}}</td>
+        <td>{{item.pactlAccount}}</td>
+        <td>{{item.agentCode}}</td>
+        <td>{{item.status | showStatus : statusData}}</td>
+        <td>
+          <button class="btn btn-default" ng-click="bound(item)" ng-show="item.status==='CHECK' || item.status==='UNBIND'">绑定</button>
+          <button class="btn btn-default" ng-click="unbound(item)" ng-show="item.status==='BIND'">解绑</button>
+          <button class="btn btn-default" ng-click="remove(item)">删除</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

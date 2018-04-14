@@ -1,0 +1,48 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">国家代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="countryCode" class="form-control" required ng-model="countryObj.countryCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">国家<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="countryName" class="form-control" required ng-model="countryObj.countryName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">iata区域<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="iataArea" class="form-control" required ng-model="countryObj.iataArea">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">币种名字<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="currencyName" class="form-control" required ng-model="countryObj.currencyName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">币种代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="currencyCode" class="form-control" required ng-model="countryObj.currencyCode">
+        </div>
+      </div>                               
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,92 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>预审</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">入库卡车扫描录入</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">入库卡车扫描录入</div>
+  <div class="pull-right" ng-if="hasPermission === true">
+    <button type="button" class="btn btn-default" ng-click="carPrint()">生成卡车条形码</button>
+    <button type="button" class="btn btn-default" ng-click="save()">暂存</button>
+    <button type="button" class="btn btn-default" ng-click="delAll()">删除</button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">载货清单编号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.truckBill" maxlength="20" ng-change="changeText()" auto-focus="true">
+        </div>
+        <button type="button" class="btn btn-primary" ng-click="search()" style="vertical-align: top;">确认</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">代理代码</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.agentIata" theme="select2" ng-disabled="hasPermission === false" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">卡车号</div>
+        <div class="search-value">
+          <input type="text" class="form-control"  ng-disabled="hasPermission === false"  ng-model="billObj.truckNo">
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w8">序号</th>
+        <th class="w17">运单号</th>
+        <th class="w10">货代</th>
+        <th class="w10">件数</th>
+        <th class="w10">重量</th>
+        <th class="w15">目的港</th>
+        <th class="w15">预审状态</th>
+        <th class="w15" ng-if="hasPermission === true">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in carData track by $index" ng-class-even="'even'">
+        <td>{{$index+1}}</td>
+        <td>{{item.waybillNo}}</td>
+        <td>{{item.iataCode}}</td>
+        <td>{{item.totalCount}}</td>
+        <td>{{item.grossWeight}}</td>
+        <td>{{item.dest1}}</td>
+        <td>{{item.wStatus|showStatus: waybillDatas}}{{item.bstatus}}</td>
+        <td ng-if="hasPermission === true">
+          <div class="btn-img" ng-click="remove(item, $index)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+      <tr ng-if="hasPermission === true">
+        <td></td>
+        <td>
+          <input type="text" class="form-control" ng-model="billObj.waybill" do-search="addData()" maxlength="11">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

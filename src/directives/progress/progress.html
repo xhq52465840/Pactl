@@ -1,0 +1,196 @@
+<div class="business-content-body-right">
+  <div class="info-1">
+    <div class="info-title">运单进度</div>
+    <div class="info-content">
+      <div class="info-content-border">
+        <div class="info-content-row">
+          <div class="info-content-row-mark">
+            <i class="i-1" ng-if="progressObj.create.flag === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.create.flag === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1">制单</div>
+            <div class="info-content-row-line-2" ng-if="progressObj.create.flag === 'true'">{{progressObj.create.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-hide="type==='pactl'">{{progressObj.create.username}} </span> {{progressObj.create.operationName}}
+            </div>
+          </div>
+        </div>
+        <div class="info-content-row">
+          <div class="info-content-row-mark">
+            <i class="i-2" ng-if="progressObj.agentTrial.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.agentTrial.flag === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1">提交预审</div>
+            <div class="info-content-row-line-2" ng-if="progressObj.agentTrial.flag === 'true'">
+              {{progressObj.agentTrial.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-hide="type==='pactl'">{{progressObj.agentTrial.username}} </span> {{progressObj.agentTrial.operationName}}
+            </div>
+            <div class="info-content-row-line-2" ng-if="progressObj.waybillStatus.wStatus === '102' && type==='agent'">
+              {{progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}} {{progressObj.pactlTrial.operationName}}
+            </div>
+            <div class="info-content-row-line-2" ng-if="progressObj.waybillStatus.wStatus === '102' && type==='pactl'">
+              {{progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}} {{progressObj.pactlTrial.username}} {{progressObj.pactlTrial.operationName}}
+            </div>
+          </div>
+        </div>
+        <div class="info-content-row">
+          <div class="info-content-row-mark">
+            <i class="i-3" ng-if="progressObj.pactlTrial.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.pactlTrial.flag  === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1">预审通过</div>
+            <div class="info-content-row-line-2" ng-if="progressObj.pactlTrial.flag  === 'true'">
+              {{progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-if="type==='pactl'">{{progressObj.pactlTrial.username}} </span> {{progressObj.pactlTrial.operationName}}
+            </div>
+            <div class="info-content-row-line-2" ng-if="progressObj.pactlTrial.flag  === 'false' && progressObj.pactlTrial.operationName === '重新预审'">
+              {{progressObj.pactlTrial.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-if="type==='pactl'">{{progressObj.pactlTrial.username}} </span> {{progressObj.pactlTrial.operationName}}
+            </div>
+          </div>
+        </div>
+        <div class="info-content-row" ng-if="!progressObj.reBook && !progressObj.openFlag && !progressObj.approachFlag">
+          <div class="info-content-row-mark">
+            <i class="i-4" ng-if="progressObj.beforeCheck.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.beforeCheck.flag  === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1">可安检</div>
+            <div class="info-content-row-line-2" ng-if="progressObj.beforeCheck.flag  === 'true'">
+              {{progressObj.beforeCheck.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-if="type==='pactl'">{{progressObj.beforeCheck.username}} </span>
+            </div>
+          </div>
+        </div>
+        <div class="info-content-row" ng-if="progressObj.reBook || progressObj.openFlag || progressObj.approachFlag">
+          <div class="info-content-row-mark">
+            <i class="i-4" ng-if="progressObj.beforeCheck.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.beforeCheck.flag  === 'true'"></i>
+          </div>
+          <div class="securitybor">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1 security">可安检</div>
+            <div class="info-content-row-line-1 curtask">当前任务</div>
+            <div class="curtaskdet" ng-if="progressObj.openFlag">
+              <div class="info-content-row-line-1 ml10">开箱检查</div>
+              <div ng-if="progressObj.openFlag.flag==='true'"><i class="i-happy completed"></i>已完成</div>
+              <div ng-if="progressObj.openFlag.flag==='false'"><i class="i-cry nocompleted"></i>未完成</div>
+            </div>
+            <div class="curtaskdet" ng-if="progressObj.reBook">
+              <div class="info-content-row-line-1 ml10">交证书正本</div>
+              <div ng-if="progressObj.reBook.flag==='true'"><i class="i-happy completed"></i>{{progressObj.reBook.operationDate | date:'MM/dd HH:mm'}} 已完成</div>
+              <div ng-if="progressObj.reBook.flag==='false'"><i class="i-cry nocompleted"></i>{{progressObj.reBook.operationDate | date:'MM/dd HH:mm'}} 未完成</div>
+            </div>
+            <div class="curtaskdet" ng-if="progressObj.approachFlag">
+              <div class="info-content-row-line-1 ml10">进场</div>
+              <div ng-if="progressObj.approachFlag.flag==='true'"><i class="i-happy completed"></i>{{progressObj.approachFlag.operationDate | date:'MM/dd HH:mm'}}已完成</div>
+              <div ng-if="progressObj.approachFlag.flag==='false'"><i class="i-cry nocompleted"></i>{{progressObj.approachFlag.operationDate | date:'MM/dd HH:mm'}}未完成</div>
+            </div>
+            <div class="curtaskdet" ng-if="progressObj.eleUpdateFlag.flag==='false'">
+              <div class="info-content-row-line-1 ml10">电子运单变更</div>
+              <div ng-if="progressObj.eleUpdateFlag.flag==='true'" class="text-success"><i class="i-happy completed"></i>已完成</div>
+              <div ng-if="progressObj.eleUpdateFlag.flag==='false'" class="text-danger"><i class="i-cry nocompleted"></i>未完成</div>
+            </div>
+          </div>
+        </div>
+        <div class="info-content-row">
+          <div class="info-content-row-mark">
+            <i class="i-5" ng-if="progressObj.checkResult.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.checkResult.flag  === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-0"></div>
+            <div class="info-content-row-line-1">安检</div>
+            <div class="info-content-row-line-2" ng-if="progressObj.waybillStatus.checkCargoType !=='2'">
+              {{progressObj.checkResult.operationDate | date:'MM/dd HH:mm'}} {{progressObj.checkResult.operationName}}
+            </div>
+            <div class="info-content-row-line-2" ng-if="progressObj.waybillStatus.checkCargoType ==='2'">
+              {{progressObj.checkResult.operationDate | date:'MM/dd HH:mm'}}
+              <span class="label dangerGoods">24H</span>{{progressObj.checkResult.operationName}}
+            </div>
+          </div>
+        </div>
+        <!-- <div class="info-content-row" ng-if="progressObj.eleUpdateAfterCheckFlag.flag === 'true'">
+          <div class="info-content-row-mark">
+            <i class="i-6" ng-if="progressObj.receiving.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.receiving.flag  === 'true'"></i>
+          </div>
+          <div class="info-content-row-line">
+            <div class="info-content-row-line-1">收单</div>
+            <div class="info-content-row-line-2">
+              {{progressObj.receiving.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-if="type==='pactl'">{{progressObj.receiving.username}} </span> {{progressObj.receiving.operationName}}
+            </div>
+          </div>
+        </div> -->
+        <div class="info-content-row">
+          <div class="info-content-row-mark">
+            <i class="i-6" ng-if="progressObj.receiving.flag  === 'false'"></i>
+            <i class="i-yes" ng-if="progressObj.receiving.flag  === 'true'"></i>
+          </div>
+          <div class="info-content-row-line" ng-if="progressObj.eleUpdateAfterCheckFlag.flag === 'true'
+          && progressObj.waybillStatus.cargoDeclareError!=='1' 
+          && progressObj.waybillStatus.liBateterError!=='1' ">
+            <div class="info-content-row-line-1">收单</div>
+            <div class="info-content-row-line-2">
+              {{progressObj.receiving.operationDate | date:'MM/dd HH:mm'}}
+              <span ng-if="type==='pactl'">{{progressObj.receiving.username}} </span> {{progressObj.receiving.operationName}}
+            </div>
+          </div>
+          <div class="securitybor" ng-if="progressObj.eleUpdateAfterCheckFlag.flag === 'false'
+          || progressObj.waybillStatus.cargoDeclareError==='1' 
+          || progressObj.waybillStatus.liBateterError==='1' ">
+            <div class="info-content-row-line-1 security">收单</div>
+            <div class="info-content-row-line-1 curtask">当前任务</div>
+            <div class="curtaskdet" ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='false'">
+              <div class="info-content-row-line-1 ml10">电子运单数据修改</div>
+              <!-- <div ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='true'" class="text-success"><i class="i-happy completed"></i>已完成</div> -->
+              <div class="text-danger"><i class="i-cry nocompleted"></i>数据修改未完成</div>
+            </div>
+
+            <div class="curtaskdet" ng-if="progressObj.waybillStatus.cargoDeclareError==='1'">
+              <div class="info-content-row-line-1 ml10">货物申报不正确</div>
+              <!-- <div ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='true'" class="text-success"><i class="i-happy completed"></i>已完成</div> -->
+              <div class="text-danger"><i class="i-cry nocompleted"></i>数据修改未完成</div>
+            </div>
+            <div class="curtaskdet" ng-if="progressObj.waybillStatus.liBatterError==='1'">
+              <div class="info-content-row-line-1 ml10">锂电池声明不正确</div>
+              <!-- <div ng-if="progressObj.eleUpdateAfterCheckFlag.flag==='true'" class="text-success"><i class="i-happy completed"></i>已完成</div> -->
+              <div class="text-danger"><i class="i-cry nocompleted"></i>数据修改未完成</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="info-2">
+    <div class="info-title">现场检查</div>
+    <div class="row">
+      <div class="col-sm-6 progress-col" ng-repeat="item in checkTypeData track by $index">
+        <div ng-class="{
+        'progress-hwd': item.checkId === '101',
+        'progress-hwd1': item.checkId === '101' && item.checkFlag === true,
+        'progress-wxp': item.checkId === '102',
+        'progress-wxp1': item.checkId === '102' && item.checkFlag === true,
+        'progress-llwk': item.checkId === '103',
+        'progress-llwk1': item.checkId === '103' && item.checkFlag === true,
+        'progress-ldc': item.checkId === '104',
+        'progress-ldc1': item.checkId === '104' && item.checkFlag === true,
+        'progress-gb': item.checkId === '105',
+        'progress-gb1': item.checkId === '105' && item.checkFlag === true,
+      }"></div>
+        <label style="word-wrap: break-word;">
+        <!-- <input type="checkbox" ng-checked="item.checkFlag" ng-model="item.checkFlag" ng-disabled="type==='pactl' || item.checkId === '102' || !editAble">{{item.checkName}} -->
+        <input type="checkbox" ng-checked="item.checkFlag === true || item.checkFlag === 'true'" ng-model="item.checkFlag" ng-disabled="true">{{item.checkName}}
+      </label>
+      </div>
+    </div>
+  </div>
+</div>

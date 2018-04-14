@@ -1,0 +1,109 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">品名咨询</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">品名咨询</div>
+	<div class="pull-right" style="line-height: 51px;">
+		<button class="btn btn-default" ng-click="addrefer()">
+			<i class="i-add"></i>新建品名咨询
+		</button>
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-tab">
+		<ul class="nav nav-tabs">
+			<li role="presentation" ui-sref-active="active">
+				<a role="button" ui-sref="agentAssist.nameAdvice">
+					<i class="i-pop"></i>品名咨询</a>
+				</li>
+				<li role="presentation" ui-sref-active="active">
+					<a role="button" ui-sref="agentAssist.shipmentWaybil">
+						<i class="i-public"></i>已出运运单</a>
+					</li>
+				</ul>
+			</div>
+			<div class="content-main-search">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="search-name">英文品名</div>
+						<div class="search-value">
+							<input type="text" class="form-control" ng-model="refer.namesEn" placeholder="如：mobile phone" ng-change="onlyEn()">
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="search-name">品名咨询编号</div>
+						<div class="search-value">
+							<input type="text" class="form-control" ng-model="refer.goodsId">
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="search-name">目的港</div>
+						<div ui-select ng-model="refer.dest" theme="select2" class="form-control wd">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+							<div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+								<div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="search-name">状态</div>
+					<label class="label-checkbox" ng-repeat="row in statusData" ng-hide="row.id==='102'">
+						<input type="checkbox" ng-model="row.checked" ng-checked="row.checked" style="margin: 0px 6px 0 0;">{{row.name}}
+					</label>
+				</div>
+				<div class="row search-btn">
+					<div class="pull-right">
+						<button class="btn btn-primary" ng-click="search()">查询</button>
+					</div>
+				</div>
+			</div>
+			<table class="table content-main-table">
+				<thead>
+					<tr>
+						<th class="w15" t-sort="GOODS_ID">咨询编号</th>
+						<th class="w15">英文品名</th>
+						<th class="w10" style="text-align:left">航空公司</th>
+						<th class="w10" t-sort="DEST">目的港</th>
+						<th class="w10" t-sort="CREATED_DATE">咨询日期</th>
+						<th class="w10" t-sort="STATUS">状态</th>
+						<th class="w30">结论</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-class-even="'even'" ng-repeat="row in rowCollection track by $index" ui-sref="agentAssist.reply({goodsId:row.pGoodsAdvice.goodsId})">
+						<td><span class="goodsIdcol">{{row.pGoodsAdvice.goodsId}}</span></td>
+						<td>{{row.pGoodsAdvice.namesEn}}</td>
+						<td style="text-align:left">
+							<span ng-class="{'pr10':airline.length==='1'}" ng-repeat="airline in row.pGoodsAdvice.airLines.split(';') track by $index"
+							ng-if="airline!==null && airline!=''">
+							{{airline | uppercase}}</span>
+						</td>
+						<td>{{row.pGoodsAdvice.dest}}</td>
+						<td>{{row.pGoodsAdvice.createdDate | date:'yyyy/MM/dd'}}</td>
+						<td>
+							<div class="status" ng-class="{'quotable':row.quotable,'ask':row.ask,'answer':row.answer,'forbidden':row.forbidden,'add':row.add}">{{row.pGoodsAdvice.status| showStatus: statusData}}
+								<div ng-if="row.pGoodsAdvice.isRead === '1'" class="new-answer-widget">
+									<div class="new-answer-content">NEW</div>
+								</div>
+							</div>
+						</td>
+						<td>
+							<label class="mr5 mt5" ng-repeat="m in row.pGoodsAdvice.result track by $index">
+								<span class="label" ng-if="m.id === '106'" ng-class="{'needless':m.id === '106','active':true}">{{m.name}}</span>
+								<span class="label" ng-if="m.id === '101'" ng-class="{'condition1':m.id === '101','active':true}">{{m.name}}</span>
+								<span class="label" ng-if="m.id === '102'" ng-class="{'backletter1':m.id === '102','active':true}">在品名补充中需详细描述</span>
+								<span class="label" ng-if="m.id === '104'" ng-class="{'unpack1':m.id === '104','active':true}">{{m.name}}</span>
+								<span class="label" ng-if="m.id === '105'" ng-class="{'dangerous1':m.id === '105','active':true}">{{m.name}}</span>
+								<span class="label" ng-if="m.id === 'all'" ng-class="{'other':m.id === 'all','active':true}">{{m.name}}</span>
+							</label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div ng-include="'page.html'" class="row"></div>
+		</div>

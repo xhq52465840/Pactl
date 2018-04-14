@@ -1,0 +1,56 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">消息模板</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    消息模板
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">模板名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="msgObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w25">模板编号</th>
+        <th class="w25">模板名称</th>
+        <th class="w25">模板内容</th>
+        <th class="w25">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in msgData track by $index" ng-class-even="'even'">
+        <td>{{row.num}}</td>
+        <td>{{row.name}}</td>
+        <td>{{row.content}}</td>
+        <td>
+          <i class="btn-edit" ng-click="edit(row)"></i>
+          <i class="btn-del" ng-click="remove(row.id, row.name)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

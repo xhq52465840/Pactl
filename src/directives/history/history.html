@@ -1,0 +1,85 @@
+<div tabset class="history-list">
+  <div tab>
+    <div tab-heading>
+      审核历史纪录
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w15">操作</th>
+          <th class="w45">备注</th>
+          <th class="w12">文件</th>
+          <th class="w10">操作人员</th>
+          <th class="w18">操作时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in auditHisroryData track by $index" ng-class-even="'even'">
+          <td>{{item.checkInfoDetail.checkName}}</td>
+          <td style="font-size: 12px;">
+            <label ng-repeat="item in item.checkInfoDetail.remarks.split('#') track by $index">{{item}}</label>
+          </td>
+          <!-- <td><span class="upload" title="{{item.fileList[0].oldName}}" ng-click="openDialog('', item.fileList[0].fileHttpPath)">{{item.fileList[0].oldName}}</span> -->
+          <td><a ng-href="{{item.fileList[0].fileHttpPath}}" target="_blank">{{item.fileList[0].oldName}}</a></td>
+          <!-- </td> -->
+          <td>
+            <span ng-if="showUserName(item,'0')">{{item.checkInfoDetail.checkUser}}</span>
+            <span ng-if="showTerminalName(item,'0')">货站</span>
+            <span ng-if="showAgentName(item,'0')">代理</span>
+            <span ng-if="showSecurityName(item,'0')">安检</span>
+          </td>
+          <td>{{item.checkInfoDetail.checkDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div tab>
+    <div tab-heading>
+      操作历史纪录
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w25">操作</th>
+          <th class="w45">备注</th>
+          <th class="w12">操作人员</th>
+          <th class="w18">操作时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in opHisroryData track by $index" ng-class-even="'even'">
+          <td>{{item.operationName}}</td>
+          <td ng-if="item.operationName === '报文导入'">
+            <button class="btn btn-default" ng-click="showMsg(item)">查看{{item.oprnType && item.oprnType.indexOf('/')>=3? item.oprnType.substring(0,item.oprnType.indexOf('/')):'报文'}}</button>
+          </td>
+          <td ng-if="item.operationName === '报文更新'">
+            <button class="btn btn-default" ng-click="showMsg(item)">查看{{item.oprnType && item.oprnType.indexOf('/')>=3? item.oprnType.substring(0,item.oprnType.indexOf('/')):'报文'}}</button>
+          </td>
+          <td ng-if="item.operationName === '收单报文'">
+            <button class="btn btn-default mr5" ng-repeat="row in item.oprnType track by $index" ng-click="showMsg(row)">
+                  查看{{row.messageType}}</button>
+          </td>
+          <td ng-if="item.operationName === '发送报文'">
+            <button class="btn btn-default mr5" ng-repeat="row in item.oprnType track by $index" ng-click="showMsg(row)">
+                    查看{{row.messageType}}</button>
+          </td>
+          <td ng-if="item.operationName === '添加证书' || item.operationName === '删除证书'  || item.operationName === '添加其他文档' || item.operationName === '删除其他文档'">{{item.oprnType[0]}}
+            <a ng-href="{{item.oprnType[1]}}" ng-if="item.oprnType[1]" target="_blank">
+                      <i class="i-pdf"></i></a>
+            <!-- <i class="i-pdf" ng-click="openDialog(item.oprnType[0],item.oprnType[1])" ng-if="item.oprnType[1]"></i> -->
+          </td>
+          <td ng-if="item.operationName !== '报文导入' && item.operationName !== '报文更新' && item.operationName !== '添加证书' && item.operationName !== '删除证书' && item.operationName !== '收单报文' && item.operationName !== '发送报文' && item.operationName !== '添加其他文档' && item.operationName !== '删除其他文档'">
+            <pre class="historyRemark historyRecoder">{{item.oprnType}}</pre>
+          </td>
+          <td>
+            <span ng-if="showUserName(item,'1')">{{item.operatorName}}</span>
+            <span ng-if="showTerminalName(item,'1')">货站</span>
+            <span ng-if="showAgentName(item,'1')">代理</span>
+            <span ng-if="showSecurityName(item,'1')">安检</span>
+          </td>
+          <td>{{item.createdDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

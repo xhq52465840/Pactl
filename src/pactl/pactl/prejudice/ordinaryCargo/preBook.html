@@ -1,0 +1,33 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>预审</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">审单宝典</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">审单宝典</div>
+</div>
+<div class="content-main-body">
+	<div>航空公司: <label ng-repeat="item in bookData">{{item[0].airCode}}</label></div>
+	<table class="car-table table mt20">
+		<thead>
+			<tr>
+				<th class="w30">目的港</th>
+				<th class="w10">国家</th>
+				<th class="w60">规则</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="item in bookData">
+			<tr ng-repeat="row in item track by $index">
+				<td>{{row.destName}}</td>
+				<td>{{row.countryCode}}</td>
+				<td>
+					<pre style="background-color: #edf0f5;border:none;font-size:20px;word-wrap: break-word;word-break: break-word;white-space: pre-wrap;">{{row.rule}}</pre>
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,122 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">证书留存授权</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">证书留存授权</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="audit()">
+      <i class="i-audit"></i>授权操作
+    </button>
+    <button class="btn btn-default" ng-click="clean()">
+      <i class="i-remove"></i>清空操作列表
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">操作代理</div>
+        <div class="search-value">
+          <div ui-select ng-model="certObj.agentSales" theme="select2" class="form-control wd" on-select="changeAgentSales(true)" on-remove="changeAgentSales(false)" autofocus="true">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="search-name" style="width:280px;">请扫描鉴定书条形码或输入鉴定证书编号</div>
+        <div class="search-value" style="width:250px;">
+          <input type="text" class="form-control" ng-model="certObj.bookNo">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-primary" ng-click="add()">确定</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">鉴定证书编号</th>
+        <th class="w6" >鉴定机构</th>
+        <th class="w10">授权书流水号</th>
+        <th class="w10">证书流水号</th>
+        <th class="w15">正本操作</th>
+        <th class="w10">货物类型</th>
+        <th class="w10">证书PDF</th>
+        <th class="w5">留存完成</th>
+        <th class="w8">年份</th>
+        <th class="w8">授权有效期</th>
+        <th class="w6">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index" class="jake">
+        <td>
+          <a role="button" ui-sref="pactlAssist.opCert({id: item.pAgentShareBook.bookId})" target="_blank">{{item.pAgentShareBook.bookNo}}</a>
+        </td>
+        <td>{{item.pOfficeInfo.officeCode}}</td>
+        <td>{{item.pAgentShareBook.authBookSerialNo}}</td>
+        <td>{{item.pAgentShareBook.bookSerialNumber}}</td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-notselected" ng-if="!item.pAgentShareBook.bookSerialNumber" ng-click="receive(item.pAgentShareBook)">收到正本</button>
+            <button type="button" class="btn btn-primary" ng-if="item.pAgentShareBook.bookSerialNumber" ng-click="receiveNo(item.pAgentShareBook)">收到正本</button>
+            <button type="button" class="btn" ng-class="{'btn-notselected':item.pAgentShareBook.auditStatus!=='105','btn-primary':item.pAgentShareBook.auditStatus==='105'}" ng-click="retent(item.pAgentShareBook)">留存完成</button>
+          </div>
+        </td>
+        <td>{{item.pAgentShareBook.goodsType | showStatus: goodTypeData}}</td>
+        <td class="imgShow">
+          <i class="i-pdf" ng-click="openDialog({
+            officeName: item.pOfficeInfo.officeName,
+            bookNo: item.pAgentShareBook.bookNo,
+            src: item.pdfPath,
+            srcArr: item.srcArr
+          })" ng-if="item.pdfPath" ng-mouseover="item.imgShow=!item.imgShow" ng-mouseleave="item.imgShow=!item.imgShow"></i>
+          <div ng-show="item.imgShow" ng-style="item.style1">
+            <img ng-src="{{item.filePath}}" ng-style="item.style2">
+          </div>          
+          <a ng-href="{{item.pOfficeInfo.url}}" target="_blank" ng-if="item.pOfficeInfo.url">
+            <i class="i-site"></i>
+          </a>
+        </td>
+        <td><i class="i-yes" ng-if="item.pAgentShareBook.auditStatus==='105'"></i></td>
+        <td>{{item.pAgentShareBook.validityYear}}</td>
+        <td>{{item.pAgentShareBook.startTime|date: 'yyyy/MM/dd'}}-{{item.pAgentShareBook.endTime|date: 'yyyy/MM/dd'}}</td>
+        <td>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!--ng-model="page.length" ng-change="search()" -->
+  <div  class="row" style="position: relative;">
+  	<div class="page-left">
+  每页显示
+  <select ng-options="m.id as m.name for m in page.perObj" ng-model="page.length" class="form-control pages" ng-change="searchPages1()">
+  </select> 
+  条，共{{allPagesLength}}条，共{{muchPage}}页
+</div>
+
+<div class="fr">
+  <!--<pagination boundary-links="true" items-per-page={{muchPage}}+'' max-size="4" total-items={{muchPage}} ng-model="pagecurrentPage"
+    rotate="false" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+    ng-change="pageChanged()">
+  </pagination>-->
+  <pagination boundary-links="true" items-per-page="page.length" max-size="4" total-items= "allPagesLength" ng-model="page.currentPage"
+    rotate="false" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+    ng-change="pageChanged()" >
+  </pagination>
+</div>
+  </div>
+    <!--<div ng-include="'page.html'" class="row"></div>-->
+</div>

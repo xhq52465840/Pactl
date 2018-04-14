@@ -1,0 +1,272 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>安检</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">安检信息综合操作</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    安检信息综合操作
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="save()">
+      <i class="i-save"></i>保存
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">运单</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="operateObj.waybillno" maxlength="11">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">安检结论日期</div>
+        <div class="search-value" style="width: 280px;">
+          <input type="text" class="form-control dib" ng-model="operateObj.stime" pikaday="myPickerObject1" style="width: 130px;">-
+          <input type="text" class="form-control dib" ng-model="operateObj.etime" pikaday="myPickerObject2" style="width: 130px;">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">申报航班</div>
+        <div class="search-value">
+          <input type="text" class="form-control dib" ng-model="operateObj.flight" style="width: 80px;">
+          <input type="text" class="form-control dib" ng-model="operateObj.flt_date" pikaday="myPickerObject3" style="width: 110px;">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">24小时通道</div>
+        <div class="search-value">
+          <div ui-select ng-model="operateObj.aisle24" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in aisleData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="operateObj.goods_class" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in goodTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">安检机</div>
+        <div class="search-value">
+          <div ui-select ng-model="operateObj.machine" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in machineData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <!-- <div class="col-sm-4">
+          <div class="search-name">货站</div>
+          <div class="search-value">
+            <label class="label-checkbox" ng-repeat="station in stationData track by $index">
+              <input type="checkbox" ng-click="selectStation($event, station.id)" ng-checked="checkStation(station.id)">{{station.name}}
+            </label>
+          </div>
+        </div> -->
+        <div class="col-sm-4">
+            <div class="search-name">安检状态</div>
+            <div class="dib">
+              <label class="label-checkbox"><input type="checkbox" value="0" ng-click="selectStatus($event, '0')" ng-checked="checkStatus('0')">通过</label>
+              <label class="label-checkbox"><input type="checkbox" value="1" ng-click="selectStatus($event, '1')" ng-checked="checkStatus('1')">扣押</label>
+              <label class="label-checkbox"><input type="checkbox" value="2" ng-click="selectStatus($event, '2')" ng-checked="checkStatus('2')">注销</label>
+              <label class="label-checkbox"><input type="checkbox" value="3" ng-click="selectStatus($event, '3')" ng-checked="checkStatus('3')">上交</label>
+              <label class="label-checkbox"><input type="checkbox" value="4" ng-click="selectStatus($event, '4')" ng-checked="checkStatus('4')">已退运</label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name">首检状态</div>
+          <div class="search-value">
+            <label class="label-checkbox">
+              <input type="checkbox" value="1" ng-click="selectFstatus($event, '1')" ng-checked="checkFstatus('1')">通过
+            </label>
+            <label class="label-checkbox">
+              <input type="checkbox" value="0" ng-click="selectFstatus($event, '0')" ng-checked="checkFstatus('0')">待定
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name">目的港</div>
+          <div class="search-value">
+            <div ui-select ng-model="operateObj.dest1" theme="select2" class="form-control wd">
+              <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+              <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+                <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <div style="position: relative;">
+    <table class="table content-main-table operate-table">
+      <thead>
+        <tr>
+          <th class="w8">运单号</th>
+          <th class="w3">货站</th>
+          <th class="w4" style="text-align: center;" colspan="2">件数/重量</th>
+          <th class="w4">代理</th>
+          <th class="w4">目的港</th>
+          <th class="w4">货物品名</th>
+          <th class="w4">鉴定证书</th>
+          <th class="w4">货物类型</th>
+          <th class="w3">首检状态</th>
+          <th class="w7">复检结论</th>
+          <th class="w4">扣押库</th>
+          <th class="w8">扣押位置</th>
+          <th class="w7">危险品分类</th>
+          <th class="w3">24小时通道</th>
+          <th class="w4">24小时通道数量</th>
+          <th class="w4">24小时货已过安检数量</th>
+          <th class="w3">安检机设备号</th>
+          <th class="w3">安检注销</th>
+          <th class="w3">已退运</th>
+          <th class="w4">上交相关部门</th>
+          <th class="w3">状态更改原因</th>
+          <th class="w3">防爆</th>
+          <th class="w3">备注</th>
+          <th class="w3">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in operateData track by $index" ng-class-even="'even'" ng-class="{'x-highlight':selectedAwid===item.awId}" ng-mouseenter="tr_mouseenter(item)">
+          <td>
+            <i class="i-e" ng-if="item.wb_ele==='1'"></i>
+            <span ng-if="item.is_formal === '1' && item.show_word && item.show_word && item.show_word !== ''" class="waybill-formal">{{item.show_word}}</span>
+            <span ng-if="item.is_formal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+            <a role="button" ui-sref="securityItem.info({id: item.awId})" target="_blank">
+            {{item.waybill_no.substring(0,3)}}-{{item.waybill_no.substring(3,11)}}
+            </a>
+          </td>
+          <td>{{item.ct}}</td>
+          <td style="text-align: right;padding-right: 0px;">{{item.total_count}}</td>
+          <td style="text-align: left;padding-left: 0px;">/{{item.gross_weight}}</td>
+          <td>{{item.agent_oprn}}</td>
+          <td>{{item.dest1}}</td>
+          <td style="position: relative;">
+            <span class="textWidth" tooltip-placement="left" tooltip-html-unsafe="{{item.div}}">{{item.goods_desc1}}</span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <a role="button" class="dropdown-toggle" data-toggle="dropdown" id="book">
+                <i class="i-pdf" ng-if="item.count_books != '0'"></i>
+              </a>
+              <ul class="dropdown-menu panel panel-default pactl-drop-menu" role="menu" aria-labelledby="book">
+                <li class="panel-heading">证书列表</li>
+                <li ng-repeat="book in item.books track by $index">
+                  <a role="button" ng-click="showPdfDialog(book, item.goods_desc, item)"><i class="i-pdf"></i>{{book.bookNo}}</a>
+                </li>
+              </ul>
+            </div>
+            <i class="i-cert" ng-if="item.count_books == '0'"></i>
+            <a role="button" ui-sref="securityItem.remark({id: item.awId, type: '2'})" target="_blank">
+              <i class="i-remark" ng-if="item.count_remark != '0'"></i>
+            </a>
+            <a role="button" ui-sref="securityItem.remark({id: item.awId, type: '2'})" target="_blank">
+              <i class="i-remark1" ng-if="item.count_remark == '0'"></i>
+            </a>
+          </td>
+          <td>
+            <div ui-select ng-model="item.goods_class" theme="select2" class="form-control" style="min-width: 60px;">
+              <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+              <div ui-select-choices repeat="row in goodTypeData | filter: {name:$select.search}" position="down">
+                <div ng-bind-html="row.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="label label-success" ng-if="item.fstatus==='1'">通过</span>
+            <span class="label label-white" ng-if="item.fstatus==='0'">待定</span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn" ng-click="refuse(item)" ng-class="{'btn-notselected':item.sstatus !== '0','btn-warning':item.sstatus === '0'}">扣押</button>
+              <button type="button" class="btn" ng-click="pass(item)" ng-class="{'btn-notselected': item.sstatus !== '1','btn-success': item.sstatus === '1'}">通过</button>
+            </div>
+          </td>
+          <td>
+            <div ui-select ng-model="item.seizure" theme="select2" class="form-control" ng-if="item.seizure">
+              <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+              <div ui-select-choices repeat="row in seizureData | filter: {name:$select.search}">
+                <div ng-bind-html="row.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </td>
+          <td><input type="text" class="form-control" ng-model="item.distressPlace" ng-if="item.seizure"></td>
+          <td>
+            <div ui-select multiple ng-model="item.danger" theme="select2" class="form-control" ng-if="item.sstatus === '0'">
+              <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+              <div ui-select-choices repeat="row in dangerData | filter: {name:$select.search}">
+                <div ng-bind-html="row.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </td>
+          <td>{{item.aisle24}}</td>
+          <td>{{item.aislecount}}</td>
+          <td>{{item.machine24}}</td>
+          <td class="listCert">
+            <a tooltip-placement="left" tooltip-html-unsafe="{{item.table}}" role="button">{{item.machine}}</a>
+          </td>
+          <td>
+            <input type="checkbox" ng-checked="item.a_flag === '1'" ng-model="item.a_flag">
+          </td>
+          <td>
+            {{item.returned|showStatus:returnedData}}
+          </td>
+          <td>
+            <input type="checkbox" ng-checked="item.turnin === '1'" ng-model="item.turnin">
+          </td>
+          <td>
+            <span class="label label-primary" ng-if="item.sremark.length>0" ng-click="showReason(item)">原因</span>
+          </td>
+          <td><input type="checkbox" ng-checked="item.exMark === '1'" ng-model="item.exMark"></td>
+          <td>
+            <i class="i-flag" ng-if="item.count_remark !== '0'" ng-click="showRemark(item)"></i>
+            <i class="i-noflag ng-scope" ng-if="item.count_remark === '0'" ng-click="showRemark(item)"></i>
+          </td>
+          <td>
+            <div class="btn-img" ng-click="remove(item, $index)">
+              <i class="btn-del"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" style="text-align: right;padding-right: 0px;">
+            <B>总计：{{showText.total_count}}</B>
+          </td>
+          <td colspan="22" style="text-align: left;padding-left: 0px;">
+            <B>/{{showText.gross_weight }}</B>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

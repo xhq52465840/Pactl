@@ -1,0 +1,21 @@
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body">
+		<div ng-repeat="item in details track by $index">
+			<a role="button" ng-click="showDetail(item)">
+				{{item.waybillNo}}{{item.messageType}}
+			</a>
+			<pre ng-show="item.checked">{{item.messageContent}}</pre>
+		</div>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default" ng-click="cancel()">关闭</button>
+		</div>		
+	</div>

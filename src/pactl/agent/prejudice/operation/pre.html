@@ -1,0 +1,346 @@
+<div class="fixed-title">
+	<div ng-controller="headCtrl">
+		<div ng-include="'head.html'" class="parentClass"></div>
+	</div>
+	<ol class="bread">
+		<li><a role="button" ui-sref="index">首页</a></li>
+		<li class="bread-arrow">&gt;</li>
+		<li><span>预审</span></li>
+		<li class="bread-arrow">&gt;</li>
+		<li class="active">预审</li>
+	</ol>
+	<div class="business-content-title">
+		<div class="title">
+			<div class="title-top">
+				<span class="title-1">货代</span>
+				<span class="title-2">{{pre.agentOprn}}/{{pre.agentSales}}</span>
+			</div>
+			<div class="title-bottom" style="position: relative;">
+				<span class="title-1">主单</span>
+				<span ng-if="pAirWaybillStatus && pAirWaybillStatus.isFormal === '1' && pAirWaybillStatus.showWord && pAirWaybillStatus.showWord && pAirWaybillStatus.showWord !== ''" class="waybill-formal">{{pAirWaybillStatus.showWord}}</span>
+				<span ng-if="pAirWaybillStatus && pAirWaybillStatus.isFormal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+				<span class="title-4">
+					<a ui-sref="agentWaybill.newMasterBill({billNo: pre.waybillNo})" target="_blank" role="button">{{pre.waybillNo}}</a>
+				</span>
+				<i class="i-e" ng-if="pre.wbEle === '1'"></i>
+				<i class="i-car" ng-if="progressObj.waybillStatus.approachFlag==='1'"></i>
+				<i class="i-huiji" ng-show="pAirWaybillStatus.shipmentFlag==='1'"></i>
+				<span ng-if="progressObj.waybillStatus.wFlag === '1'" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">无效运单</span>
+				<span ng-if="datas" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">{{datas}}</span>
+				<span ng-if="changeWaybillData" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">{{changeWaybillData}}</span>
+				<span ng-if="moveAmount > 0" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">迁转{{moveAmount}}件</span>
+				<span class="label pre-localCheckFlag" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkFlag === true || item.checkFlag === 'true'">{{item.checkName}}</span>
+			</div>
+		</div>
+		<div class="pull-right pt30">
+			<button class="btn btn-default" ng-click="edit()" ng-disabled="progressObj.waybillStatus.wFlag === '1' || progressObj.waybillStatus.aFlag === '1'">
+				<i class="i-edit"></i>修改
+			</button>
+			<!--<button class="btn btn-default" ng-click="save()" ng-disabled="!editAble">
+        <i class="i-save"></i>保存
+      </button>-->
+			<button class="btn btn-default" ng-click="commit()" ng-disabled="aftercom || progressObj.waybillStatus.wFlag === '1'">
+      	<i class="i-up"></i>提交预审
+      </button>
+			<button class="btn btn-default" ng-click="reback()" ng-disabled="afterback || progressObj.waybillStatus.wFlag === '1'">
+      	<i class="i-back"></i>撤回预审
+      </button>
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      	<i class="i-other"></i>其他操作
+      	<span class="caret"></span>
+      </button>
+			<ul class="dropdown-menu" role="menu">
+				<li ng-show="!editAble || progressObj.waybillStatus.wFlag === '1' || agency"><a role="button" ng-click="editSale()">修改子账户</a></li>
+				<li ng-if="allowChangeAgent" ng-disabled="!editAble || progressObj.waybillStatus.wFlag === '1'"><a role="button" ng-click="editOprn()">修改主账户</a></li>
+				<li><a role="button" ui-sref="pactlPrejudice.sublist({waybillNo:pre.awId})">分单清单</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="business-content-body" scroll-top>
+	<div class="business-content-body-left">
+		<div class="business-content-info">
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="info-name">航空公司</div>
+					<div class="info-value-1">{{pre.carrier1}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">件数</div>
+					<div class="info-value-1">{{pre.rcpNo}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">重量(KG)</div>
+					<div class="info-value-1">{{pre.grossWeight}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">计费重量(KG)</div>
+					<div class="info-value-1">{{pre.chargeWeight}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">体积({{pre.volumeCode}})</div>
+					<div class="info-value-1">{{pre.vol}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">目的港</div>
+					<div class="info-value-1">{{pre.airportDest}}</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="info-name preIcon">航班</div>
+					<div class="info-value-1 preIcon">{{pre.flightNo}} {{pre.fltDate | date:'MM/dd'}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name preIcon">
+						<div role="button" class="name-result name-result1 noCargoBook" ng-show="showCargoDeclare.dangerFlag !=='0' && showCargoDeclare.dangerFlag !=='1' && showCargoDeclare.dangerFlag !=='2' && showCargoDeclare.dangerFlag !=='3' && showCargoDeclare.dangerFlag !=='4'"
+						  ng-click="showCargoDeclaraction()">货物申报</div>
+						<div role="button" class="name-result name-result1 dangerGoods" ng-show="showCargoDeclare.dangerFlag==='0' || showCargoDeclare.dangerFlag==='3'"
+						  ng-click="showCargoDeclaraction()">危险品</div>
+						<div role="button" class="name-result name-result1 hasNoBook" ng-show="showCargoDeclare.dangerFlag==='1'" ng-click="showCargoDeclaraction()">普货有证书</div>
+						<div role="button" class="name-result name-result1 hasNoBook" ng-show="showCargoDeclare.dangerFlag==='2'" ng-click="showCargoDeclaraction()">普货无证书</div>
+						<div role="button" class="name-result name-result1 lidianchi" ng-show="showCargoDeclare.dangerFlag==='4'" ng-click="showCargoDeclaraction()">锂电池</div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name preIcon">
+						<div role="button" class="name-result name-result1 noCargoBook" ng-show="progressObj.eli.flag !== 'true' && progressObj.elm.flag !== 'true'"
+						  ng-click="showBatteryDeclaraction()">锂电池声明</div>
+						<div role="button" class="name-result name-result1 lidianchi listCert nullClass" ng-show="progressObj.eli.flag === 'true'"
+						  ng-click="showBatteryDeclaraction()"><span tooltip-placement="left" tooltip-html-unsafe="{{pre.eli}}" role="button">ELI</span></div>
+						<div role="button" class="name-result name-result1 lidianchi listCert nullClass" ng-show="progressObj.elm.flag === 'true'"
+						  ng-click="showBatteryDeclaraction()"><span tooltip-placement="left" tooltip-html-unsafe="{{pre.elm}}" role="button">ELM</span></div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name preIcon">证书</div>
+					<div class="info-value-1 preIcon">
+						<!--图标1-->
+						<div class="corner-parent" ng-show="pAirWaybillbooks.book" ng-click="searchBook({
+						awId: pre.awId,
+						type: 'book',
+						agentOprnId: pre.agentOprnId,
+						goodsNameEn: pre.goodsNameEn,
+						goodsNameCn: pre.goodsNameCn,
+						goodsDesc: pre.goodsDesc,
+						wStatus: editAble && pres.length === 0})">
+							<i class="i-zs-z preIcon1"></i>
+							<a><small class="corner">{{pAirWaybillbooks.book}}</small></a>
+						</div>
+						<i class="i-zheng-2 preIcon1" ng-show="!pAirWaybillbooks.book && pres.length === 0" ng-click="searchBook({
+					awId: pre.awId,
+					type: 'book',
+					agentOprnId: pre.agentOprnId,
+					goodsNameEn: pre.goodsNameEn,
+					goodsNameCn: pre.goodsNameCn,
+					goodsDesc: pre.goodsDesc,							
+					wStatus: editAble})">
+				</i>
+				<!--磁检证书-->
+				<i class="i-ci-1 preIcon1" ng-show="pre.ckElectricFlag === '1' && pres.length === 0" ng-model="pre.ckElectricFlag" ng-click="ckEleStatus('main', editAble, pre, '0', $event)"></i>
+				<i class="i-ci-2 preIcon1" ng-show="pre.ckElectricFlag !== '1' && pres.length === 0" ng-model="pre.ckElectricFlag" ng-click="ckEleStatus('main', editAble, pre, '1', $event)"></i>
+						<!--其他证书-->
+						<div class="corner-parent" ng-show="pAirWaybillbooks.other" ng-click="searchBook({
+				awId: pre.awId,
+				type: 'other',
+				agentOprnId: pre.agentOprnId,
+				wStatus: editAble})">
+							<i class="i-zs-qt preIcon1"></i>
+							<a><small class="corner">{{pAirWaybillbooks.other}}</small></a>
+						</div>
+						<i class="i-qt-2 preIcon1" ng-show="!pAirWaybillbooks.other" ng-click="searchBook({
+			awId: pre.awId,
+			type: 'other',
+			agentOprnId: pre.agentOprnId,
+			wStatus: editAble})">
+		</i>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name preIcon">品名咨询</div>
+					<div class="info-value-1 preIcon">
+						<i class="i-mpzx-2 preIcon1" ng-show="pres.length === 0 && !(pre.goodsQuoteId && pre.goodsQuoteType)" ng-click="addNameAdvice(pre, 'main', editAble)"></i>
+						<span ng-if="pre.goodsQuoteId && pre.goodsQuoteType && pres.length === 0">
+			<i class="i-mpzx-1 preIcon1" ng-click="showNameAdvice(pre, 'main')" ng-if="pre.goodsQuoteType === '101'"></i>
+			<a ui-sref="agentPrejudice.pre({awId:pre.goodsQuoteId})" target="_blank" ng-if="pre.goodsQuoteType === '103' || pre.goodsQuoteType === '102'">
+				<i class="i-mpzx-1 preIcon1"></i>
+			</a>
+			<i class="btn-close" title="删除" ng-if="editAble" ng-click="removeNameAdvice(pre, 'main')"></i>
+		</span>
+					</div>
+				</div>
+				<div class="col-sm-2 listCert">
+					<div class="info-name preIcon">品名补充</div>
+					<div class="info-value-1 preIcon">
+						<i tooltip-placement="left" tooltip-html-unsafe="{{pre.div}}" role="button" class="i-mpbc-1 preIcon1" style="margin-right:0px;"
+						  ng-show="(pre.goodsNameEn || pre.goodsNameCn || pre.goodsRemarks) && pres.length === 0" ng-click="nameAadded(pre, editAble)"></i>
+						<i class="i-mpbc-2 preIcon1" style="margin-right:0px" ng-show="(!pre.goodsNameEn && !pre.goodsNameCn && !pre.goodsRemarks)  && pres.length === 0"
+						  ng-click="nameAadded(pre, editAble)"></i>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="info-name">品名</div>
+				<div class="info-value-1 ellipsis w90" title="{{pre.goodsDesc}}" style="margin-bottom: -4px;">{{pre.goodsDesc}}</div>
+			</div>
+			<div class="row">
+				<div class="info-name">退回原因</div>
+				<div class="info-value-1 ellipsis w90" title="{{pre.subBillAuditRemarks}}" style="margin-bottom: -4px;">{{pre.subBillAuditRemarks}}</div>
+			</div>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w3"></th>
+					<th class="w15" inside-sort="waybillNo">分单号</th>
+					<th class="w18" inside-sort="goodsDesc">英文品名</th>
+					<th class="w4">补充</th>
+					<th class="w5" inside-sort="rcpNo">件数</th>
+					<th class="w7" inside-sort="grossWeight">重量</th>
+					<th class="w12" style="text-align: center;">证书</th>
+					<th class="w7" style="text-align: center;">咨询</th>
+					<th class="w9" style="text-align: center;">
+						<span ng-show="progressObj.eli.flag === 'true' || progressObj.elm.flag === 'true' || eliORelm">锂Ⅱ</span>
+					</th>
+					<th class="w13" style="padding: 0px 5px;">退回原因</th>
+					<th class="w7" style="text-align: center;">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in pres track by $index" ng-class-even="'even'" ng-show="$index > showItem.start && $index < showItem.end"
+				  ng-class="{'gray-bg': row.subAirWaybillInfo.refStatus === '1'}">
+					<td>
+						<!--<i class="i-yes" ng-if="row.subAirWaybillInfo.refStatus === '0'"></i>-->
+						<i class="i-no" ng-if="row.subAirWaybillInfo.refStatus === '1'"></i>
+					</td>
+					<td style="padding:0px;">
+						<a role="button" ui-sref="agentWaybill.newBill({awId: row.subAirWaybillInfo.awId})" target="_blank">
+					{{row.subAirWaybillInfo.waybillNo}}
+				</a>
+						<i class="i-e" ng-show="row.subAirWaybillInfo.wbEle==='1'"></i>
+					</td>
+					<td style="padding:0px;">{{row.subAirWaybillInfo.goodsDesc}}</td>
+					<td class="listCert">
+						<a role="button" tooltip-placement="right" tooltip-html-unsafe="{{row.div}}" ng-click="nameAadded(row.subAirWaybillInfo, editAble)"
+						  ng-show="row.subAirWaybillInfo.goodsNameEn || row.subAirWaybillInfo.goodsNameCn || row.subAirWaybillInfo.goodsRemarks"><i class="i-mpbc-1"></i></a>
+						<a ng-click="nameAadded(row.subAirWaybillInfo, editAble)" ng-hide="row.subAirWaybillInfo.goodsNameEn || row.subAirWaybillInfo.goodsNameCn || row.subAirWaybillInfo.goodsRemarks"><i class="i-mpbc-2"></i></a>
+					</td>
+					<td>{{row.subAirWaybillInfo.rcpNo}}</td>
+					<td>{{row.subAirWaybillInfo.grossWeight}}</td>
+					<td style="text-align: center;">
+						<!--图标1-->
+						<div class="corner-parent" ng-show="row.subAirWaybillbooks.book" ng-click="searchBook({
+				parentAwId:pre.awId,
+				awId: row.subAirWaybillInfo.awId,
+				type: 'book',
+				agentOprnId: pre.agentOprnId,
+				goodsNameEn: row.subAirWaybillInfo.goodsNameEn,
+				goodsNameCn: row.subAirWaybillInfo.goodsNameCn,
+				goodsDesc: row.subAirWaybillInfo.goodsDesc,
+				wStatus: editAble})">
+							<i class="i-zs-z"></i>
+							<small class="corner">{{row.subAirWaybillbooks.book}}</small>
+						</div>
+						<i class="i-zheng-2" ng-show="!row.subAirWaybillbooks.book" ng-click="searchBook({
+			parentAwId:pre.awId,
+			awId: row.subAirWaybillInfo.awId,
+			type: 'book',
+			agentOprnId: pre.agentOprnId,
+			wStatus: editAble})">
+		</i>
+						<!--图标2-->
+						<i class="i-ci-1" ng-show="row.subAirWaybillInfo.ckElectricFlag === '1' && pres.length !== 0" ng-model="row.subAirWaybillInfo.ckElectricFlag"
+						  ng-click="ckEleStatus('sub', editAble,row.subAirWaybillInfo, '0', $event)"></i>
+						<i class="i-ci-2" ng-show="row.subAirWaybillInfo.ckElectricFlag !== '1' && pres.length !== 0" ng-model="row.subAirWaybillInfo.ckElectricFlag"
+						  ng-click="ckEleStatus('sub',editAble, row.subAirWaybillInfo, '1', $event)"></i>
+
+						<!-- 						<div class="corner-parent" ng-show="row.subAirWaybillbooks.electric" ng-click="searchBook({
+        awId: row.subAirWaybillInfo.awId,
+        type: 'electric',
+        agentOprnId: pre.agentOprnId,
+        wStatus: editAble})">
+        <i class="i-zs-c"></i>
+        <small class="corner">{{row.subAirWaybillbooks.electric}}</small>
+      </div> 
+      <i class="i-ci-2" ng-show="!row.subAirWaybillbooks.electric" ng-click="searchBook({
+        awId: row.subAirWaybillInfo.awId,
+        type: 'electric',
+        agentOprnId: pre.agentOprnId,
+        wStatus: editAble})">
+      </i>  -->
+						<!--图标3-->
+						<div class="corner-parent" ng-show="row.subAirWaybillbooks.other" ng-click="searchBook({
+      awId: row.subAirWaybillInfo.awId,
+      type: 'other',
+      agentOprnId: pre.agentOprnId,
+      wStatus: editAble})">
+							<i class="i-zs-qt"></i>
+							<small class="corner">{{row.subAirWaybillbooks.other}}</small>
+						</div>
+						<i class="i-qt-2" ng-show="!row.subAirWaybillbooks.other" ng-click="searchBook({
+    awId: row.subAirWaybillInfo.awId,
+    type: 'other',
+    agentOprnId: pre.agentOprnId,
+    wStatus: editAble})">
+  </i>
+					</td>
+					<td style="text-align: center;">
+						<span ng-if="row.subAirWaybillInfo.goodsQuoteId && row.subAirWaybillInfo.goodsQuoteType">
+		<i class="i-mpzx-1" ng-click="showNameAdvice(row, 'sub')" ng-if="row.subAirWaybillInfo.goodsQuoteType === '101'"></i>
+		<a ng-click="showPrejudicePre(row.subAirWaybillInfo)" target="_blank" ng-if="row.subAirWaybillInfo.goodsQuoteType === '102' || row.subAirWaybillInfo.goodsQuoteType === '103'">
+			<i class="i-mpzx-1"></i>
+		</a>
+		<i class="btn-close" title="删除" ng-if="editAble" ng-click="removeNameAdvice(row, 'sub')"></i>
+	</span>
+						<i class="i-mpzx-2" ng-if="!(row.subAirWaybillInfo.goodsQuoteId && row.subAirWaybillInfo.goodsQuoteType)" ng-click="addNameAdvice(row, 'sub', editAble)"></i>
+					</td>
+					<td class="listCert nullClass" style="padding:0px;text-align: center;">
+						<div class="status ELI1" style="width:38px;height:36px;margin-top: 5px;vertical-align: middle;padding:7px 2px;" ng-show="row.holdCodeELI && progressObj.eli.flag !== 'true'"
+						  tooltip-placement="left" tooltip-html-unsafe="{{pre.eli}}" role="button">ELI</div>
+						<button class="btn mt5" style="width:36px;padding:7px 0px;" ng-click="editELI(row.subAirWaybillInfo)" ng-class="{'btn-notselected':row.subAirWaybillInfo.eliFlag !== '1','btn-Success': row.subAirWaybillInfo.eliFlag === '1'}"
+						  ng-show="(row.holdCodeELI && progressObj.eli.flag === 'true') ||(!row.holdCodeELI && progressObj.eli.flag === 'true')"
+						  tooltip-placement="left" tooltip-html-unsafe="{{pre.eli}}" role="button">ELI</button>
+						<div class="status ELI1" style="width:47px;height:36px;margin-top: 5px;vertical-align: middle;padding:7px 2px;" ng-show="row.holdCodeELM && progressObj.elm.flag !== 'true'"
+						  tooltip-placement="left" tooltip-html-unsafe="{{pre.elm}}" role="button">ELM</div>
+						<button class="btn mt5" style="width:36px;padding:7px 0px;" ng-click="editELM(row.subAirWaybillInfo)" ng-class="{'btn-notselected':row.subAirWaybillInfo.elmFlag !== '1','btn-Success': row.subAirWaybillInfo.elmFlag === '1'}"
+						  ng-show="(row.holdCodeELM && progressObj.elm.flag === 'true') ||(!row.holdCodeELM && progressObj.elm.flag === 'true')"
+						  tooltip-placement="left" tooltip-html-unsafe="{{pre.elm}}" role="button">ELM</button>
+					</td>
+					<td style="">{{row.subAirWaybillInfo.subBillAuditRemarks}}</td>
+					<td style="text-align: center;">
+						<button class="btn btn-default" style="width:42px;padding:7px 2px;" ng-click="pullTo(row, $index)" ng-if="upBtn(row,pAirWaybillStatus)">拉上</button>
+						<button class="btn btn-default" style="width:42px;padding:7px 2px;" ng-click="pullDown(row, $index)" ng-if="downBtn(row,pAirWaybillStatus,queryFirstStatus)">拉下</button>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4">
+						合计： <span class="mr30">分单票数</span>{{totalObj.totalCount}}
+					</td>
+					<td>{{totalObj.packages}}</td>
+					<td>{{totalObj.weight}}</td>
+					<td colspan="5"></td>
+				</tr>
+			</tfoot>
+		</table>
+		<div ng-include="'pageInside.html'" class="row" style="margin: -30px 0px;font-size: 12px;"></div>
+		<div class="remark-content-list">
+			<div tabset>
+				<div tab>
+					<div tab-heading>
+						<i class="i-search"></i> 备注
+					</div>
+					<div remark-dire awid="pre.awId" type="agent"></div>
+				</div>
+				<div tab>
+					<div tab-heading>
+						<i class="i-history"></i> 历史记录
+					</div>
+					<div history-dire awid="pre.awId" type="agent"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div progress-dire awid="pre.awId" type="agent" edit-able="editAble" progress-obj="progressObj" progress-data="checkTypeData"></div>
+</div>

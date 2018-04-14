@@ -1,0 +1,38 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>收单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">收单搜索</li>
+</ol>
+<div class="bill-content">
+  <div class="bill-content-body">
+    <div tabset ng-if="!showResult">
+      <div tab>
+        <div tab-heading>
+          <i class="i-search"></i> 主运单查询
+        </div>
+        <div class="input-group bill-content-body-info">
+          <input type="text" class="form-control info-input-1" maxlength="3" ng-model="billObj.srh_code">
+          <input type="text" class="form-control info-input-2" maxlength="8" ng-model="billObj.srh_no">
+          <button class="btn info-btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+    <div class="bill-resullt" ng-if="showResult">
+      <div class="bill-content-body-result">
+        <div class="bill-content-body-result-img">
+        </div>
+        <div class="bill-content-body-result-noresult">
+          很抱歉, 没有搜索到运单
+        </div>
+        <div class="bill-content-body-result-btn">
+          <button type="button" class="btn btn-default" ng-click="showSearch()">重新搜索</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

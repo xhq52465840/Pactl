@@ -1,0 +1,60 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>用户管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">用户组</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    用户组
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增用户组
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userGroupObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w33">名称</th>
+        <th class="w33">用户数</th>
+        <th class="w34">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in userGroupData track by $index" ng-class-even="'even'">
+        <td>{{item.name}}</td>
+        <td>
+          <a role="button" ng-click="showUser(item)">{{item.users.length}}</a>
+        </td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

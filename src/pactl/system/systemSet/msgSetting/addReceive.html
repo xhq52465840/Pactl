@@ -1,0 +1,65 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">说明</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="itemObj.explain"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">报文类型<span class="text-danger">*</span></div>
+        <div class="col-sm-11 modal-body-value">
+          <div ui-select ng-model="itemObj.msgType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in msgTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" ng-model="itemObj.msgType" required name="msgType">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">收报目录<span class="text-danger">*</span></div>
+        <div class="col-sm-11 modal-body-value">
+          <div ui-select ng-model="itemObj.recCatalog" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.remark}}</div>
+            <div ui-select-choices repeat="item in catalogAddrData | filter: {remark:$select.search}">
+              <div ng-bind-html="item.remark | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" ng-model="itemObj.recCatalog" required name="recCatalog">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">备份目录<span class="text-danger">*</span></div>
+        <div class="col-sm-11 modal-body-value">
+          <div ui-select ng-model="itemObj.recCatalog2" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.remark}}</div>
+            <div ui-select-choices repeat="item in catalogAddrData | filter: {remark:$select.search}">
+              <div ng-bind-html="item.remark | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">备注</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="itemObj.remark"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide {
+			display: none !important;
+		}
+
+		ng\:form {
+			display: block;
+		}
+
+		.ng-animate-block-transitions {
+			transition: 0s all!important;
+			-webkit-transition: 0s all!important;
+		}
+
+		.ng-hide-add-active,
+		.ng-hide-remove {
+			display: block!important;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>分单列表</title>
+	<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+
+<body ng-cloak>
+	<div ng-controller="airSubListCtrl">
+		<div class="weui-cells weui-cells_form" style="margin-top:0;margin-bottom: 15px;background-color: rgb(236,246,253);" ng-if="btn.detail">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">总单</label></div>
+				<label style="font-weight: 700">{{subListMainData.waybillNo.substr(0, 3)}}
+					<span class="">-</span>
+					{{subListMainData.waybillNo.substr(3)}} </label>
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd"><label class="weui-label">品名</label></div>
+					{{subListMainData.goodsDesc}}
+				</div>
+				<div class="weui-cell" ng-if="subListMainData.bookWithFileList.length>0">
+					<div class="weui-cell__hd"><label class="weui-label">交正本
+						<input type="checkbox" ng-if="check.subListMainData" ng-checked="check.subListMainData" ng-disabled="true" class="weui-agree__checkbox" style="width: 20px;height: 20px;">
+						<input type="checkbox" ng-if="!check.subListMainData" ng-disabled="true">
+					</label>
+				</div>
+				<span ng-repeat="item in subListMainData.bookWithFileList" ng-if="item.book.bookType==='onetime'">
+					<a ng-click="watchPDF(item.fileIdList[0])" target="_blank">{{item.book.bookNo}}</a></span>
+				</div>
+			</div>
+			<div class="weui-cells weui-cells_form" style="margin-top:0;margin-bottom: 15px;background-color: rgb(236,246,253);" 
+			ng-if="btn.detail" ng-repeat="row in subListSubData track by $index">
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">分单</label></div>
+				{{row.waybillNo}}
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd"><label class="weui-label">品名</label></div>
+				{{row.goodsDesc}}
+			</div>
+			<div class="weui-cell" ng-if="row.bookWithFileList.length>0">
+				<div class="weui-cell__hd"><label class="weui-label">交正本
+					<input type="checkbox" ng-if="row.check" ng-checked="row.check" ng-disabled="true" class="weui-agree__checkbox" style="width: 20px;height: 20px;">
+					<input type="checkbox" ng-if="!row.check" ng-disabled="true">
+				</label>
+			</div>
+			<span ng-repeat="item in row.bookWithFileList" style="padding: 10px;">
+				<a ng-click="watchPDF(item.fileIdList[0])">{{item.book.bookNo}}</a></span>
+			</div>
+		</div>
+		<div class="singleBarcode" ng-if="btn.showimg">
+			<img src="../imges/noresult.png" height="89" width="102" alt="无搜索结果">
+		</div>
+	</div>
+</body>
+</html>

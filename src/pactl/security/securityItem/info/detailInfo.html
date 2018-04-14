@@ -1,0 +1,33 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{item.waybillNo}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w20">操作</th>
+					<th class="w45">备注</th>
+					<th class="w15">操作人员</th>
+					<th class="w20">操作时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rowobj in rows track by $index" ng-class-even="'even'">
+					<td>{{rowobj.oprnType}}</td>
+					<td>{{rowobj.operationName }}</td>
+					<td>{{rowobj.operatorName}}</td>
+					<td>{{rowobj.createdDate | date: "yy/MM/dd HH:mm:ss"}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>

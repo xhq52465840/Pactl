@@ -1,0 +1,98 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>系统设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">正式运单规则</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">
+		正式运单规则选项
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="search-name" style="width: 25%;">正式运单规则外显示文字</div>
+				<div class="search-value" style="width: 50%;">
+					<input type="text" class="form-control" ng-model="general.data1.regVal">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">
+				  <button class="btn btn-default" ng-click="save()">保存</button>
+				</div>
+			  </div>
+		</div>
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		正式运单规则
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-default" ng-click="add()">
+			<i class="i-add"></i>新增
+		</button>
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">航空公司</div>
+				<div class="search-value">
+					<div ui-select ng-model="itemObj.airId" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+						<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+							<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">代理</div>
+				<div class="search-value">
+					<div ui-select ng-model="itemObj.agentSales" theme="select2" class="form-control wd">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+						<div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+							<div ng-bind-html="item.code | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 fr">
+				<button class="btn btn-primary ml30" ng-click="search(true)">查询</button>
+			</div>
+		</div>
+	</div>
+	<table class="table content-main-table">
+		<thead>
+			<tr>
+				<th class="w10">航空公司</th>
+				<th class="w35">代理</th>
+				<th class="w20">显示文字</th>
+				<th class="w5">修改人员</th>
+				<th class="w10">修改时间</th>
+				<th class="w20">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in OfficialRuleData track by $index" ng-class-even="'even'">
+				<td>{{row.airCode}}</td>
+				<td>{{row.agentCode}}</td>
+				<td>{{row.showWord}}</td>
+				<td>{{row.operator}}</td>
+				<td>{{row.operateTime | date:'MM/dd HH:mm'}}</td>
+				<td>
+					<i class="btn-edit" ng-click="edit(row)"></i>
+					<i class="btn-del" ng-click="remove(row.id, row.airCode)"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div ng-include="'page.html'" class="row"></div>
+</div>

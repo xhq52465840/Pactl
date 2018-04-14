@@ -1,0 +1,90 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">特货代码</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">特货代码</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增特货代码
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">三字代码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="codeObj.sccCode" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">代码说明</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="codeObj.sccDesc">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <label class="label-checkbox"><input type="checkbox" ng-model="codeObj.dangerousMark">危险品</label>
+        <label class="label-checkbox"><input type="checkbox" ng-model="codeObj.liMark">锂电池</label>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="">三字代码</th>
+        <th class="">代码说明</th>
+        <th class="">选项</th>
+        <th class="">现场检查类型</th>
+        <th class="">状态</th>
+        <th class="">创建人</th>
+        <th class="">修改人</th>
+        <th class="">最后修改时间</th>
+        <th class="">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in codeData track by $index" ng-class-even="'even'">
+        <td>{{item.sccCode}}</td>
+        <td>{{item.sccDesc}}</td>
+        <td>
+          <label class="label-checkbox"><input type="checkbox" ng-checked="item.dangerousMark==='1'" ng-disabled="true">危险品</label>
+          <label class="label-checkbox"><input type="checkbox" ng-checked="item.liMark==='1'" ng-disabled="true">锂电池</label>
+        </td>
+        <td>
+          <span class="label label-primary mr5" ng-repeat="row in item.localeCheckType.split(';')">{{row}}</span>
+        </td>
+        <td>
+          <div class="btn-img" ng-click="ableSatatus(item.sccId, '1')" ng-if="item.useful==='0'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="ableSatatus(item.sccId, '0')" ng-if="item.useful==='1'">
+            <i class="i-yx"></i>
+          </div>
+        </td>
+        <td>{{item.createName}}</td>
+        <td>{{item.updateName}}</td>
+        <td>{{item.lastupdateTime | date: 'yyyy-MM-dd'}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.sccId, item.sccCode)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

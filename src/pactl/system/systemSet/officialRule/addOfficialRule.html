@@ -1,0 +1,51 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body modal-body-content">
+			<div class="row">
+				<div class="modal-body-name" style="width: 70px;">航空公司<span class="text-danger">*</span></div>
+				<div class="modal-body-value" style="width: 320px;">
+					  <div ui-select ng-model="itemObj.airCode" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+						<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+						  <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+						</div>
+					  </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="modal-body-name" style="width: 70px;">代理人<span class="text-danger">*</span></div>
+				<div class="modal-body-value" style="width: 320px;">
+					<div ui-select multiple ng-model="itemObj.agentCode" theme="select2" class="form-control" ng-disabled="itemObj.check.agentAble">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.code}}</div>
+						<div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+							<div ng-bind-html="item.code | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-body-value" style="width: 90px;">
+					<label>
+					所有<input type="checkbox" ng-click="itemObj.check.agentAble=!itemObj.check.agentAble" style="margin-left: 5px;" ng-checked="itemObj.check.agentAble">
+				  </label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="modal-body-name" style="width: 70px;">显示文字</div>
+				<div class="modal-body-value">
+					<input type="text" name="showWord" class="form-control" ng-model="itemObj.showWord">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" w5c-form-submit="save()">确定</button>
+				<button class="btn btn-default" ng-click="cancel()">取消</button>
+			</div>
+		</div>
+	</div>
+</form>

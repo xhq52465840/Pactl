@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="app">
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide {
+			display: none !important;
+		}
+
+		ng\:form {
+			display: block;
+		}
+
+		.ng-animate-block-transitions {
+			transition: 0s all!important;
+			-webkit-transition: 0s all!important;
+		}
+
+		.ng-hide-add-active,
+		.ng-hide-remove {
+			display: block!important;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>多货物查询</title>
+</head>
+
+<body ng-cloak>
+	<div ng-controller="multipleWaybillCtrl">
+		<div style="margin-left:10px;font-size: 16px;"><a href="javascript:void(0)">{{airCode}}:</a></div>
+		<header>
+			<div class="Grid" style="background: #fff;">
+				<div class="Grid-cell u-1of4">					
+					<label class="weui-label" style="width: 60px;">航班</label>
+				</div>
+				<div class="Grid-cell">
+					<input class="weui-input form-control" placeholder="请输入航班，如HU1234" ng-model="multiple.flightNo">
+				</div>
+			</div>
+			<div class="Grid" style="background: #fff;">
+				<div class="Grid-cell u-1of4">					
+					<label class="weui-label" style="width: 60px;">日期</label>
+				</div>
+				<div class="Grid-cell">
+					<input class="weui-input form-control" style="height: 2em;line-height: 1em;" type="date" ng-model="multiple.fltDate">
+				</div>
+			</div>
+			<div class="Grid" style="background: #fff;">
+				<div class="Grid-cell u-1of4">					
+					<label class="weui-label" style="width: 60px;">代理</label>
+				</div>
+				<div class="Grid-cell">
+					<input class="weui-input form-control" placeholder="请输入代理，如KNN" ng-model="multiple.agentSalesId">
+				</div>
+<!-- 
+				<div class="Grid-cell" style="border: 1px solid #ddd;">
+					<select class="weui-input form-control" style="height: 2em;line-height: 1em;" name="select1" ng-model="multiple.agentSalesId" ng-options="sel.agentSales for sel in salesData">
+						<option value="" selected hidden></option>
+					</select>
+				</div> -->
+			</div>
+			<a role="button" style="display: inline-block;width: 65%;margin: 10px;" class="weui-btn weui-btn_primary" ng-click="search()">查询</a>
+			<a role="button" style="display: inline-block;width: 20%;margin: 10px;float: right;" class="weui-btn weui-btn_default" ng-click="reset()">重置</a>
+		</header>
+		<div class="result">查询结果</div>
+		<div class="searchList" ng-if="btn.detail">
+			<table class="searchTable table table-striped">
+				<tbody>
+					<tr ng-repeat="item in multiple.multipleData track by $index">
+						<td>							
+							<a target="_blank" ng-href="airLine.html?waybillNo={{item.waybillNo}}">{{item.waybillNo}}</a>
+							<img ng-if="item.wbEle === '1'" src="../imges/e.png" height="18" width="18" alt="e">
+							<img ng-if="item.approachFlag === '1'" src="../imges/i-car.png" height="18" width="22" alt="jc">
+						</td>
+						<td>{{item.totalCount}}/{{item.grossWeight}}</td>
+						<td>{{item.iataCode}}</td>
+						<td>
+							<span ng-if="item.aStatus === '210'" class="notSecurity">不可安检</span>
+							<span ng-if="item.aStatus === '211'" class="canSecurity">可安检</span>
+							<span ng-if="item.aStatus === '200'" class="Securiting">安检中</span>
+							<span ng-if="item.aStatus === '201'" class="passSecurity">安检通过</span>
+							<span ng-if="item.aStatus === '202'" class="kouSecurity">安检扣押</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="margin:10px;">汇总：{{multiple.multipleData.length}}票&nbsp;&nbsp;{{totalObj.totalCount}}/{{totalObj.grossWeight}}K
+			</div>
+		</div>
+		<div class="singleBarcode" ng-if="btn.showimg">
+			<img src="../imges/noresult.png" height="89" width="102" alt="无搜索结果">
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>用户管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">可转授权的角色列表</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    可转授权的角色列表
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增角色
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">角色名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="roleListObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w50">角色</th>
+        <th class="w25">角色类型</th>
+        <th class="w25">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in roleListData track by $index" ng-class-even="'even'">
+        <td>{{item.role.name}}</td>
+        <td><span class="label label-primary mr5" style=" font-weight:500" ng-repeat="row in roleTypeData" ng-if="row.id==item.type">{{row.name}}</span></td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

@@ -1,0 +1,69 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="row pull-right">
+			<button class="btn btn-primary" ng-click="addCert()" ng-if="itemObj.canEdit">添加记录</button>
+		</div>
+		<table class="table content-main-table">
+		<thead>
+				<tr>
+					<th class="w25">电子文档</th>
+					<th class="w50">备注</th>
+					<th class="w25">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rowobj in rows track by $index" ng-class-even="'even'">
+					<td>
+						<i class="i-pdf" ng-click="openDialog({src: rowobj.fileHttpPath, srcArr: rowobj.srcArr})" ng-if="rowobj.fileHttpPath"></i>
+					</td>
+					<td>{{rowobj.book.bookComment}}</td>
+					<td>
+						<i class="btn-del" ng-click="remove(rowobj, $index)" ng-if="canDel()"></i>
+					</td>
+				</tr>
+				<tr ng-repeat="item in originItems track by $index">
+					<td>
+						<i class="i-pdf" ng-click="openDialog({src: item.fileHttpPath, srcArr: item.srcArr})" ng-if="item.fileHttpPath"></i>
+					</td>
+					<td>{{item.bookComment}}</td>
+					<td><i class="btn-del" ng-click="remove2($index)" ng-if="itemObj.canEdit"></i></td>
+				</tr>				
+				<tr ng-repeat="item in newItems track by $index">
+					<td>
+						<div ng-show="!item.fileHttpPath">
+							<button class="btn btn-primary" on-file-uploaded="uploadCallback($response, item)" pl-upload pl-max-file-size="3mb" pl-progress-model="item.progress">上传</button>
+							<div progressbar value="item.progress" type="success"><b>{{item.progress}}%</b></div>							
+						</div>
+						<div ng-show="item.fileHttpPath">
+							<i class="i-pdf" ng-click="openDialog({src: item.fileHttpPath, srcArr: item.srcArr})"></i>
+							<div class="dib" ng-click="removeFile(item)">
+								<i class="btn-close"></i>
+							</div>
+						</div>
+					</td>
+					<td>
+						<textarea rows="3" ng-model="item.bookComment" class="form-control"></textarea>
+					</td>
+					<td>
+						<div class="btn-img" ng-click="removeCert(item, $index)">
+							<i class="btn-del"></i>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()" ng-if="itemObj.canEdit">确定</button>
+		<button class="btn btn-default" ng-click="cancel()" ng-if="itemObj.canEdit">取消</button>
+		<button class="btn btn-default" ng-click="cancel()" ng-if="!itemObj.canEdit">关闭</button>
+	</div>
+</div>

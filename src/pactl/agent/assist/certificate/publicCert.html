@@ -1,0 +1,118 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">公共证书共享库</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">公共证书共享库</div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentAssist.proxyCert">
+          <i class="i-proxy"></i>代理证书共享库</a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentAssist.publicCert">
+          <i class="i-public"></i>公共证书共享库</a>
+      </li>
+    </ul>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="search-name">证书编号</div>
+        <div class="search-value" style="width: 600px;">
+          <div ui-select multiple tagging tagging-label="" ng-model="publicObj.bookNo" theme="select2" class="form-control" on-remove="clear()">
+            <div ui-select-match>{{$item}}</div>
+            <div ui-select-choices repeat="book in availableBookNo | filter: $select.search">
+              {{book}}
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary ml10 mr20" ng-click="search()">查询</button>
+        <span class="dropdown ">
+          <button class="glyphicon glyphicon-list-alt mr5 btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            制作授权书
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a role="button" ng-click="doAuthorize('A')">送样单位授权书</a>
+            </li>
+            <li>
+              <a role="button" ng-click="doAuthorize('B')">销售代理转授权</a>
+            </li>                            
+          </ul>
+        </span>
+
+
+        <button class="btn btn-default" ng-click="printBarCode()" ng-if="unitType">
+          <span class="glyphicon glyphicon-barcode mr5"></span>打印条形码
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w4">
+          <input type="checkbox" ng-click="allCheck($event)">
+        </th>        
+        <th class="w10" t-sort="OFFICE_NAME">鉴定机构</th>
+        <th class="w14">鉴定书编号</th>
+        <th class="w9">已提交</th>
+        <th class="w9">在线审核完成</th>
+        <th class="w9">证书审核完成</th>
+        <th class="w9">已授权</th>
+        <th class="w9">可引用</th>
+        <th class="w9">是否启用</th>
+        <th class="w9">延期</th>
+        <th class="w9">关注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index" ng-class-even="'even'">
+        <td>
+          <input type="checkbox" ng-checked="item.checked" ng-click="singleCheck($event, item)">
+        </td>
+        <td>{{item.pAgentShareBook.officeName}}</td>
+        <td>{{item.pAgentShareBook.bookNo}}</td>
+        <td>
+          <i ng-class="{'i-yes': item['101']}"></i>
+        </td>
+        <td>
+          <i ng-class="{'i-no': item['102'] && item['102'].id === '100'}"></i>
+          <i ng-class="{'i-yes': item['102'] && item['102'].id === '102'}"></i>
+        </td>
+        <td>
+          <i ng-class="{'i-yes': item['105']}"></i>
+        </td>
+        <td>
+          <i ng-class="{'i-yes': item['103']}"></i>
+        </td>
+        <td>
+          <i ng-class="{'i-yes': item['107']}"></i>
+        </td>
+        <td>
+          <i ng-class="{'i-yes': item.pAgentShareBook.disableFlag==='0'}"></i>
+          <i ng-class="{'i-no': item.pAgentShareBook.disableFlag==='1'}"></i>
+        </td>
+        <td>
+          <button class="btn btn-default" ng-if="item.pOfficeInfoDelay && item.pOfficeInfoDelay.length"
+           ng-click="showDelayDialog(item)">延期</button>
+        </td>        
+        <td>
+          <div class="btn-img" ng-click="concern(item.pAgentShareBook.bookId)">
+            <i ng-class="{'btn-nostart': !item.pShareBooksFocus, 'btn-start': item.pShareBooksFocus}"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

@@ -1,0 +1,235 @@
+<ol class="bread">
+	<li>
+		<a role="button" ui-sref="index">首页</a>
+	</li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>系统设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">业务参数</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">
+		业务参数
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="search-name" style="width: 63%;">可选择的航空公司数量</div>
+				<div class="search-value" style="width: 20%;">
+					<input type="text" class="form-control" ng-model="params.data1.regVal">
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name" style="width: 63%;">品名咨询过期时间</div>
+				<div class="search-value" style="width: 20%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data2.regVal" ng-change="onlyNum('data2')">
+				</div>天
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name" style="width: 25%;">超过</div>
+				<div class="search-value" style="width: 20%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data3.regVal">
+				</div>标记为紧急
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name" style="width: 25%;">超过</div>
+				<div class="search-value" style="width: 20%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data4.regVal">
+				</div>标记为非常紧急
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 44%;">首页可查询创建</div>
+				<div class="search-value" style="width: 20%;">
+					<input class="agentSystem" type="text" ng-model="params.data8.regVal" name="indexDays" ng-change="onlyNum('data8')">
+				</div>
+				天以内的运单
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 45%;">运单列表可查询出运</div>
+				<div class="search-value" style="width: 20%;">
+					<input class="agentSystem" type="text" ng-model="params.data9.regVal" name="shipmentHours" ng-change="onlyNum('data9')">
+				</div>
+				小时以内的运单
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 44%;">代理可查询出运</div>
+				<div class="search-value" style="width: 20%;">
+					<input class="agentSystem" type="text" ng-model="params.data11.regVal" name="indexDays" ng-change="onlyNum('data11')">
+				</div>
+				天以内的运单
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="search-name" style="width: 32%;">系统收件箱(邮箱用英文逗号隔开)</div>
+				<div class="search-value" style="width: 65%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data12.regVal" placeholder="多个邮箱用英文的逗号隔开">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 29%;">发送消息邮箱</div>
+				<div class="search-value" style="width: 65%;margin-right:14px">
+					<div ui-select ng-model="params.data10.regVal" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.emailAddr}}</div>
+						<div ui-select-choices repeat="item in sentEmails | filter: {emailAddr:$select.search}">
+							<div ng-bind-html="item.emailAddr | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		证书共享
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 21%;">定时删除</div>
+				<div class="search-value" style="width: 15%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data19.regVal" ng-change="onlyNum('data19')">
+				</div> 天前的证书邮件
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		报文制单
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+						<div class="col-sm-4">
+				<div class="search-name" style="width: 21%;">定时删除</div>
+				<div class="search-value" style="width: 15%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data20.regVal" ng-change="onlyNum('data20')">
+				</div> 天前的报文邮件
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 57%;">报文导入到运单时的更新方式</div>
+				<div class="search-value" style="width: 20%;">
+					<div ui-select ng-model="params.data5.regVal" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in codeData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div class="col-sm-8">
+				<div class="search-name" style="width: 34%;">电子运单SHC代码(用英文逗号隔开)</div>
+				<div class="search-value" style="width: 62%;margin-right:14px;float: right;">
+					<input type="text" class="form-control" ng-model="params.data18.regVal" placeholder="多个SHC编码用英文的逗号隔开">
+				</div>
+			</div>-->
+		</div>
+
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		审单
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 21%;">审单时长</div>
+				<div class="search-value" style="width: 15%;margin-right:14px">
+					<input type="text" class="form-control" ng-model="params.data6.regVal" ng-change="onlyNum('data6')">
+				</div>分钟
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		安检
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 45%;">安检首检图片保留天数</div>
+				<div class="search-value" style="width: 20%;">
+					<input class="agentSystem" type="text" ng-model="params.data13.regVal" name="indexDays" ng-change="onlyNum('data13')">
+				</div>
+				天
+			</div>
+			<div class="col-sm-8">
+				<div class="search-name" style="width: 23%;">安检首检图片备份邮箱</div>
+				<div class="search-value">
+					<input class="agentSystem" style="width:510px" type="text" ng-model="params.data14.regVal" name="indexDays">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name" style="width: 45%;">安检首检超时参数一</div>
+				<div class="search-value" style="width: 20%;">
+					<input class="agentSystem" type="text" ng-model="params.data15.regVal" name="fCheckTimeout1" ng-change="onlyNum('data15')">
+				</div>
+				小时
+			</div>
+			<div class="col-sm-8">
+				<div class="search-name" style="width: 23%;">安检首检超时参数二</div>
+				<div class="search-value">
+					<input class="agentSystem" type="text" ng-model="params.data16.regVal" name="fCheckTimeout2" ng-change="onlyNum('data16')">
+				</div>
+				小时
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="search-name" style="width: 20%;">安检用户在线同意书</div>
+				<div class="search-value" style="width: 75%;">
+					<textarea rows="10" ng-model="params.data17.regVal" style="width: 100%;" name="agreeBook" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		收单
+	</div>
+</div>
+<div class="content-main-title">
+	<div class="title">
+		数据修改申请
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="search-name" style="width: 82%;">非电子运单报文产生的差异是否进入数据修改申请</div>
+				<div class="search-value" style="width: 16%;">
+					<div ui-select ng-model="params.data7.regVal" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in codeData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-1">
+				<button class="btn btn-default fr" ng-click="save()">保存</button>
+			</div>
+		</div>
+	</div>
+</div>

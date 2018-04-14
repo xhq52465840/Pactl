@@ -1,0 +1,64 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+    <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">安全</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">局域网默认网关</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">IP地址</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="ipObj.accessIp" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+
+    </div>
+   
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">IP内容</th>
+        <th class="w12">备注</th>
+        <th class="w16">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in IpData track by $index" ng-class-even="'even'">
+        <td>{{item.accessIp}}</td>
+        <td>{{item.remark}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="enable(item.accessId,item.status)" ng-if="item.status=='2'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="disable(item.accessId,item.accessIp,item.status)" ng-if="item.status=='0'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.accessId,item.status)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

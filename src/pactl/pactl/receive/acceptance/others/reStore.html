@@ -1,0 +1,23 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="receiptPass">
+		<div class="reBillNo">运单号: {{restore.waybillNo}}</div>
+			<div class="reBillNo">备注</div>
+			<div><textarea class="form-control receipthei reBillVal" ng-model="restore.content"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save('1')">确定重新入库</button>
+		<button class="btn btn-primary" ng-click="save('0')">取消重新入库</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

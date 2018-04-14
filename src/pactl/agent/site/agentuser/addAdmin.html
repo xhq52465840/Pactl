@@ -1,0 +1,89 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+	<div class="modal-content">
+		<div class="modal-header">
+			<div class="modal-title">
+				{{title}}
+				<div class="modal-close" ng-click="cancel()">
+					<i class="i-close"></i>
+				</div>
+			</div>
+		</div>
+		<div class="modal-body modal-body-content">
+			<div class="row">
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="modal-body-name">所属机构<span class="text-danger">*</span></div>
+						<div class="modal-body-value">
+							<div ui-select ng-model="userObj.dept" theme="select2" class="form-control" on-select="changeRole($item)">
+								<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+								<div ui-select-choices repeat="item in agentData | filter: {name:$select.search}">
+									<div ng-bind-html="item.name | highlight: $select.search"></div>
+								</div>
+							</div>
+							<input type="hidden" name="dept" required ng-model="userObj.dept">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">账户名<span class="text-danger">*</span></div>
+						<div class="modal-body-value"><span class="text-danger">{{unit.code}}</span>
+							<input type="text" class="pactl-form-control" name="account" w5c-unique-check="{url:'/api/pactlorg/users/account?account='+unit.code+userObj.account}"
+									autocomplete="off" required ng-model="userObj.account">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">密码<span class="text-danger">*</span></div>
+						<div class="modal-body-value">
+							<input type="password" class="form-control" name="password" required ng-model="userObj.password">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">再次输入密码<span class="text-danger">*</span></div>
+						<div class="modal-body-value">
+							<input type="password" class="form-control" name="repeatPassword" w5c-repeat="password" required ng-model="userObj.repeatPassword">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">用户名<span class="text-danger">*</span></div>
+						<div class="modal-body-value">
+							<input type="text" class="form-control" name="fullname" autocomplete="off" required ng-model="userObj.fullname">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">角色<span class="text-danger">*</span></div>
+						<div class="modal-body-value">
+							<div ui-select multiple ng-model="userObj.roles" theme="select2" class="form-control">
+								<div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+								<div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+									<div ng-bind-html="item.name | highlight: $select.search"></div>
+								</div>
+							</div>
+							<input type="hidden" name="roles" required ng-model="userObj.roles">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">邮箱</div>
+						<div class="modal-body-value">
+							<input type="text" class="form-control" name="email" ng-model="userObj.email">
+						</div>
+					</div>
+					<div class="row">
+						<div class="modal-body-name">账户过期日期</div>
+						<div class="modal-body-value">
+							<input type="text" class="form-control dib w40 mr10 ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty" pikaday="myPickerObject1" ng-model="userObj.expireDate">
+						</div>
+					</div>
+					<!--<div class="row">
+						<div class="modal-body-name">超级管理员</div>
+						<div class="modal-body-value">
+						<input type="checkbox" class="checkbox-primary" ng-model="userObj.isSuper" name="isSuper">
+						</div>
+					</div>-->
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+			<button class="btn btn-default" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+</form>

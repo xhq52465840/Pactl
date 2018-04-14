@@ -1,0 +1,26 @@
+<div class="mainInfo-index">
+  <div class="row index-page">
+    <div class="col-sm-2">
+      <div class="index-a-4">
+        <a class="a-btn" ui-sref="securityItem.reCheck">
+          <i class="icon11"></i>
+          <div>复检</div>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="index-a-5">
+        <a class="a-btn" ui-sref="securityItem.operate">
+          <i class="icon12"></i>
+          <div>综合操作</div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row chart-right">
+    <div class="chart-main">
+      <div class="chart-main-head">安检</div>
+    </div>
+    <div ng-include="'barChart/securityRecheck.html'" class="chart-main-body"></div>
+  </div>
+</div>

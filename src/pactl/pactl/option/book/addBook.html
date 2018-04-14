@@ -1,0 +1,68 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">航空公司<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="itemObj.airCode" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" required name="airCode" ng-model="itemObj.airCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">目的港<span ng-if="!itemObj.countryCode" class="text-danger">*</span></div>
+        <div class="col-sm-8 modal-body-value">
+          <div ui-select multiple ng-model="itemObj.destCode" theme="select2" class="form-control" ng-disabled="itemObj.check.destAble">
+            <div ui-select-match placeholder="请选择...">{{$item.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-required="itemObj.check.destAble!==true&&!itemObj.countryCode" name="destCode" ng-model="itemObj.destCode">
+        </div>
+        <div class="col-sm-2 modal-body-value">
+            <label>
+                所有<input type="checkbox" ng-click="itemObj.check.destAble=!itemObj.check.destAble" style="margin-left: 5px;" ng-checked="itemObj.check.destAble">
+            </label>
+        </div>
+      </div>   
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">国家<span ng-if="itemObj.check.destAble!==true&&!itemObj.destCode" class="text-danger">*</span></div>
+        <div class="col-sm-8 modal-body-value">
+          <textarea class="form-control" ng-required="itemObj.check.destAble!==true&&!itemObj.destCode" ng-disabled="itemObj.check.destAble" ng-model="itemObj.countryCode" rows="3"></textarea>
+        </div>
+        <div class="col-sm-2 modal-body-value">
+            <button class="btn btn-default" ng-click="editCountry()" ng-disabled="itemObj.check.destAble">选择</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">规则<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="5" class="form-control" ng-model="itemObj.rule" required name="rule" maxlength="1000"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">序号<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" ng-model="itemObj.coding" required name="coding" ng-change="onlyEn()" placeholder="只能输入数字和字母">
+        </div>        
+      </div>      
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

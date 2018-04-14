@@ -1,0 +1,42 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">报文类型<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="msgObj.messageType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in typeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>          
+          <input type="hidden" name="airName" class="form-control" required ng-model="msgObj.messageType">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">SITA报文地址<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="address" class="form-control" required ng-model="msgObj.address">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">地址说明</div>
+        <div class="modal-body-value">
+          <textarea class="form-control" name="addExplain" rows="3" ng-model="msgObj.addExplain"></textarea>
+        </div>
+      </div>      
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

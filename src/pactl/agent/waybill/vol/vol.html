@@ -1,0 +1,89 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">尺寸
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body cert">
+		<div class="modal-body-title">
+			<button class="btn btn-default" ng-click="add()">
+				<i class="i-add"></i>增加
+			</button>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w12">选项</th>
+					<th class="w10">长(CM)</th>
+					<th class="w10">宽(CM)</th>
+					<th class="w10">高(CM)</th>
+					<th class="w16">尺寸单位</th>
+					<th class="w10">件数</th>
+					<th class="w12">重量</th>
+					<th class="w10">重量单位</th>
+					<th class="w10">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in newItems">
+					<td>
+						<label>
+							<input type="checkbox" ng-model="item.unitcodeCheck" ng-checked="changeUnitCode(item)">无尺寸
+						</label>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="item.length" ng-change="changeNum(item, 'length')" ng-disabled="item.unitcodeCheck">
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="item.width" ng-change="changeNum(item, 'width')" ng-disabled="item.unitcodeCheck">
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="item.height" ng-change="changeNum(item, 'height')" ng-disabled="item.unitcodeCheck">
+					</td>
+					<td>
+						<div ui-select ng-model="item.unitcode" theme="select2" class="form-control w35" style="width: 100px;" ng-disabled="item.unitcodeCheck">
+							<div ui-select-match placeholder="请选择...">{{$select.selected.id}}</div>
+							<div ui-select-choices repeat="item in unitCodeData | filter: {id:$select.search}">
+								<div ng-bind-html="item.id | highlight: $select.search"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="item.pieces" ng-change="changeNum(item, 'pieces')" ng-disabled="item.unitcodeCheck">
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="item.weight" ng-change="changeNum2(item, 'weight')">
+					</td>
+					<td>
+						<div ui-select ng-model="item.weightCode" theme="select2" class="form-control w45" style="width: 60px;">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+							<div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="btn-img" ng-click="remove($index)">
+							<i class="btn-del"></i>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="5">
+						合计：
+					</td>
+					<td><input type="text" class="form-control" ng-model="totalObj.pieces" ng-disabled="true"></td>
+					<td colspan="3"></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">保存</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

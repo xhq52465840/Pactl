@@ -1,0 +1,55 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">机构全称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="officeName" class="form-control" required ng-model="agentObj.officeName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">官网查询地址<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="url" class="form-control" required ng-model="agentObj.url">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">简称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="shortName" class="form-control" required ng-model="agentObj.shortName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">联系电话<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="tel" class="form-control" required ng-model="agentObj.tel">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">对应代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="officeCode" class="form-control" required ng-model="agentObj.officeCode" ng-pattern="/[A-Z]{3}/g">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">授权信息</div>
+        <div class="modal-body-value">
+          <input type="text" name="accredit" class="form-control w40 dib" ng-model="agentObj.accredit">-
+          <input type="text" name="accredit2" class="form-control w40 dib" ng-model="agentObj.accredit2">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

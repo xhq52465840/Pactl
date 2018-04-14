@@ -1,0 +1,24 @@
+<div class="modal-content">
+  <div class="modal-header" style="min-height: 50px">
+    <div class="modal-title-detial">
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+      <div> 
+        <span ng-if="items.waybill_no" class="mr20 word-el">运单号:{{items.waybill_no}}</span>
+        <span ng-if="items.officeName" class="mr20 word-el">机构:{{items.officeName}}</span>
+        <span ng-if="items.bookNo" class="mr20 word-el">证书编号:{{items.bookNo}}</span>
+        <br ng-if="items.waybill_no">
+        <span ng-if="items.goodsDesc" class="mr20 word-el">品名:{{items.goodsDesc}} </span>
+      </div>
+      <div ng-if="items.goodsNameEn" class="word-el">英文品名: {{items.goodsNameEn}}</div>
+      <div ng-if="items.goodsNameCn" class="word-el">中文品名: {{items.goodsNameCn}}</div>
+    </div>
+  </div>
+  <div class="modal-body" style="height: 800px;">
+    <div ylx="items.srcArr"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

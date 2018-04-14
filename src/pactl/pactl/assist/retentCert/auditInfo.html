@@ -1,0 +1,27 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			操作提示
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body modal-body-content">
+    <div class="row">
+      <div class="col-sm-2">
+        <i class="i-pencil"></i>
+      </div>
+      <div class="col-sm-9">
+        <div class="mb10">
+          <div class="tip-info-1">授权书流水号为</div>
+          <div class="tip-info-2">{{authBookSerialNo}}</div>
+        </div>
+        <div>请将流水号抄写到授权证书上进行授权书归档管理</div>
+      </div>
+    </div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()">关闭</button>
+	</div>
+</div>

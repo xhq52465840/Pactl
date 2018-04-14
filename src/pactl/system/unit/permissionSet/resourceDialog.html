@@ -1,0 +1,57 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="content-main-body">
+        <div class="content-main-search">
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="search-name">资源名称</div>
+              <div class="search-value">
+                <input type="text" class="form-control" ng-model="resourceObj.resName">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <button class="btn btn-primary" ng-click="search()">查询</button>
+            </div>
+          </div>
+        </div>
+        <table class="table content-main-table">
+          <thead>
+            <tr>
+              <th class="w15">资源ID</th>
+              <th class="w10">资源类型</th>
+              <th class="w30">资源名称</th>
+              <th class="w35">url</th>
+              <th class="w10">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in resourceData track by $index" ng-class-even="'even'">
+              <td>{{item.resId}}</td>
+              <td>{{item.resTypeName}}</td>
+              <td>
+                {{item.resName}}
+              </td>
+              <td>
+                  <a href="{{item.url}}" target="_blank">{{item.url}}</a>
+                </td>
+              <td>
+                  <button class="btn btn-primary" ng-click="save(item)">选择</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div ng-include="'page.html'" class="row"></div>
+      </div>
+      <div class="modal-footer">
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

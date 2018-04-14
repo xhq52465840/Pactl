@@ -1,0 +1,97 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content modal-add-people">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">适用于</div>
+        <div class="col-sm-4 modal-body-value">
+          <label class="label-checkbox" ng-repeat="item in type1 track by $index">
+            <input type="checkbox" ng-model="item.checked" ng-checked="awData.indexOf(item.id)>-1" ng-click="setAwData(item, $event)">{{item.name}}
+          </label>
+          <input type="hidden" name="awType" required ng-model="peopleObj.awType">
+        </div>
+        <div class="col-sm-2 modal-body-name">类型</div>
+        <div class="col-sm-4 modal-body-value">
+          <label class="label-checkbox" ng-repeat="item in type2 track by $index">
+            <input type="checkbox" ng-model="item.checked" ng-checked="scData.indexOf(item.id)>-1" ng-click="setScData(item, $event)">{{item.name}}
+          </label>
+          <input type="hidden" name="scType" required ng-model="peopleObj.scType">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">代码</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.code" maxlength="32">
+        </div>
+        <div class="col-sm-2 modal-body-name">名称</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.name" name="name" required maxlength="200">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">邮编</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.zipcode" maxlength="10">
+        </div>
+        <div class="col-sm-2 modal-body-name">州名</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.state" maxlength="50">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">城市</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.city" maxlength="50">
+        </div>
+        <div class="col-sm-2 modal-body-name">国家</div>
+        <div class="col-sm-4 modal-body-value">
+          <div ui-select ng-model="peopleObj.country" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.countryCode}}</div>
+            <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+              <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">电话</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.tel" maxlength="20">
+        </div>
+        <div class="col-sm-2 modal-body-name">传真</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.fax" maxlength="50">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">联系人</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" ng-model="peopleObj.contacts" maxlength="50">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2  modal-body-name">地址</div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="peopleObj.address" maxlength="200"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2  modal-body-name">备注</div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" ng-model="peopleObj.remarks" maxlength="500"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

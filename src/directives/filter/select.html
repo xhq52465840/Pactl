@@ -1,0 +1,25 @@
+<div>
+  <button class="btn filter-drop-button ellipsis" ng-click="toggle($event)">
+    {{showName}}
+  </button>
+  <a role="button" class="filter-drop-a" ng-click="remove()">
+    <span class="glyphicon glyphicon-remove"></span>
+  </a>
+  <div ng-show="open" class="filter-drop-div">
+    <div class="filter-drop-input">
+      <input type="text" class="form-control" autocomplete="off" ng-model="search">
+    </div>
+    <ul class="filter-drop-ul">
+      <li class="filter-drop-li" ng-repeat="li in liList | filter: search">
+        <label>
+          <input type="checkbox" ng-click="liClick2($event, li)">
+          <span>{{li.name}}</span>
+        </label>
+      </li>
+    </ul>
+    <div class="pd5">
+      <button type="button" class="btn btn-default" ng-click="update()">更新</button>
+      <button type="button" class="btn btn-link" ng-click="close()">关闭</button>
+    </div>
+  </div>
+</div>

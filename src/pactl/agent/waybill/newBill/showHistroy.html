@@ -1,0 +1,45 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w20">操作</th>
+          <th class="w45">备注</th>
+          <th class="w15">操作人员</th>
+          <th class="w20">操作时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in waybillData track by $index" ng-show="$index > showItem.start && $index < showItem.end" ng-class-even="'even'">
+          <td>{{item.operationName}}</td>
+          <td ng-if="item.operationName === '报文导入'">
+            <button class="btn btn-default" ng-click="showMsg(item)">查看{{item.oprnType && item.oprnType.indexOf('/')>=3? item.oprnType.substring(0,item.oprnType.indexOf('/')):'报文'}}</button>
+          </td>
+          <td ng-if="item.operationName === '收单报文'">
+            <button class="btn btn-default" ng-click="showMsg(item)">点击查看</button>
+          </td>
+          <td ng-if="item.operationName === '发送报文'">
+            <button class="btn btn-default mr5" ng-repeat="row in item.oprnType track by $index" ng-click="showMsg(row)">查看{{row.messageType}}</button>
+          </td>
+          <td ng-if="item.operationName !== '报文导入' && item.operationName !== '收单报文' && item.operationName !== '发送报文'">
+            <pre class="historyRemark historyRecoder">{{item.oprnType}}</pre>
+          </td>
+          <td>{{item.operatorName}}</td>
+          <td>{{item.createdDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'pageInside.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

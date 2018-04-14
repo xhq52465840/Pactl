@@ -1,0 +1,9 @@
+{
+  "LOGIN": {
+    "usename": "usename",
+    "password": "password",
+    "login": "login",
+    "rem": "remember me",
+    "qrcode": "QRcode"
+  }
+}

@@ -1,0 +1,73 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>选项</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">系统设置</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">系统设置</div>
+</div>
+<div class="content-main-body">
+	<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+		<div class="content-main-search">
+			<div class="row">
+				<p><label class="mr10">首页可查询创建</label><input class="agentSystem" type="text" ng-model="agentSystem.indexDays" name="indexDays"
+					  ng-change="onlyNum('indexDays')">天以内的运单</p>
+			</div>
+			<div class="row">
+				<div class="row">
+					<p><label class="mr10">综合操作可查询出运</label><input class="agentSystem" type="text" ng-model="agentSystem.shipmentHours" name="shipmentHours"
+						  ng-change="onlyNum('shipmentHours')">小时以内的运单</p>
+				</div>
+			</div>
+			<div class="row">
+				<p><label class="mr10">接收消息邮箱</label><input class="agentSystem" type="email" style="width: 350px;" ng-model="agentSystem.email"
+					  name="email"></p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">当天现场主管手机</label><input class="agentSystem" type="tel" style="width: 350px;" placeholder="T1:13900000001 T3:13800000001"
+					  maxlength="50" ng-model="agentSystem.directorPhone" name="directorPhone"></p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">锂电池声明联系电话</label><input  class="agentSystem" type="tel" style="width: 350px;" maxlength="20" ng-model="agentSystem.liPhone"
+					  name="liPhone"></p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">锂电池声明托运人名称/地址</label><input class="agentSystem" type="tel" style="width: 350px;" maxlength="100" ng-model="agentSystem.nameAddress"
+					  name="liPhone"></p>
+			</div>
+			<!--addressFlag ：锂电池默认托运人名/地址类型（0 主账户 1 子账户 2运单）
+				goodsDeclareName ：货物申报联系人
+				goodsDeclarePhone ：货物申报联系电话 
+				autograph：锂电池托运人签名-->
+			<div class="row">
+				<p><label class="mr10">锂电池托运人签名</label><input  class="agentSystem" type="tel" style="width: 350px;" maxlength="200" ng-model="agentSystem.autograph"
+					  name="liPhone"></p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">锂电池默认托运人名/地址类型</label>
+				<select ng-if="!unitType"  name="liPhone" style="width: 261px;" ng-model="agentSystem.addressFlag" ng-init="agentSystem.addressFlag='0'">
+					<option  ng-repeat = 'x in xianghq' value = "{{x.token}}">{{x.name}}</option>
+				</select>
+				<select ng-if="unitType"  name="liPhone" style="width: 261px;" ng-model="agentSystem.addressFlag" ng-init="agentSystem.addressFlag='0'">
+					<option  ng-repeat = 'x in xianghq1' value = "{{x.token}}">{{x.name}}</option>
+				</select>
+				
+				</p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">货物申报联系人</label><input ng-disabled="!unitType" class="agentSystem" type="tel" style="width: 350px;" maxlength="200" ng-model="agentSystem.goodsDeclareName"
+					  name="liPhone"></p>
+			</div>
+			<div class="row">
+				<p><label class="mr10">货物申报联系电话</label><input ng-disabled="!unitType" class="agentSystem" type="tel" style="width: 350px;" maxlength="200" ng-model="agentSystem.goodsDeclarePhone"
+					  name="liPhone"></p>
+			</div>
+			
+			<div class="row">
+				<button class="btn btn-default fr" w5c-form-submit="save()">保存</button>
+			</div>
+		</div>
+	</form>
+</div>

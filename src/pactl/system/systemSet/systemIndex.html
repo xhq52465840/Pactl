@@ -1,0 +1,86 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<div class="main-content">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">系统设置</div>
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.general">
+          通用
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.msgTemp">
+          消息模板
+        </a>
+      </li>      
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.params">
+          业务参数
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.receiveEmail">
+          邮件
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.msgbase">
+          报文基础设置
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.msgSetting">
+          报文平台收发报设置
+        </a>
+      </li>      
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.backups">
+          备份
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.senior">
+          高级
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.UIdisplay">
+          界面显示
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.support">
+          系统支持
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.secure">
+          安全
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.preEmailNotice">
+          预审邮件提醒
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.officialRule">
+          正式运单规则
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.operationHistory">
+          操作历史纪录
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div role="button" ng-click="nav()" ng-class="{'left-arrow-show':!showNav,'content-arrow1': !showNav,'content-arrow': showNav}"></div>
+  <div class="row content-right-white" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>

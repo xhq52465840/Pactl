@@ -1,0 +1,100 @@
+<div class="content-main-title">
+	<div class="title">产品说明</div>
+	<div class="pull-right">
+		<button class="btn btn-big" ng-click="remove()">
+				<i class="i-remove"></i>删除
+		</button>
+		<button class="btn btn-default" ng-click="back()">
+			<i class="i-back"></i>返回
+		</button>
+	</div>
+</div>
+<div class="online">{{goodsId}}</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4 border1 fl">
+				<div class="mb10">中文品名</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.namesCn" readonly>
+				</div>
+			</div>
+			<div class="col-sm-4 border1 fl">
+				<div class="mb10">英文品名</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.namesEn" readonly>
+				</div>
+			</div>
+			<input type="hidden" ng-model="airLines">
+			<div class="col-sm-4 border1">
+				<div class="mb10">目的港</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.dest" readonly>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 border1">
+				<div class="mb10">产品用途描述</div>
+				<div class="color333 search-value w100">
+					<textarea  class="form-control" ng-model="product.use" readonly> </textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 border1">
+				<div class="mb10">产品构成（制作材料及内含物质，需详细说明）</div>
+				<div class="color333 search-value w100">
+					<textarea  class="form-control" ng-model="product.mix" readonly> </textarea>
+				</div>
+			</div>
+		</div>
+		<div class="mt40">
+			<span>该货物是否有以下特性:</span>
+		</div>
+		<div class="mt10">
+			<label class="mr5 btn padding character1" ng-model="product.character1" ng-show="product.character1">有马达</label>
+			<label class="mr5 btn padding character2" ng-model="product.character2" ng-show="product.character2">有电机</label>
+			<label class="mr5 btn padding character3" ng-model="product.character3" ng-show="product.character3">有磁性</label>
+			<label class="mr5 btn padding character4" ng-model="product.character4" ng-show="product.character4">有辐射</label>
+			<label class="mr5 btn padding character5" ng-model="product.character5" ng-show="product.character5">有氟利昂</label>
+			<label class="mr5 btn padding character6" ng-model="product.character6" ng-show="product.character6">有制冷剂</label>
+			<label class="mr5 btn padding character7" ng-model="product.character7" ng-show="product.character7">有冷冻液</label>
+			<label class="mr5 btn padding character8" ng-model="product.character8" ng-show="product.character8">有液体</label>
+			<label class="mr5 btn padding character9" ng-model="product.character9" ng-show="product.character9">有气体</label>
+			<label class="mr5 btn padding character10" ng-model="product.character10" ng-show="product.character10">有锂电池以及其他电池</label>
+			<div type="text" class="refer-value mr5 btn padding character11" ng-show="product.character11">{{product.character11}}</div>
+		</div>
+		<div class="row mt40">
+			<div class="col-sm-5 border1 fl">
+				<div class="mb10">生产厂家全称</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.name"  readonly>
+				</div>
+			</div>
+
+			<div class="col-sm-5 border1 fr">
+				<div class="mb10">托运人</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.shipper" readonly>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-5 border1 fl">
+				<div class="mb10">生产厂家联系人</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.contacts" readonly>
+				</div>
+			</div>
+
+			<div class="col-sm-5 border1 fr">
+				<div class="mb10">24小时应急联系电话</div>
+				<div class="color333 search-value w100">
+					<input type="text" class="non-border w100" ng-model="product.contactsphone" readonly>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,16 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <span class="label label-primary mr5 dib mb10" ng-repeat="row in obj" style="font-size: 16px;">{{row.airCode}}{{row.days ? '+' + row.days : ''}}</span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

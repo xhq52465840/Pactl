@@ -1,0 +1,130 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      清单检查
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="receipt">收单标签检查</div>
+    <div class="row">
+      <div class="col-sm-6" ng-repeat="markCheck in checklist.markChecks track by $index">
+        <label class="w30 tar" ng-class="{'necessary':markCheck.needFlag==='true'}">{{markCheck.markName}}</label>
+        <!-- <span class="text-danger" ng-show="markCheck.needFlag==='true'">*</span> -->
+        <label><input class="lg-radio" type="radio" name="{{markCheck.markCode}}" value="true" ng-model="markCheck.checkFlag" ng-checked="markCheck.checkFlag==='true'">是</label>
+        <label><input class="lg-radio" type="radio" name="{{markCheck.markCode}}" value="false" ng-model="markCheck.checkFlag" ng-checked="markCheck.checkFlag==='false'">否</label>
+      </div>
+    </div>
+    <div class="receipt">现场补交文件</div>
+    <div class="row">
+      <div class="col-sm-6" ng-repeat="filesCheck in checklist.filesChecks">
+        <label class="w30 necessary">{{filesCheck.fileName}}</label>
+        <label><input class="lg-radio" type="checkbox" name="{{filesCheck.fileName}}" ng-model="filesCheck.checkFlag" ng-checked="filesCheck.checkFlag">是</label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="checklist.ckElectricFlag">
+      <label class="w30 tar necessary" style="width: 10rem;">磁检报告</label><label><input class="lg-radio" type="checkbox" ng-model="checklist.electricFlag" ng-checked="checklist.electricFlag">是</label>
+    </div>
+
+    <div class="receipt">代理预审文件</div>
+    <div class="row">
+      <div class="col-sm-6" ng-repeat="agentFile in checklist.agentFiles">
+        <label class="w30 necessary">{{agentFile.name}}</label>
+        <label><input class="lg-radio" type="checkbox" name="{{agentFile.name}}" ng-model="agentFile.checkFlag" ng-checked="agentFile.checkFlag">是</label>
+      </div>
+    </div>
+    <div class="receipt">3%核重</div>
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="w25 receipttitle">运单重量</label>
+        <label class="waybillwt">{{checklist.grossWeight}}</label>
+      </div>
+      <div class="col-sm-6">
+        <label class="w25 receipttitle">实际重量</label>
+        <input type="text" class="form-control ac-weight mr10" ng-model="checklist.actualWeight" ng-keyup="countDiff()">
+        <label class="waybillwt" ng-show="checklist.diff">{{checklist.diff}}%</label>
+      </div>
+    </div>
+    <div ng-if="checklist.trueWeight">
+      <div class="col-md-offset-8 text-danger">实际重量的格式不正确</div>
+    </div>
+    <div class="row">
+      <i class="i-add pull-right" ng-click="addCert()"></i>
+    </div>
+    <div class="row" ng-repeat="item in checklist.newItems track by $index">
+      <div class="col-sm-2 lo-weight">
+        <label class="ml10">长</label>
+        <input type="text" class="form-control ac-weight" ng-model="item.length" ng-change="count(item,'length')">
+        <label>CM *</label>
+        <div class="text-danger" style="padding-left: 34px;" ng-show="item.lenType">格式不正确</div>
+      </div>
+      <div class="col-sm-2 lo-weight">
+        <label class="ml10">宽</label>
+        <input type="text" class="form-control ac-weight" ng-model="item.width" ng-change="count(item,'width')">
+        <label>CM *</label>
+        <div class="text-danger" style="padding-left: 34px;" ng-show="item.widType">格式不正确</div>
+      </div>
+      <div class="col-sm-2 lo-weight">
+        <label class="ml10">高</label>
+        <input type="text" class="form-control ac-weight" ng-model="item.height" ng-change="count(item,'height')">
+        <label>CM *</label>
+        <div class="text-danger" style="padding-left: 34px;" ng-show="item.lenType">格式不正确</div>
+      </div>
+      <div class="col-sm-2 lo-weight">
+        <label class="ml10">件数</label>
+        <input type="text" class="form-control ac-weight" ng-model="item.count" ng-change="count(item,'count')">
+        <label>件</label>
+        <div class="text-danger" style="padding-left: 34px;" ng-show="item.lenType">格式不正确</div>
+      </div>
+      <div class="col-sm-2 lo-weight">
+        <label class="ml10">=</label>
+        <input type="text" class="form-control ac-weight" ng-model="item.volume" ng-change="count(item,'volume')" ng-disabled="true">
+        <label>M³</label>
+      </div>
+      <div class="col-sm-1 lo-weight">
+        <span class="glyphicon glyphicon-minus csp" ng-click="removeItem($index)" ng-show="checklist.newItems.length >= 1"></span>
+      </div>
+    </div>
+    <div class="row">
+      <label class="mr5">总体积</label>
+      <input type="text" class="form-control ac-weight mr10" style="width:15%" ng-model="checklist.totalVolume" ng-change="totalChange()"
+        ng-disabled="checklist.canTotal">M³
+      <label class="mr5">/</label>
+      <label class="mr5 waybillwt">0.006</label>
+      <label class="mr5 waybillwt">=</label>
+      <label class="mr5 waybillwt">{{checklist.totalVolume1}}</label>
+      <label class="mr5">运单计费重量</label>
+      <label class="mr5 waybillwt">{{checklist.chargeWeight}}</label>
+      <label class="mr5">超出</label>
+      <label class="mr5 waybillwt" ng-show="checklist.totalVolume2">{{checklist.totalVolume2}}%</label>
+      <div ng-show="checklist.totalType">
+        <div class="text-danger" style="padding-left: 50px;">格式不正确</div>
+      </div>
+    </div>
+    <div ng-if="checklist.showCashCheck">
+      <div class="receipt">现金结算确认</div>
+      <div class="row">
+        <label><input class="lg-radio" type="checkbox" ng-model="checklist.cashCheck" ng-checked="checklist.cashCheck">是</label>
+      </div>
+    </div>
+    <div class="receipt">备注</div>
+    <div class="row" ng-repeat="remark in remarks">
+      <div class="remark-content">
+        <div class="remark-title">
+          <span class="remark-title-name" style="color:#000">{{remark.createName}}</span>
+          <span class="remark-title-time" style="word-wrap: break-word;word-break: break-all;">{{remark.content}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-if="checklist.hasLiBatteryChange">
+      <label class="w30 tar necessary">已查看锂电池声明</label><label><input class="lg-radio" type="checkbox" ng-model="checklist.confirmLiBatteryStatement" ng-checked="checklist.confirmLiBatteryStatement">是</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" ng-hide="status==='301'">保存</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>

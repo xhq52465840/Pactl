@@ -1,0 +1,365 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">航空公司</li>
+</ol>
+<div class="content-main-title">
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="save()">
+      <i class="i-save"></i>保存
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>基本信息
+    </div>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">二字码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.airCode" ng-change="changeAirCode()" ng-class="{'error': errData.indexOf('airCode')>-1}">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">三字码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.destCode" ng-change="changeDestCode()" ng-class="{'error': errData.indexOf('destCode')>-1}">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">图标</div>
+        <div class="search-value">
+          <img ng-src="{{airObj.fileObj.url}}" alt="" class="air-img" ng-show="airObj.fileObj&&airObj.fileObj.url">
+          <div class="dib">
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, airObj)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]"
+            pl-max-file-size="5mb" pl-url="/api/pactl/uploadfile">上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.airName">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">TEL</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.tel" ng-change="changeTel()" ng-class="{'error': errData.indexOf('tel')>-1}">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">FAX</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.fax" ng-change="changeFax()" ng-class="{'error': errData.indexOf('fax')>-1}">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">E-mail</div>
+        <div class="search-value" style="width: 270px;">
+          <input type="text" class="form-control" ng-model="airObj.email" ng-change="changeEmail()" ng-class="{'error': errData.indexOf('email')>-1}">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>接收航空公司电子运单报文地址
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-default mt10" ng-click="addMsg()">
+        <i class="i-add"></i>新增
+      </button>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w14">报文类型</th>
+        <th class="w14">SITA报文地址</th>
+        <th class="w14">地址说明</th>
+        <th class="w14">创建人</th>
+        <th class="w14">修改人</th>
+        <th class="w14">最后修改时间</th>
+        <th class="w16">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in msgData track by $index" ng-class-even="'even'">
+        <td>{{row.messageType | showStatus: typeData}}</td>
+        <td>{{row.address}}</td>
+        <td>{{row.addExplain}}</td>
+        <td>{{row.creater}}</td>
+        <td>{{row.updater}}</td>
+        <td>{{row.updateDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td>
+          <div class="btn-img" ng-click="editMsg(row)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="enableMsg(row.msgAddrId)" ng-if="row.msgStatus==='2'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="disableMsg(row.msgAddrId)" ng-if="row.msgStatus==='0'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="removeMsg(row.msgAddrId, row.address)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>航空公司发报设置
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-default" ng-click="addSent()">
+        <i class="i-add"></i>新增报文发报设置
+      </button>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w5">规则编号</th>
+        <th class="w8">发报类型</th>
+        <th class="w5">航空公司</th>
+        <th class="w10">说明</th>
+        <th class="w5">卸机站</th>
+        <th class="w5">航班号</th>
+        <th class="w5">报文类型</th>
+        <th class="w5">报文版本号</th>
+        <th class="w5">报文优先级</th>
+        <th class="w10">发报地址</th>
+        <th class="w10">收报地址</th>
+        <th class="w10">报文发送目录</th>
+        <th class="w10">备注</th>
+        <th class="w7">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in sentData track by $index" ng-class-even="'even'">
+        <td>{{$index + 1}}</td>
+        <td>{{item.msgSendSet.sendType | showFileType: sendTypeData}}</td>
+        <td>{{item.airline && item.airline.airCode}}</td>
+        <td>{{item.msgSendSet.explain}}</td>
+        <td>{{item.msgSendSet.station}}</td>
+        <td>{{item.msgSendSet.fltNo}}</td>
+        <td>{{item.msgSendSet.msgType | showFileType: msgTypeData}}</td>
+        <td>{{item.msgSendSet.msgVersion}}</td>
+        <td>{{item.msgSendSet.msgPriority}}</td>
+        <td>{{item.msgSendSet.sendAddr}}</td>
+        <td>{{item.msgSendSet.recAddr}}</td>
+        <td>{{item.msgSendSet.msgSendDir | showRemark: msgSendDirData}}</td>
+        <td>{{item.msgSendSet.remark}}</td>
+        <td>
+          <i class="btn-edit" ng-click="editSent(item)"></i>
+          <i class="btn-del" ng-click="remSent(item.msgSendSet.id, item.msgSendSet.sendType, item)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>收单允许差异
+    </div>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">收单边界重量</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.weight" style="text-align:right" ng-change="onlyNum('weight')">
+        </div>
+        <div class="search-name" style="width:20px;">KG</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">边界内允许重量差异</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.innerDiffer" style="text-align:right" ng-change="onlyNum('innerDiffer')">
+        </div>
+        <div class="search-name" style="width:20px;">KG</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">边界外允许重量差异</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.outterDiffer" style="text-align:right" ng-change="onlyNum('outterDiffer')">
+        </div>
+        <div class="search-name" style="width:20px;">%</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">计费重量允许差异</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airObj.chargeDiffer" style="text-align:right" ng-change="onlyNum('chargeDiffer')">
+        </div>
+        <div class="search-name" style="width:20px;">%</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">误差类型</div>
+        <div class="search-value">
+          <select class="form-control" ng-model="airObj.errorType">
+            <option value="">请选择</option>
+            <option value="1">允许正向和负向误差</option>
+            <option value="0">允许正向误差</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>参数设置
+    </div>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+
+      <!--<div class="col-sm-4">
+        <div class="search-name" style="width:140px;">运单打印格式</div>
+        <div class="search-value">
+          <select class="form-control" ng-model="airObj.printFormat">
+            <option value="">请选择</option>
+            <option value="1">打印格式1</option>
+            <option value="2">打印格式2</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:140px;">锂电池空运声明</div>
+        <div class="search-value">
+          <select class="form-control" ng-model="airObj.liBatteryDeclear">
+            <option value="">请选择</option>
+            <option value="1">打印格式1</option>
+            <option value="2">打印格式2</option>
+          </select>
+        </div>
+      </div>-->
+      <div class="col-sm-2">
+        <label>
+          <input type="checkbox" ng-model="airObj.msgSendFunction">启用运单报文发送功能
+        </label>
+      </div>
+      <div class="col-sm-3">
+        <label>
+          <input type="checkbox" ng-model="airObj.pullSubwaybill">允许代理自己拉电子运单分单
+        </label>
+      </div>
+      <div class="col-sm-2">
+        <label>
+          <input type="checkbox" ng-model="airObj.forbid24Goods">禁收24小时货
+        </label>
+      </div>
+      <div class="col-sm-2">
+        <label>
+          <input type="checkbox" ng-model="airObj.subRsRequired">分单收发货人必录
+        </label>
+      </div>
+      <div class="col-sm-3">
+        <label>
+          <input type="checkbox" ng-model="airObj.liSection2">锂电池-Section II 现场检查控制
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4" style="float: left; width: 24%;">
+        <div class="search-name" style="width:140px;">电子运单管理范围</div>
+        <div class="search-value" style="width: 150px;">
+          <select class="form-control" ng-model="airObj.ewaybillRange">
+            <option value="1">总单层面</option>
+            <option value="2">分单层面</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4" style="float: left; width: 24%;">
+        <div class="search-name" style="width:140px;">运单重复适用天数</div>
+        <div class="search-value"  style="width: 150px;">
+          <input type="text" class="form-control" ng-model="airObj.repeatDays">
+        </div>
+      </div>
+      <div class="col-sm-4" style="width: 20%;float: left;">
+        <div class="search-name" style="width:80px;">例外货代</div>
+          <div ui-select multiple ng-model="airObj.exceptAgentId" theme="select2" class="form-control wd" style="width: 150px;">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+      </div>
+      	<div class="col-sm-4" style="width: 32%;">
+				<div class="search-name" style="width:234px;">电子运单SHC代码(用英文逗号隔开)</div>
+				<div class="search-value"  style="width: 155px;">
+					<input type="text" class="form-control" ng-model="airObj.shcCode" >
+				</div>
+			</div>
+    </div>
+    <!--<div class="row">
+      <div class="col-sm-3">
+        <label>
+          <input type="checkbox" ng-model="airObj.liSection2">锂电池-Section II 现场检查控制
+        </label>
+      </div>
+    </div>-->
+  </div>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>适用的鉴定机构
+    </div>
+    <!-- <div class="pull-right">
+      <button class="btn btn-default mt10" ng-click="saveAgent()">
+        <i class="i-add"></i>新增
+      </button>
+    </div> -->
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w10">机构编号</th>
+        <th class="w30">机构名称</th>
+        <th class="w20">机构鉴定证书有效年度</th>
+        <th class="w20">航空公司鉴定证书延期有效年度</th>
+        <th class="w5" ng-repeat="delay in delays track by $index">
+          {{delay.name}}
+        </th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in officeInfoList track by $index" ng-class-even="'even'">
+        <td>{{row.officeInfo.officeCode}}</td>
+        <td>{{row.officeInfo.officeName}}</td>
+        <td>{{row.officeInfo.year}}</td>
+        <td>{{row.airLineDelay.year}}</td>
+        <td ng-repeat="type in row.pGoodsTypeDelays2 track by $index">
+          {{type.days}}
+        </td>
+        <td>
+          <!-- <div class="btn-img" ng-click="editAgent(row)">
+            <i class="btn-edit"></i>
+          </div> -->
+          <div class="btn-img" ng-click="enableAgent(row.airLineDelay.id, '0')" ng-if="row.airLineDelay.status==='1'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="enableAgent(row.airLineDelay.id, '1')" ng-if="row.airLineDelay.status!=='1'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="removeAgent(row.airLineDelay.id, row.officeInfo.officeCode)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

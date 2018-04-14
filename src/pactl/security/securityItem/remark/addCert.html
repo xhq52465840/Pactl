@@ -1,0 +1,51 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      证书添加
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body modal-body-content">
+    <div class="row">
+      <div class="col-sm-2 modal-body-name" style="width: 60px;">运单号</div>
+      <div class="col-sm-10 modal-body-value" style="width: 500px;">
+        {{certObj.waybillNo}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 modal-body-name" style="width: 60px;">证书编号</div>
+      <div class="col-sm-8 modal-body-value" style="width: 500px;margin-right: 10px;">
+        <input type="text" class="form-control" name="name" autocomplete="off" required ng-model="certObj.bookNo">
+      </div>
+      <div class="col-sm-2" style="width: 60px;">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w20">序号</th>
+          <th class="w60">证书</th>
+          <th class="w20">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in bookData track by $index">
+          <td>{{$index + 1}}</td>
+          <td>
+            <i class="i-pdf" ng-click="showBook(item)"></i>
+            <a role="button" ng-click="showBook(item)">{{item.pAgentShareBook.bookNo}}</a>
+          </td>
+          <td>
+            <i class="i-list-add" ng-click="addBook(item)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

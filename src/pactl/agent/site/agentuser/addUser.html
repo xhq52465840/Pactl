@@ -1,0 +1,117 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="col-sm-7">
+          <div class="row">
+            <div class="modal-body-name">账户名<span class="text-danger">*</span></div>
+            <div class="modal-body-value"><span class="text-danger">{{unit.code}}</span>
+              <input type="text" class="pactl-form-control" name="account" w5c-unique-check="{url:'/api/pactlorg/users/account?account='+unit.code+userObj.account}"
+                autocomplete="off" required ng-model="userObj.account">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">密码<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="password" class="form-control" name="password" required ng-model="userObj.password">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">再次输入密码<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="password" class="form-control" name="repeatPassword" w5c-repeat="password" required ng-model="userObj.repeatPassword">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">员工编号</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="employid" autocomplete="off" ng-model="userObj.employid">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">用户名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="fullname" autocomplete="off" required ng-model="userObj.fullname">
+            </div>
+          </div>
+          <div class="row" ng-if="userObj.unitRoleDOs.length===1">
+            <div class="modal-body-name">角色</div>
+              <div ng-repeat="unitRole in userObj.unitRoleDOs track by $index" class="modal-body-value">
+                  <div ui-select multiple ng-model="unitRole.roleDos" theme="select2" class="form-control">
+                    <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+                    <div ui-select-choices repeat="item in unitRole.roles | filter: {name:$select.search}">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="roleDos" required ng-model="unitRole.roleDos">
+              </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">邮箱</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="email" ng-model="userObj.email">
+            </div>
+          </div>
+          <div class="row">
+						<div class="modal-body-name">账户过期日期</div>
+						<div class="modal-body-value">
+							<input type="text" class="form-control dib w40 mr10 ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty" pikaday="myPickerObject1" ng-model="userObj.expireDate">
+						</div>
+					</div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+          <img ng-src="{{userObj.fileObj.url}}" alt="" class="upload-avatar mb10">
+          <div>
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, userObj)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]"
+              pl-max-file-size="5mb" pl-url="/api/org/units/avatars/ ">上传</button>            
+          </div>          
+        </div>
+      </div>
+      <div class="row" ng-if="userObj.unitRoleDOs.length>1">
+          <div class="col-sm-12">
+            <table class="table content-main-table">
+              <thead>
+                <tr>
+                  <th class="w10"></th>
+                  <th class="w30">主账户机构</th>
+                  <th class="w60">角色</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="unitRole in userObj.unitRoleDOs track by $index" ng-show="$index > showItem.start && $index < showItem.end" ng-class-even="'even'">
+                  <td>
+                    {{$index+1}}
+                  </td>
+                  <td>{{unitRole.unit.description}}</td>
+                  <td>
+                      <div ui-select multiple ng-model="unitRole.roleDos" theme="select2" class="form-control">
+                        <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+                        <div ui-select-choices repeat="item in unitRole.roles | filter: {name:$select.search}">
+                          <div ng-bind-html="item.name | highlight: $select.search" ng-disabled="true"></div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="roleDos" required ng-model="unitRole.roleDos">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div ng-include="'pageInside.html'" class="row"></div>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

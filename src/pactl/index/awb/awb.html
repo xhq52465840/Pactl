@@ -1,0 +1,15 @@
+<div class="noprint" style="width: 794px;margin: 0 auto 20px;text-align: center;color:Red;">
+  <h3>{{awbTypeName[awbType]}}</h3>
+  <!-- <p>当使用chrome浏览器, QQ浏览器时，请将浏览器最小字体设置成6px，获取较好效果</p> -->
+  <!-- <div print-desc></div>
+  <p>打印fwb时，在打印预览中，将上下左右边距都调为0</p> -->
+  <div style="text-align: right;font-size:20px;" ng-if="awbType!=='A4'"> 
+      请使用IE9及以上或者chrome浏览器进行打印,打印前请查看<button class="btn btn-default" ng-click="showPrintInstitution()">打印设置说明</button>
+  </div>
+  <div style="text-align: right;margin-top:20px;">
+      <button class="btn btn-default" ng-click="print()">打印</button>
+    </div>
+</div>
+<div ng-class="{'print-break': !$last}" ng-repeat="item in idArr track by $index">
+  <div awb="item" awb-type="awbType"></div>
+</div>

@@ -1,0 +1,29 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 30px;">国家</div>
+        <div class="modal-body-value" style="width: 500px;">
+          <div ui-select multiple ng-model="fileObj.country" theme="select2" class="form-control" ng-disabled="fileObj.check.countryAble">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.countryCode}}</div>
+            <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>       
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

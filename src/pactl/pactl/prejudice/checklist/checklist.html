@@ -1,0 +1,78 @@
+	<div>
+		<div ng-controller="headCtrl">
+			<div ng-include="'head.html'"></div>
+		</div>
+		<ol class="bread">
+			<li><a role="button" ui-sref="index">首页</a></li>
+			<li class="bread-arrow">&gt;</li>
+			<li><span>功能</span></li>
+			<li class="bread-arrow">&gt;</li>
+			<li class="active">特殊货物现场检查清单</li>
+		</ol>
+		<div class="content-main-title">
+			<div class="title">特殊货物现场检查清单</div>
+		</div>
+		<div class="content-main-body">
+			<div class="content-main-search">
+				<div class="row">
+
+					<div class="col-sm-4">
+						<div class="search-name" ng-model="check.status">状态</div>
+						<div ui-select ng-model="check.status" theme="select2" class="form-control wd">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+							<div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="search-name">代理</div>
+						<div ui-select ng-model="check.agentSales" theme="select2" class="form-control wd">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+							<div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+								<div ng-bind-html="item.code | highlight: $select.search"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="search-name">运单号</div>
+						<div class="search-value">
+							<input type="text" class="form-control" ng-model="check.waybillNo">
+						</div>
+					</div>
+				</div>
+				<div class="row search-btn">
+					<div class="fr">
+						<button class="btn btn-primary" ng-click="search()">查询</button>
+					</div>
+				</div>
+			</div>
+			<table class="table content-main-table">
+				<thead>
+					<tr>
+						<th class="w15" t-sort="GOODS_ID">运单号</th>
+						<th class="w10">代理代码</th>
+						<th class="w10" t-sort="DEST">目的港</th>
+						<th class="w10">件数/重量</th>
+						<th class="w10">特货代码</th>
+						<th class="w45">检查结果</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-class-even="'even'" ng-repeat="row in rows track by $index">
+						<td><a ui-sref="pactlPrejudice.inspectList({waybillNo: row.waybillNo})">{{row.waybillNo}}</a></td>
+						<td>{{row.agentOprn}}</td>
+						<td>{{row.dest1}}</td>
+						<td>{{row.totalCount}}/{{row.grossWeight}}</td>
+						<td>{{row.agentIataCode}}</td>
+						<td>
+							<label ng-repeat="localeCheck in row.localeCheck" class="mr10">
+							<input type="checkbox" ng-checked="localeCheck.checkFlag" ng-disabled="true">{{localeCheck.checkName}}
+							</label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div ng-include="'page.html'" class="row"></div>
+		</div>
+	</div>

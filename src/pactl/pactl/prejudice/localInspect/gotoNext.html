@@ -1,0 +1,20 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">{{items.title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-warning">
+      <span class="glyphicon glyphicon-exclamation-sign"></span> {{items.content}}
+      <br/> {{items.content1}}
+      <span>{{timeRemaining | date:'mm:ss'}}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">确认</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>

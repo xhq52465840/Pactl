@@ -1,0 +1,51 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>安检</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">运单备注</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">运单备注</div>
+  <!--<div class="pull-right">
+    <button class="btn btn-default" ng-click="back()">
+      <i class="i-back"></i>返回
+    </button>
+  </div>-->
+</div>
+<div class="content-main-body">
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w25">运单号</th>
+        <th class="w25">证书</th>
+        <th class="w25">品名</th>
+        <th class="w25">备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in remarkData track by $index" ng-class-even="'even'">
+        <td>
+          <i class="i-e" ng-if="item.wb_ele==='1'"></i> {{item.waybill_no}}
+        </td>
+        <td>
+          <div ng-repeat="book in item.books">
+            <i class="i-pdf" ng-click="showBook(book, item.agent_oprn_id)"></i>
+            <a role="button" ng-click="showBook(book, item.agent_oprn_id)">{{book.bookNo}}</a>
+            <div class="btn-img" ng-click="removeBook(book.bookNo, book.awId, book.id)" ng-if="(book.deviceId==='1' || book.checkVisual === '1') && aStatus!=='201'">
+              <i class="btn-del"></i>
+            </div>
+          </div>
+          <div>
+            <i class="i-list-add" ng-click="addBook(item)" ng-if="item.type === '0' && aStatus!=='201'"></i>
+          </div>
+        </td>
+        <td>{{item.goods_desc}}</td>
+        <td>
+          <i class="i-flag" ng-if="item.count_remark !== '0'" ng-click="showRemark(item)"></i>
+          <i class="i-noflag" ng-if="item.count_remark === '0'"  ng-click="showRemark(item)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

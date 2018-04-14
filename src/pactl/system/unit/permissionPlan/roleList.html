@@ -1,0 +1,37 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="pull-right">
+        <button class="btn btn-default" ng-click="add()">
+        <i class="i-add"></i>添加角色
+      </button>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <th>角色名称</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in roleData track by $index">
+          <td>{{item.name}}</td>
+          <td>
+            <a role="button" ng-click="addPermission(item)">权限</a>
+            <a role="button" ng-click="remove(item)">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

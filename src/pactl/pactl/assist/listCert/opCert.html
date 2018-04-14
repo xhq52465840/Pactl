@@ -1,0 +1,166 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">证书信息</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">证书信息</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="operate()">
+      <i class="i-operate"></i>操作日志
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search content-main-input">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">鉴定证书编号</div>
+        <div class="search-value" style="padding: 6px 10px 6px 0;">
+          {{certObj.pAgentShareBook.bookNo}}
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">电子文档</div>
+        <div class="search-value imgShow" style="width: 300px;">
+          <i class="i-pdf" ng-click="openDialog({
+          officeName: certObj.pOfficeInfo.officeName,
+          bookNo: certObj.pAgentShareBook.bookNo,
+          src: certObj.pdfPath,
+          srcArr: certObj.srcArr
+        })" ng-if="certObj.pdfPath" ng-mouseover="certObj.imgShow=true" ng-mouseleave="certObj.imgShow=false"></i>
+          <div ng-show="certObj.imgShow" ng-style="certObj.style1">
+            <img ng-src="{{certObj.filePath}}" ng-style="certObj.style2">
+          </div>
+          <a ng-href="{{certObj.pOfficeInfo.url}}" target="_blank" ng-if="certObj.pOfficeInfo.url">
+            <i class="i-site"></i>
+          </a>
+          <div class="dib" ng-show="editAble">
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, certObj)" pl-upload>上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">鉴定机构</div>
+        <div class="search-value" style="padding: 6px 10px 6px 0;">
+          {{certObj.pOfficeInfo.officeName}}
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">使用年份</div>
+        <div class="search-value" style="padding: 6px 10px 6px 0;">
+          {{certObj.pAgentShareBook.validityYear}}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="certObj.goodType" theme="select2" class="form-control wd" ng-disabled="!editAble" on-select="saveGoodType()">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in goodTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">证书状态</div>
+        <div class="search-value">
+          <div class="btn-img" ng-click="stop()" ng-if="certObj.pAgentShareBook.disableFlag==='0' && editAble">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="restart()" ng-if="certObj.pAgentShareBook.disableFlag==='1' && editAble">
+            <i class="i-sx"></i>
+          </div>
+          {{certObj.pAgentShareBook.disableReason}}
+        </div>
+      </div>
+    </div>
+    <div class="row cert-status">
+      <span class="label label-primary" ng-if="certObj.pAgentShareBook.auditStatus === '102' || certObj.pAgentShareBook.auditStatus === '104' || certObj.pAgentShareBook.auditStatus === '105'">在线审核通过</span>
+      <span class="label label-info" ng-if="certObj.pAgentShareBook.auditStatus === '104' || certObj.pAgentShareBook.auditStatus === '105'">证书正本已收|证书流水号{{certObj.pAgentShareBook.bookSerialNumber}}</span>
+      <span class="label label-success" ng-if="certObj.pAgentShareBook.auditStatus === '105'">留存操作完成</span>
+    </div>
+    <div class="row info-title-content">
+      <div class="info-title-title">
+        <span class="title-span"></span>授权信息
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w25">代理</th>
+          <th class="w25">可用时间</th>
+          <th class="w15">授权流水号</th>
+          <th class="w10">无授权书</th>
+          <th class="w25">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in certObj.pAgentShareBookAccredits track by $index" ng-class-even="'even'">
+          <td>{{item.agentSales}}</td>
+          <td>{{item.startTime|date: 'yyyy/MM/dd'}}-{{item.endTime|date: 'yyyy/MM/dd'}}</td>
+          <td>{{item.authBookSerialNo}}</td>
+          <td>
+            <i class="i-yes" ng-if="item.authBookFlag==='1'"></i>
+          </td>
+          <td>
+            <div class="btn-img" ng-click="audit(item)" ng-show="editAble">
+              <i class="btn-edit"></i>
+            </div>
+            <div class="btn-img" ng-click="disable(item, '0')" ng-if="item.status==='1' && editAble">
+              <i class="i-sx"></i>
+            </div>
+            <div class="btn-img" ng-click="disable(item, '1')" ng-if="item.status==='0' && editAble">
+              <i class="i-yx"></i>
+            </div>
+            <div class="btn-img" ng-click="removeAudit(item, $index)" ng-show="editAble">
+              <i class="btn-del"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row info-title-content">
+      <div class="info-title-title">
+        <span class="title-span"></span>延期信息
+      </div>
+      <div class="info-title-title pull-right" ng-if="certObj.pAgentShareBook.bookSerialNumber">
+        <button class="btn btn-primary" ng-click="addDelay()" ng-show="certObj.pAgentShareBook.auditStatus === '105' && editAble">
+        <i class="i-add" style="margin-bottom: 3px;"></i>添加延期信息
+      </button>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w33">航空公司</th>
+          <th class="w33">延期天数</th>
+          <th class="w34">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in certObj.pAirLineDelays track by $index" ng-class-even="'even'">
+          <td>{{item.airCode}}</td>
+          <td>{{item.days}} &nbsp;&nbsp;&nbsp;
+            <label ng-if="item.expirationDate">延长到:{{item.expirationDate | date: 'yyyy/MM/dd'}}</label>
+          </td>
+          <td>
+            <div class="btn-img" ng-click="editDelay(item, $index)" ng-show="editAble">
+              <i class="btn-edit"></i>
+            </div>
+            <div class="btn-img" ng-click="removeDelay(item, $index)" ng-show="editAble">
+              <i class="btn-del"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

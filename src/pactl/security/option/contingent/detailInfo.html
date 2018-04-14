@@ -1,0 +1,88 @@
+<div class="content-main-title">
+	<div class="title">
+		分队信息
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">分队编号</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="info.unitid">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">分队名称</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="info.name">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">所属货站</div>
+				<div class="search-value">
+					<div ui-select ng-model="info.ctid" theme="select2" class="form-control wd">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">预警邮箱</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="info.eMail">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="search-name">备注</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="info.remark">
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-primary" ng-click="save()" style="float: right;
+				margin-right: 108px;">保存</button>
+			</div>
+		</div>
+	</div>
+	<div class="content-main-title mt30">
+		<div class="title">
+			安检章信息
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-default" ng-click="add()">
+				<i class="i-add"></i> 增加安检章
+			</button>
+		</div>
+	</div>
+	<table class="table content-main-table">
+		<thead>
+			<tr>
+				<th class="w25">安检章类型</th>
+				<th class="w25">正常状态图章</th>
+				<th class="w25">注销状态图章</th>
+				<th class="w25">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="rowobj in infoData track by $index" ng-class-even="'even'">
+				<td>{{rowobj.type}}</td>
+				<td><img ng-src="{{rowobj.normalStampFiles[0].fileHttpPath}}" alt="" class="air-img"></td>
+				<td><img ng-src="{{rowobj.logoutStampFiles[0].fileHttpPath}}" alt="" class="air-img"></td>
+				<td>
+					<div class="btn-img" ng-click="edit(rowobj)">
+						<i class="btn-edit"></i>
+					</div>					
+					<div class="btn-img" ng-click="remove(rowobj.id)">
+						<i class="btn-del"></i>
+					</div>
+				</td>
+			</tr>
+		</tbody>		
+	</table>
+	<div ng-include="'page.html'" class="row"></div>
+</div>

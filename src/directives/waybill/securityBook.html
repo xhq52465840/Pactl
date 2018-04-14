@@ -1,0 +1,56 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">证书类型</th>
+					<th class="w15">鉴定机构</th>
+					<th class="w24">证书编号</th>
+					<th class="w23">证书电子档</th>
+					<th class="w13">在线审核通过</th>
+					<th class="w10">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in rows  track by $index" ng-class-even="'even'">
+					<td>{{item.type.name}}</td>
+					<td>{{item.officeCode.shortName}}</td>
+					<td>{{item.bookNo}}</td>
+					<td class="imgShow">
+						<i class="i-pdf" ng-click="openDialog({
+						officeName:item.officeCode.officeName,
+						bookNo: item.bookNo,
+						src:item.fileHttpPath,
+						srcArr: item.srcArr
+						})" ng-if="item.fileHttpPath"></i>
+						<span class="label goodsType-puhuo1" ng-if="item.goodsType === '101' && item.type.id === 'sharing'">普货</span>
+						<span class="label goodsType-ldc1" ng-if="item.goodsType === '102' && item.type.id === 'sharing'">锂电池</span>
+						<span class="label goodsType-puhuo" role="button" ng-if="item.type.id !== 'sharing'" ng-model="item.goodsType" ng-click="selectCargo(item, '101')"
+							ng-class="{'goodsType-puhuo1':item.goodsType === '101'}">普货</span>
+						<span class="label goodsType-ldc" role="button" ng-if="item.type.id !== 'sharing'" ng-model="item.goodsType" ng-click="selectCargo(item, '102')"
+							ng-class="{'goodsType-ldc1':item.goodsType === '102'}">锂电池</span>
+					</td>
+					<td>
+						<i ng-if="item.deviceId!=='1' && item.status==='1'" class="i-yes1"></i>
+						<i ng-if="item.deviceId!=='1' &&item.status==='2'" class="i-no1"></i>
+						<span ng-if="!item.status && item.deviceId!=='1'">待审核</span> <span ng-if="item.deviceId==='1'">安检添加</span>
+					</td>
+					<td>
+						<button class="btn btn-primary" ng-click="save(item,$index)">选择</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" ng-click="cancel()" >关闭</button>
+	</div>
+</div>

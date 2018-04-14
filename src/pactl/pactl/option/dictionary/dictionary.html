@@ -1,0 +1,82 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">字典</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">字典</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="search-name">字典分类</div>
+        <div class="search-value" style="width: 400px;">
+          <div ui-select ng-model="dictObj.type" theme="select2" class="form-control" autofocus="true">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in typeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="dictObj.name">
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">序号</th>
+        <th class="w12">名称</th>
+        <th class="w12">排序</th>
+        <th class="w12">分类</th>
+        <th class="w12">父节点</th>
+        <th class="w16">备注</th>
+        <th class="w12">状态</th>
+        <th class="w12">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in dictData track by $index" ng-class-even="'even'">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.num}}</td>
+        <td>{{item.type | showDictType:typeData}}</td>
+        <td>{{item.parent}}</td>
+        <td>{{item.remarks}}</td>
+        <td>
+          <div class="btn-img" ng-click="ableStatus(item, '0')" ng-if="item.status==='1'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="ableStatus(item, '1')" ng-if="item.status==='0'">
+            <i class="i-yx"></i>
+          </div>
+        </td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

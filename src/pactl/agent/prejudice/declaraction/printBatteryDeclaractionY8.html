@@ -1,0 +1,401 @@
+<div class="declare-content print-width print-break" ng-if="lang==='EN'">
+  <div class="row mb20">
+    <div class="print-declare-awn" style="width: 100%;text-align: left;">
+      <span><img src="../../../../image/pactl/Y8_log3.png"/></span>
+    </div>
+  </div>
+  <div class="print-declare-title">
+    Declaration for Lithium Batteries Section Ⅱ
+  </div>
+  <div class="row print-declare-line1">
+    <span class="content-1">Master Awb Number:</span>
+    <span class="content-2">{{obj.waybillNo}}</span>
+  </div>
+  <div class="row print-declare-line2">
+    <p>
+      <span class="content-1">WARNING:</span>
+    </p>
+  </div>
+  <div class="row print-declare-line3">
+    <p style="margin-bottom: 0;">
+      LITHIUM BATTERIES THAT HAVE BEEN RECALLED BY THE MANUFACTURER FOR SAFETYREASONS
+      <span style="font-weight: bold;"><u>MUST NOT</u></span> BE SHIPPED BY AIR.
+    </p>
+    <p>
+      The lithium cell/battery is one of the type proven to meet the requirement of each test in the UN Manual of Tests and Criteria,
+      Part Ⅲ, subsection 38.3; and is manufactured under a quality managements program according to 59<sup>th</sup> DGR 3.9.2.6(e).
+      The tested package is capable of with standing a.1.2m drop test in any orientation (except PI967 & PI970).
+    </p>
+  </div>
+  <div class="print-declare-main">
+    <div class="row print-declare-line4 bt">
+      <div class="row print-declare-line4-1 br">
+        <div class="print-declare-line3"><b>Lithium Ion - Maximum of</b></div>
+        <div class="print-declare-line3"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;• 20 Watt-hours per cell; and</i></b></div>
+        <div class="print-declare-line3"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;• 100 Watt-hours per battery</i></b></div>
+      </div>
+      <div class="row print-declare-line4-2">
+        <div class="print-declare-line3"><b>Lithium Metal – Maximum of</b></div>
+        <div class="print-declare-line3"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;• 1 gram of lithium metal per cell; and</i></b></div>
+        <div class="print-declare-line3"><b><i>&nbsp;&nbsp;&nbsp;&nbsp;• 2 grams of lithium per battery</i></b></div>
+      </div>
+    </div>
+    <div class="row print-declare-line5 bt">
+      <div class="row print-declare-line5-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left">
+            <span class="font-bold">{{obj.eliIiPack?"√":"□"}}</span>
+          </div>
+          <p class="print-declare-line3">Packed <span style="border-bottom: 1px solid black;">with equipment</span>(ICAO/IATA Packing Instruction 966, Section
+            Ⅱ) - Cells or batteries contained in a package with associated electronic equipment - with the batteries not
+            installed in the equipment (for batteries, The Walt hour rating must be marked on the outside case except those
+            manufactured before 1 January 2009)</p>
+        </div>
+      </div>
+      <div class="row print-declare-line5-2">
+        <div class="row print-declare-line5-2-1">
+          <div class="pl10">
+            <div class="print-declare-line-left font-bold">
+              {{obj.elmIiPack?"√":"□"}}
+            </div>
+            <p class="print-declare-line3">Packed <span style="border-bottom: 1px solid black;">with equipment</span>(ICAO/IATA Packing Instruction 969,
+              Section Ⅱ) - Cells or batteries contained in a package with associated electronic equipment - with the batteries
+              not installed in the equipment (for batteries, The Walt hour rating must be marked on the outside case except
+              those manufactured before 1 January 2009)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row print-declare-line7 bt">
+      <div class="row print-declare-line7-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.eliRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">Contained <span style="border-bottom: 1px solid black;">in equipment</span>(ICAO/IATA packing Instruction 967,
+            Section Ⅱ) - Cells or batteries installed in equipment (for batteries, The Watt-hour rating must be marked on
+            the outside case except those manufactured before 1 January 2009)</p>
+        </div>
+      </div>
+      <div class="row print-declare-line7-2">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.elmRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">Contained <span style="border-bottom: 1px solid black;">in equipment</span>(ICAO/IATA packing Instruction 970,
+            Section Ⅱ) - Cells or batteries installed in equipment (for batteries, The Watt-hour rating must be marked on
+            the outside case except those manufactured before 1 January 2009)</p>
+        </div>
+      </div>
+    </div>
+    <div class="row print-declare-line8 bt">
+      <p class="print-declare-line3"><b>Additional Handling Information</b></p>
+      <p class="print-declare-line3">• This package must be handled with care. A flammability hazard exists if the package is damaged</p>
+      <p class="print-declare-line3">• If this package is damaged in transportation, it must not be loaded until the condition of the contents can be verified.
+        The batteries contained in this package must be inspected for damage and may only be repacked if they are intact
+        and protected against short circuits</p>
+      <div>
+        <span class="print-declare-line3 dib">• For more information about the batteries contained in this package, please call :</span>
+        <div class="content-2 dib">{{obj.phone}}</div>
+      </div>
+      <div>
+        <span class="print-declare-line3 dib">• For PI967, the total cells or batteries in each package are:</span>
+        <div class="content-3 dib">{{obj.eliBatteryCellNo}}</div>
+        <span class="print-declare-line3 dib">Cells (and/or)</span>
+        <div class="content-3 dib">{{obj.eliBatteryNo}}</div>
+        <span class="print-declare-line3 dib">Batteries</span>
+      </div>
+      <div>
+        <span class="print-declare-line3 dib">• For PI970, the total cells or batteries in each package are:</span>
+        <div class="content-3 dib">{{obj.elmBatteryCellNo}}</div>
+        <span class="print-declare-line3 dib">Cells (and/or)</span>
+        <div class="content-3 dib">{{obj.elmBatteryNo}}</div>
+        <span class="print-declare-line3 dib">Batteries</span>
+      </div>
+      <p class="print-declare-line3">• For PI966/PI969,the number of cells or batteries in each package must not exceed the approiate number for the equipment’s
+        operations, plus two spares.</p>
+    </div>
+    <div class="row print-declare-line9 bt">
+      <p class="print-declare-line3">
+        <b>Package despriction</b>
+        <span> (Please insert “√” in brackets according to the actual shipment)</span>
+      </p>
+      <div class="row">
+        <span class="print-declare-line3 dib">• Durably and legibly “Lithium battery handling label” has been labeled on each package</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':obj.noeli || obj.noelm}">(</span>
+          <span class="font-bold" ng-class="{'pd10':!obj.noeli && !obj.noelm}">
+          {{((obj.eliRelation&&!obj.elmRelation&&obj.noeli)||(obj.elmRelation&&!obj.eliRelation&&obj.noelm)||(obj.elmRelation&&obj.noeli&&obj.eliRelation&&obj.noelm)) ? " ":"√"}}
+          </span>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="print-declare-line3 dib">• “Lithium battery handling label” is not necessary(ONLY FOR PI967/PI970):</span>
+      </div>
+      <div class="row pl10">
+        <div class="row">
+          <span class="print-declare-line3 dib">1) packages containing only button cell batteries installed in equipment (including circuit boards) , or</span>
+          <div class="pull-right">
+            <span ng-class="{'mr20':!(obj.eliButtonFlag || obj.elmButtonFlag)}">(</span>
+            <span class="font-bold" ng-class="{'pd10':obj.eliButtonFlag || obj.elmButtonFlag}">
+              {{obj.eliButtonFlag || obj.elmButtonFlag ?"√":" "}}
+            </span>
+            <span>)</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="print-declare-line3 dib">2) consignments of two packages or less where each package contains no more than four cells or two batteries installed in equipment</span>
+          <div class="pull-right">
+            <span class="print-declare-line3 dib"></span><span ng-class="{'mr20':!(obj.eliCountLimit || obj.elmCountLimit)}">(</span>
+            <span class="font-bold" ng-class="{'pd10':obj.eliCountLimit || obj.elmCountLimit}">
+              {{obj.eliCountLimit || obj.elmCountLimit?"√":" "}}
+            </span>
+            <span>)</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <span class="print-declare-line3 dib">• The word “over pack” has been marked on the outside of the overpack. (if applicable)</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':!obj.overpack}">(</span>
+          <span class="font-bold" ng-class="{'pd5':obj.overpack}">
+            {{obj.overpack ?"√":" "}}
+          </span>
+          <span>)</span>
+        </div>
+      </div>
+      <!--bug3856-->
+      <!--<div class="row">
+        <b>
+        	
+        	<span class="print-declare-line3 dib">• PI966/PI967/PI1969/PI1970 Section Ⅱ , net quantity of lithium cells or batteries per package isn't more than 5Kg</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':!obj.lessthen5kg}">(</span>
+          <span class="font-bold" ng-class="{'pd5':obj.lessthen5kg}">
+            {{obj.lessthen5kg ?"√":" "}}
+          </span>
+          <span>)</span>
+        </div>
+        </b>
+      </div>-->
+    </div>
+    <div class="row print-declare-line10">
+      <div class="row print-declare-line6-1" style="height: 125px;border-right: 1px solid black;">
+        <div class="pl10">
+          <p class="print-declare-line3">I hereby declare that the contents of this consignment are fully and accurately described above by the proper shipping
+            name, and are classified, packaged, marked and labeled/placarded, and are in all respects in proper condition
+            for transport according to applicable international and national governmental regulations. I declare that all
+            of the applicable air transport requirements have been met.</p>
+        </div>
+      </div>
+      <div class="row print-declare-line10-2">
+        <div class="row print-declare-line10-2-1 bt">
+          <div><span class="print-declare-line3 dib">Name/Address of shipper </span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.nameAddress}}</span></div>
+        </div>
+        <div class="row print-declare-line10-2-2 br">
+          <div><span class="print-declare-line3 dib">Signature of shipper or his agent:</span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.signName}}</span></div>
+        </div>
+        <div class="row print-declare-line10-2-3">
+          <span class="print-declare-line3 dib">Date:</span>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.createTime}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="declare-content print-width" ng-if="lang==='CN'">
+  <div class="row mb20">
+    <div class="print-declare-awn" style="width: 100%;text-align: left;">
+      <span><img src="../../../../image/pactl/Y8_log3.png"/></span>
+    </div>
+  </div>
+  <div class="print-declare-title">
+    关于锂电池 Section Ⅱ 空运声明
+  </div>
+  <div class="row print-declare-line1">
+    <span class="content-1">主运单号</span>
+    <span class="content-2">{{obj.waybillNo}}</span>
+  </div>
+  <div class="row print-declare-line3">
+    <p style="margin-bottom: 0;">
+    <span class="content-1">警告:</span>因为安全隐患原因而被厂家召回的锂电池禁止空运
+    </p>
+    <p>
+      本包装件内含有如下所列的锂电池或电池芯，该电池/芯已通过了联合国《危险品运输建议-实验和标准手册》第38.3章节测试；该锂电池的生产符合了IATA《危险品规则》59版3.9.2.6(e)中规定的质量管理程序；被测试的包装件能够承受1.2米跌落试验（除PI967和PI970外）
+    </p>
+  </div>
+  <div class="print-declare-main">
+    <div class="row print-declare-line4 bt">
+      <div class="row print-declare-line4-1 br">
+        <div class="print-declare-line3"><b>锂离子电池</b></div>
+        <div class="print-declare-line3"><b>&nbsp;&nbsp;&nbsp;&nbsp;• 每个电池芯额定能量不超过20瓦时; 且</b></div>
+        <div class="print-declare-line3"><b>&nbsp;&nbsp;&nbsp;&nbsp;• 每个电池额定能量不超过100瓦时</b></div>
+      </div>
+      <div class="row print-declare-line4-2">
+        <div class="print-declare-line3"><b>锂金属电池</b></div>
+        <div class="print-declare-line3"><b>&nbsp;&nbsp;&nbsp;&nbsp;• 每个电池芯锂含量不超过1克; 且</b></div>
+        <div class="print-declare-line3"><b>&nbsp;&nbsp;&nbsp;&nbsp;• 每个电池锂含量不超过2克</b></div>
+      </div>
+    </div>
+    <div class="row print-declare-line5 bt">
+      <div class="row print-declare-line5-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left">
+            <span class="font-bold">{{obj.eliIiPack?"√":"□"}}</span>
+          </div>
+          <p class="print-declare-line3"><b>和设备包装在一起(ICAO/IATA </b>包装说明<b>966, Section II)</b> –电池或电池芯作为附件和电子设备包装在一个包装件内，该设备由电池驱动，且电池没有安装在设备内(2009.1.1之后生产的电池需在外壳上显示瓦时数)</p>
+        </div>
+      </div>
+      <div class="row print-declare-line5-2">
+        <div class="row print-declare-line5-2-1">
+          <div class="pl10">
+            <div class="print-declare-line-left font-bold">
+              {{obj.elmIiPack?"√":"□"}}
+            </div>
+            <p class="print-declare-line3"><b>和设备包装在一起(ICAO/IATA </b>包装说明<b>969, Section II)</b>  –电池或电池芯作为附件和电子设备包装在一个包装件内，该设备由电池驱动，且电池没有安装在设备内(2009.1.1之后生产的电池需在外壳上显示瓦时数)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row print-declare-line7 bt">
+      <div class="row print-declare-line7-1 br">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.eliRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">
+              <b>安装在设备中(ICAO/IATA</b>包装说明<b>967, Section II)</b> – 电池或电池芯安装在设备中。
+          </p>
+          <p class="print-declare-line3" style="margin-bottom: 0;">(2009.1.1之后生产的电池需在外壳上显示瓦时数)</p>
+        </div>
+      </div>
+      <div class="row print-declare-line7-2">
+        <div class="pl10">
+          <div class="print-declare-line-left font-bold">
+            {{obj.elmRelation?"√":"□"}}
+          </div>
+          <p class="print-declare-line3">
+              <b>安装在设备中( ICAO/IATA</b> 包装说明<b>970, Section II)</b> –电池或电池芯安装在设备中。
+          </p>
+          <p class="print-declare-line3">
+            (2009.1.1之后生产的电池需在外壳上显示瓦时数)
+          </p>          
+        </div>
+      </div>
+    </div>
+    <div class="row print-declare-line8 bt">
+      <p class="print-declare-line3"><b>附加操作要求</b></p>
+      <p class="print-declare-line3">• 应小心操作 , 如包装件破损 , 有易燃危险性</p>
+      <p class="print-declare-line3">• 如该包装件在运输中损坏，在未确定内部物品状态前不能装载。该包装件中的电池必须检查是否有损坏，只有确认电池完好无损且做好短路防护时才能再次包装它</p>
+      <div>
+        <span class="print-declare-line3 dib">• 如果需要更多该包装中电池的信息，请联系以下电话</span>
+        <div class="content-2 dib">{{obj.phone}}</div>
+        <span class="print-declare-line3 dib">（电话号码需含国家区号）</span>
+      </div>
+      <div>
+        <span class="print-declare-line3 dib">• 对于PI967，单个包装件内所含的锂电池芯和锂电池数量：</span>
+        <div class="content-3 dib">{{obj.eliBatteryCellNo}}</div>
+        <span class="print-declare-line3 dib">锂电池芯（和/或）</span>
+        <div class="content-3 dib">{{obj.eliBatteryNo}}</div>
+        <span class="print-declare-line3 dib">锂电池。</span>
+      </div>
+       <div>
+        <span class="print-declare-line3 dib">• 对于PI970，单个包装件内所含的锂电池芯和锂电池数量：</span>
+        <div class="content-3 dib">{{obj.elmBatteryCellNo}}</div>
+        <span class="print-declare-line3 dib">锂电池芯（和/或）</span>
+        <div class="content-3 dib">{{obj.elmBatteryNo}}</div>
+        <span class="print-declare-line3 dib">锂电池。</span>
+      </div>
+      <p class="print-declare-line3">• 对于PI966/PI969，每个包装件内含有的锂电池数不超过设备限制数量（包括2个备用件）</p>
+    </div>
+    <div class="row print-declare-line9 bt">
+      <p class="print-declare-line3">
+        <b>包装情况说明</b>
+        <span> （请根据货物实际情况，在下列括号内打“√”）</span>
+      </p>
+      <div class="row">
+        <span class="print-declare-line3 dib">• 已在货物外包装上粘贴经久耐用且清晰可辨的锂电池操作标签</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':obj.noeli || obj.noelm}">(</span>
+          <span class="font-bold" ng-class="{'pd10':!obj.noeli && !obj.noelm}">
+          {{((obj.eliRelation&&!obj.elmRelation&&obj.noeli)||(obj.elmRelation&&!obj.eliRelation&&obj.noelm)||(obj.elmRelation&&obj.noeli&&obj.eliRelation&&obj.noelm)) ? " ":"√"}}
+          </span>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="print-declare-line3 dib">• 货物外包装上无需粘贴锂电池操作标签（仅适用 PI967/PI970）</span>
+      </div>
+      <div class="row pl10">
+        <div class="row">
+          <span class="print-declare-line3 dib">1) 包装件中仅含有装在设备或主板中的纽扣电池，或</span>
+          <div class="pull-right">
+            <span ng-class="{'mr20':!(obj.eliButtonFlag || obj.elmButtonFlag)}">(</span>
+            <span class="font-bold" ng-class="{'pd10':obj.eliButtonFlag || obj.elmButtonFlag}">
+              {{obj.eliButtonFlag || obj.elmButtonFlag ?"√":" "}}
+            </span>
+            <span>)</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="print-declare-line3 dib">2) 本票含锂电池包装件不超过两件，且每个包装件中的设备内含有不超过四个锂电池芯或两个锂电池。</span>
+          <div class="pull-right">
+            <span class="print-declare-line3 dib"></span><span ng-class="{'mr20':!(obj.eliCountLimit || obj.elmCountLimit)}">(</span>
+            <span class="font-bold" ng-class="{'pd10':obj.eliCountLimit || obj.elmCountLimit}">
+              {{obj.eliCountLimit || obj.elmCountLimit?"√":" "}}
+            </span>
+            <span>)</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <span class="print-declare-line3 dib">• 集合包装件已按要求在集合包装外注明“OVERPACK” 字样（如适用）</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':!obj.overpack}">(</span>
+          <span class="font-bold" ng-class="{'pd5':obj.overpack}">
+            {{obj.overpack ?"√":" "}}
+          </span>
+          <span>)</span>
+        </div>
+      </div>
+      <!--bug 3856-->
+      <!--<div class="row">
+        <b>
+        	
+        	<span class="print-declare-line3 dib">• 已按要求 PI966/PI967/ PI969/PI970 Section Ⅱ，单个包装件内锂电池芯或锂电池的净重不超过5KG</span>
+        <div class="pull-right">
+          <span ng-class="{'mr20':!obj.lessthen5kg}">(</span>
+          <span class="font-bold" ng-class="{'pd5':obj.lessthen5kg}">
+            {{obj.lessthen5kg ?"√":" "}}
+          </span>
+          <span>)</span>
+        </div>
+        </b>
+      </div>-->
+    </div>
+    <div class="row print-declare-line10">
+      <div class="row print-declare-line6-1" style="height: 125px;border-right: 1px solid black;">
+        <div class="pl10">
+          <p class="print-declare-line3" style="line-height: 28px;">我司特别声明：上述运输专用名称完整、准确地描述了货物的内装物品，并进行了分类、包装，粘贴标记和标签，各方面完好适合运输，且符合国际及国家的有关规定。我申明所有适用的空运要求均已符合。</p>
+        </div>
+      </div>
+      <div class="row print-declare-line10-2">
+        <div class="row print-declare-line10-2-1 bt">
+          <div><span class="print-declare-line3 dib">托运人 名称/地址: </span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.nameAddress}}</span></div>
+        </div>
+        <div class="row print-declare-line10-2-2 br">
+          <div><span class="print-declare-line3 dib">托运人或其代理人签名: </span></div>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.signName}}</span></div>
+        </div>
+        <div class="row print-declare-line10-2-3">
+          <span class="print-declare-line3 dib">日期:</span>
+          <div class="font-bold"><span class="print-declare-line3 dib">{{obj.createTime}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

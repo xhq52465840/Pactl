@@ -1,0 +1,116 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="onlineForm">
+	<div class="content-main-title">
+		<div class="title">产品说明</div>
+		<div class="pull-right">
+			<button class="btn btn-big" ng-click="remove()" ng-if="sameAgent() && showButton('del')">
+				<i class="i-remove"></i>删除
+			</button>
+			<button class="btn btn-big" w5c-form-submit="searchGoodReadFlag()" ng-if="sameAgent() && showButton('save')">
+				<i class="i-save"></i>
+				保存
+			</button>
+			<button class="btn btn-default" ng-click="back()">
+				<i class="i-back"></i>
+				返回
+			</button>
+		</div>
+	</div>
+	<div class="online">{{goodsId}}</div>
+	<div class="content-main-body">
+		<div class="content-main-search">
+			<div class="row">
+				<div class="col-sm-4 border1 fl">
+					<div class="mb10">中文品名</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.namesCn" name="namesCn" readonly>
+					</div>
+				</div>
+				<div class="col-sm-4 border1 fl">
+					<div class="mb10">英文品名</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.namesEn" required name="namesCn" readonly>
+					</div>
+				</div>
+				<input type="hidden" ng-model="airLines">
+				<div class="col-sm-4 border1">
+					<div class="mb10">目的港</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.dest" name="dest" readonly>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 border1">
+					<div class="mb10">产品用途描述</div>
+					<div class="color333 search-value w100">
+						<textarea  class="form-control" ng-model="product.use" name="use" maxlength="1000" ng-disabled="readOnly"> </textarea>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 border1">
+					<div class="mb10">产品构成（制作材料及内含物质，需详细说明）</div>
+					<div class="color333 search-value w100">
+						<textarea  class="form-control" ng-model="product.mix" name="mix" maxlength="1000"  ng-disabled="readOnly"> </textarea>
+					</div>
+				</div>
+			</div>
+			<div class="mt40">
+				<span>该货物是否有以下特性:</span>
+			</div>
+			<div class="checkbox-line">
+				<input type="checkbox" ng-model="product.character1" id="character1"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character1">有马达</label>	
+				<input type="checkbox" ng-model="product.character2" id="character2"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character2">有电机</label>	
+				<input type="checkbox" ng-model="product.character3" id="character3"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character3">有磁性</label>
+				<input type="checkbox" ng-model="product.character4" id="character4"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character4">有辐射</label>
+				<input type="checkbox" ng-model="product.character5" id="character5"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character5">有氟利昂</label>
+				<input type="checkbox" ng-model="product.character6" id="character6"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character6">有制冷剂</label>
+				<input type="checkbox" ng-model="product.character7" id="character7"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character7">有冷冻液</label>
+				<input type="checkbox" ng-model="product.character8" id="character8"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character8">有液体</label>
+				<input type="checkbox" ng-model="product.character9" id="character9"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character9">有气体</label>	
+				<input type="checkbox" ng-model="product.character10" id="character10"  ng-disabled="readOnly"/>
+				<label class="mr10" for="character10">有锂电池以及其他电池</label>
+				<label class="mr10">其他</label>
+				<input type="text" class="form-control w20 dib" ng-model="product.character11"  ng-disabled="readOnly"/>
+			</div>
+			<div class="row mt40" ng-if="sameAgent()">
+				<div class="col-sm-5 border1 fl">
+					<div class="mb10">生产厂家全称</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.name" name="name"  ng-disabled="readOnly">
+					</div>
+				</div>
+				<div class="col-sm-5 border1 fr">
+					<div class="mb10">托运人</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.shipper" name="shipper"  ng-disabled="readOnly">
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-if="sameAgent()">
+				<div class="col-sm-5 border1 fl">
+					<div class="mb10">生产厂家联系人</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.contacts" name="contacts"  ng-disabled="readOnly">
+					</div>
+				</div>
+				<div class="col-sm-5 border1 fr">
+					<div class="mb10">24小时应急联系电话</div>
+					<div class="color333 search-value w100">
+						<input type="text" class="non-border w100" ng-model="product.contactsphone" name="contactsphone" ng-change="onlyTel()"  
+						ng-disabled="readOnly">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

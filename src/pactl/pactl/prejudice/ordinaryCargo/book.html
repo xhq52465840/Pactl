@@ -1,0 +1,63 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">证书类型</th>
+					<th class="w20">鉴定机构</th>
+					<th class="w20">证书编号</th>
+					<th class="w25">证书电子档</th>
+					<th class="w20">在线审核通过</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in rows track by $index">
+					<td>{{row.book.bookType | showStatus: typeData }}</td>
+					<td>{{row.book.officeName}}</td>
+					<td>{{row.book.bookNo}}</td>
+					<td class="imgShow">
+						<i class="i-pdf" ng-mouseover="row.imgShow=true" ng-mouseleave="row.imgShow=false" ng-click="openDialog(row)" ng-if="row.pdfPath"></i>
+						<div ng-show="row.imgShow" ng-style="row.style1">
+							<img ng-src="{{row.filePath}}" ng-style="row.style2">
+						</div>
+						<a role="button" ng-if="row.book.bookType === 'onetime'" ui-sref="pactlReceive.officialWeb({id:row.book.id,awId:awId,bookType:'book'})"
+						  target="_blank"><i class="i-site"></i></a>
+						<span class="label goodsType-puhuo1" ng-if="row.book.goodsType === '101' && row.book.bookType === 'sharing'">普货</span>
+						<span class="label goodsType-ldc1" ng-if="row.book.goodsType === '102' && row.book.bookType === 'sharing'">锂电池</span>
+						<span class="label goodsType-puhuo" role="button" ng-if="row.book.bookType !== 'sharing'" ng-model="row.book.goodsType" ng-click="selectCargo(row.book, '101')"
+						  ng-class="{'goodsType-puhuo1':row.book.goodsType === '101'}">普货</span>
+						<span class="label goodsType-ldc" role="button" ng-if="row.book.bookType !== 'sharing'" ng-model="row.book.goodsType" ng-click="selectCargo(row.book, '102')"
+						  ng-class="{'goodsType-ldc1':row.book.goodsType === '102'}">锂电池</span>
+					</td>
+					<!-- 0:既不通过，也没退回，1：通过，2：退回 -->
+					<td ng-if="!saveForbidden">
+						<i ng-if="row.book.deviceId!=='1'" class="i-yes2" ng-show="row.book.status==='0' || row.book.status==='2'|| !row.book.status"
+						  ng-model="row.book.status" ng-click="changeStatus(row.book, '1', $event)"></i>
+						<i ng-if="row.book.deviceId!=='1'" class="i-yes1" ng-show="row.book.status==='1'" ng-model="row.book.status" ng-click="changeStatus(row.book, '2', $event)"></i>
+						<i ng-if="row.book.deviceId!=='1'" class="i-no2" ng-show="row.book.status==='0' || row.book.status==='1' || !row.book.status"
+						  ng-model="row.book.status" ng-click="changeStatus(row.book, '2', $event)"></i>
+						<i ng-if="row.book.deviceId!=='1'" class="i-no1" ng-show="row.book.status==='2'" ng-model="row.book.status" ng-click="changeStatus(row.book, '1', $event)"></i>
+						<span ng-if="row.book.deviceId==='1'">安检添加</span>
+					</td>
+					<td ng-if="saveForbidden">
+						<i ng-if="row.book.deviceId!=='1' && row.book.status==='1'" class="i-yes1"></i>
+						<i ng-if="row.book.deviceId!=='1' && row.book.status==='2'" class="i-no1"></i>
+						<span ng-if="row.book.deviceId==='1'">安检添加</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-show="wStatusCode" ng-click="save()" ng-disabled="isPass">确定</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

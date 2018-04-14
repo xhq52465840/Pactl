@@ -1,0 +1,36 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>系统设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">界面显示</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">
+		界面显示设置
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-1" style="line-height: 34px;">标题
+			</div>
+			<div class="col-sm-11">
+				<input type="text" class="form-control" ng-model="UIdisplay.title">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1" style="line-height: 34px;">内容</div>
+			<div class="col-sm-11">
+				<textarea class="form-control" rows="5" ng-model="UIdisplay.content"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="search-name fr">
+				<button class="btn btn-default" ng-click="save()">保存</button>
+			</div>
+		</div>
+	</div>
+</div>

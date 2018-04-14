@@ -1,0 +1,145 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">鉴定机构维护</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    鉴定机构维护
+  </div>
+  <div class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn" ng-class="{'btn-valid': agentObj.status==='1','btn-novalid': agentObj.status==='0'}"
+       ng-disabled="agentObj.status==='1'" ng-click="disable()">启用</button>
+      <button type="button" class="btn" ng-class="{'btn-valid': agentObj.status==='0','btn-novalid': agentObj.status==='1'}"
+       ng-disabled="agentObj.status==='0'" ng-click="disable()">禁用</button>
+    </div>    
+    <button class="btn btn-default" ng-click="save()">
+      <i class="i-save"></i>保存
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">机构代码</div>
+        <div class="search-value" style="padding: 6px 10px 6px 0;">
+          <span>{{agentObj.officeCode}}</span>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">机构全称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.officeName">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">机构简称</div>
+        <div class="search-value" style="width: 250px;">
+          <input type="text" class="form-control" ng-model="agentObj.shortName">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">联系电话</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.tel">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">官网查询地址</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.url">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">授权信息</div>
+        <div class="search-value search-agent">
+          <input type="text" class="form-control w12" ng-model="agentObj.accredit">-
+          <input type="text" class="form-control w12" ng-model="agentObj.accredit2">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row agent-time">
+    <div>
+      <span>鉴定证书延期年度</span>
+      <input type="text" class="form-control input-agent" ng-model="agentObj.year">
+    </div>
+    <div ng-repeat="delay in delays">
+      <span>{{delay.name}}</span>
+      <input type="text" class="form-control input-agent" ng-model="delay.days">
+    </div>       
+  </div>
+  <div class="row agent-time">
+    <div class="col-sm-1">证书截图参数</div>
+    <div class="col-sm-1">
+      X轴 <input type="text" class="form-control w60 dib" ng-model="agentObj.xAxle">
+    </div>
+    <div class="col-sm-1">
+      Y轴 <input type="text" class="form-control w60 dib" ng-model="agentObj.yAxle">
+    </div>
+    <div class="col-sm-1">
+      长 <input type="text" class="form-control w60 dib" ng-model="agentObj.lengths">
+    </div>
+    <div class="col-sm-1">
+      宽 <input type="text" class="form-control w60 dib" ng-model="agentObj.wides">
+    </div> 
+        <div class="col-sm-1" style="width: 221px;">
+     <span>鉴定证书页码</span> <input type="text" class="form-control w60 dib" ng-model="agentObj.screenshotPage" ng-change="onlyNum('screenshotPage')">
+    </div> 
+  </div>
+  <div class="row info-title-content">
+    <div class="info-title-title">
+      <span class="title-span"></span>适用航空公司
+    </div>
+    <div class="info-title-button">
+      <button class="btn btn-primary" ng-click="add()">
+        <i class="i-add"></i>新建适用航空公司
+      </button>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w15">航空公司</th>
+        <th class="w5">鉴定证书延期年度</th>
+        <th class="w5" ng-repeat="delay in delays track by $index">
+          {{delay.name}}
+        </th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in agentData | orderBy:'pAirLineDelay.airCode' track by $index" ng-class-even="'even'" ng-show="$index > showItem.start && $index < showItem.end">
+        <td>
+          <img ng-src="{{item.airLineInfoVo.filePath}}" alt="" class="air-img">
+          <span class="mr5">{{item.pAirLineDelay.airCode}}</span>
+          {{item.pAirLineDelay.airName}}</td>
+        <td>{{item.pAirLineDelay.year}}</td>
+        <td ng-repeat="type in item.pGoodsTypeDelays2 track by $index">
+          {{type.days}}
+        </td>
+        <td>
+          <div class="btn-img" ng-click="enableAgent(item.pAirLineDelay.id, '0',item.pAirLineDelay)" ng-if="item.pAirLineDelay.status==='1'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="enableAgent(item.pAirLineDelay.id, '1',item.pAirLineDelay)" ng-if="item.pAirLineDelay.status!=='1'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>          
+          <div class="btn-img" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'pageInside.html'" class="row"></div>
+</div>

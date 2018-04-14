@@ -1,0 +1,36 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">标签</div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="tagObj.tag" theme="select2" class="form-control wd" style="width: 400px;" ng-disabled="tagDisable">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+            <div ui-select-choices repeat="item in tagData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="type==='1'">
+        <div class="col-sm-offset-2 modal-body-value">
+          <label>
+            <input type="checkbox" ng-click="cleanTag($event)">清空标签
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,75 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">审单宝典</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">审单宝典</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">航空公司</div>
+        <div class="search-value">
+          <div ui-select ng-model="bookObj.airCode" theme="select2" class="form-control wd" autofocus="true">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">目的港</div>
+        <div class="search-value">
+          <div ui-select ng-model="bookObj.destCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="car-table table mt20">
+    <thead>
+      <tr>
+        <th class="w5">航空公司</th>
+        <th class="w10">目的港</th>
+        <th class="w5">国家</th>
+        <th class="w60">规则</th>
+        <th class="w10">序号</th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody ng-repeat="item in bookData">
+      <tr ng-repeat="row in item track by $index">
+        <td ng-if="$index===0" rowspan="{{item.length}}">{{row.airCode}}</td>
+        <td>{{row.destName}}</td>
+        <td>{{row.countryCode}}</td>
+        <td>
+          <pre style="background-color: #edf0f5;border:none;font-size:20px;word-wrap: break-word;word-break: break-word;white-space: pre-wrap;">{{row.rule}}</pre>
+        </td>
+        <td>{{row.coding}}</td>
+        <td>
+          <i class="btn-edit" ng-click="edit(row)"></i>
+          <i class="btn-del" ng-click="remove(row.id, row.airCode)"></i>
+        </td>
+      </tr>
+    </tbody>
+    <tbody>
+    </tbody>
+  </table>
+</div>

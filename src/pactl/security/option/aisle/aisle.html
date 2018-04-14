@@ -1,0 +1,48 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">24小时货通道</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">24小时货通道</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w10">序号</th>
+        <th class="w20">名称</th>
+        <th class="w20">货站</th>
+        <th class="w30">备注</th>
+        <th class="w20">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in aisleData track by $index" ng-class-even="'even'">
+        <td>{{$index+1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.ctid | showStatus: stationData}}</td>
+        <td>{{item.remark}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="ableAisle(item, '1')" ng-if="item.status==='0'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="ableAisle(item, '0')" ng-if="item.status==='1'">
+            <i class="i-yx"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

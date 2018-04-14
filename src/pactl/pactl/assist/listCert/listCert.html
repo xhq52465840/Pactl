@@ -1,0 +1,131 @@
+<ol class="bread">
+	<li>
+		<a role="button" ui-sref="index">首页</a>
+	</li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">证书查询</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">证书查询</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">鉴定证书编号</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="certObj.bookNo" auto-focus="true">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">授权书流水号</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="certObj.authBookSerialNo">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">证书流水号</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="certObj.bookSerialNumber">
+				</div>
+			</div>
+			<!--<div class="col-sm-4" style="margin-top: 10px;">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+        	<select name="" class="form-control" ng-model="cargo">
+        		<option value="101">普货</option>
+        		<option value="102">锂电池</option>       		
+        	</select>
+        </div>
+      </div>-->
+			 <div class="col-sm-4" style="margin-top: 10px;">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="proxyObj.goodType" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in goodTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+			<div class="col-sm-4" style="margin-top: 10px;">
+				<div class="search-name">证书有效年份</div>
+				<div class="search-value">
+					<!--<select  ng-options="x for x in years" class="form-control" ng-model="year"  ng-change="take()" >        		
+        	</select>-->
+					<input type="text" class="form-control" ng-model="year">
+				</div>
+			</div>
+			<div class="col-sm-4" style="margin-top: 10px;">
+				<div class="search-name">鉴定机构</div>
+				<div class="search-value">
+					<div ui-select ng-model="proxyObj.officeCode" theme="select2" class="form-control wd">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.shortName}}</div>
+						<div ui-select-choices repeat="item in officeCodeData | filter: {shortName:$select.search}">
+							<div ng-bind-html="item.shortName | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row search-btn">
+			<div class="pull-right">
+				<button class="btn btn-primary" ng-click="search()">查询</button>
+			</div>
+		</div>
+	</div>
+	<table class="table content-main-table">
+		<!--<span class="glyphicon glyphicon-chevron-down"></span>-->
+		<thead>
+			<tr>
+				<th t-sort="book_No" ng-click="changeupdown()" class="w10" style="padding-left: 9px;">鉴定证书编号</th>
+				<th class="w9">授权书流水号</th>
+				<th class="w9" t-sort="book_Serial_Number" ng-click="changeupdown1()">证书流水号</th>
+				<th class="w9">鉴定机构</th>
+				<th class="w9">货物类型</th>
+				<th class="w9">证书PDF</th>
+				<th class="w9">在线审核通过</th>
+				<th class="w9">已授权</th>
+				<th class="w9">已收正本</th>
+				<th class="w9">留存完成</th>
+				<th class="w9">年份</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in certData track by $index" ng-class-even="'even'">
+				<td>
+					<a role="button" ui-sref="pactlAssist.opCert({id: item.pAgentShareBook.bookId})" target="_blank">{{item.pAgentShareBook.bookNo}}</a>
+				</td>
+				<td class="listCert">
+					<a tooltip-placement="right" tooltip-html-unsafe="{{item.table}}" role="button">查看</a>
+				</td>
+				<td>{{item.pAgentShareBook.bookSerialNumber}}</td>
+				<td>{{item.pAgentShareBook.officeName}}</td>
+				<td>{{item.pAgentShareBook.goodsType | showStatus: goodTypeData}}</td>
+				<td class="imgShow">
+					<i class="i-pdf" ng-click="openDialog({
+            officeName: item.pAgentShareBook.officeName,
+            bookNo: item.pAgentShareBook.bookNo,
+            src: item.pdfPath,
+            srcArr: item.srcArr
+          })" ng-if="item.pdfPath" ng-mouseover="item.imgShow=!item.imgShow" ng-mouseleave="item.imgShow=!item.imgShow"></i>
+					<div ng-show="item.imgShow" ng-style="item.style1">
+						<img ng-src="{{item.filePath}}" ng-style="item.style2">
+					</div>
+					<a ng-href="{{item.pOfficeInfo.url}}" target="_blank" ng-if="item.pOfficeInfo.url">
+						<i class="i-site"></i>
+					</a>
+				</td>
+				<td><i ng-class="{'i-yes': item['102']}"></i></td>
+				<td><i ng-class="{'i-yes': item['103']}"></i></td>
+				<td><i ng-class="{'i-yes': item['104']}"></i></td>
+				<td><i ng-class="{'i-yes': item['105']}"></i></td>
+				<td>{{item.pAgentShareBook.validityYear}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div ng-include="'page.html'" class="row"></div>
+</div>

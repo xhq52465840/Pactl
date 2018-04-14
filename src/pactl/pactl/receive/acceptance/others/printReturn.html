@@ -1,0 +1,54 @@
+<div class="content-main-title print-width" style="border-bottom: none;">
+	<div class="sub_title">退运出库单<label style="font-size:12px">(E)</label>
+		<button class="btn btn-default fr mt10 noprint" ng-click="printBill()">打印</button>
+	</div>
+</div>
+<div class="content-main-body print-width">
+	<div style="border:1px solid #ddd;border-bottom:none;position:relative">
+		<table class="table content-main-table border2" style="margin-top:0px;font-size:10px;margin-bottom:0">
+			<thead>
+				<tr>
+					<th colspan="3">主单号: <label style="font-size:20px;">{{parentBill.waybillNo}}</label></th>
+					<th colspan="3" class="print-border-left">集装器号：</th>
+				</tr>
+			</thead>
+			<tbody class="sublist-commodity">
+				<tr class="border2">
+					<td class="border2">退运总件数:<label style="font-size:16px">{{print.totalRcpNo}}</label></td>
+					<td class="border2">退运总重量:<label style="font-size:16px">{{print.totalWeight}}</label></td>
+					<td class="border2">代理:{{print.agent}}</td>
+					<td class="border2" colspan="2">原预定航班/日期：{{parentBill.flightNo}}/{{parentBill.fltDate}}</td>
+					<td class="border2">退运日期:{{print.printDate}}</td>
+				</tr>
+				<tr class="border2" ng-repeat="item in printChildBills track by $index" ng-if="printChildBills.length>0">
+					<td class="border2">分单号：{{item[0] && item[0].childBill.waybillNo}}</td>
+					<td class="border2">分单件数：{{item[0] && item[0].childBill.rcpNo}}</td>
+					<td class="border2">分单重量：{{item[0] && item[0].childBill.grossWeight}}</td>
+					<td class="border2" ng-if="item[1]">分单号：{{item[1] && item[1].childBill.waybillNo}}</td>
+					<td class="border2" ng-if="item[1]">分单件数：{{item[1] && item[1].childBill.rcpNo}}</td>
+					<td class="border2" ng-if="item[1]">分单重量：{{item[1] && item[1].childBill.grossWeight}}</td>
+				</tr>
+				<tr class="border2">
+					<td class="border2" colspan="3">进站时间：</td>
+					<td class="border2" colspan="3">出站时间：</td>
+				</tr>
+				<tr>
+					<td style="position: relative;" colspan="6">
+						<div class="print-reason">退货原因:</div>
+						<textarea class="form-control print-reason-input" text-height ng-model="textInput"></textarea>
+					</td>
+				</tr>
+				<tr class="border2">
+					<td class="border2" colspan="6">仓储费：</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- <div class="print-whole-row pd5">经办人员签名：</div> -->
+	<div class="pd5">
+		<div class="print-row-25">货运站：</div>
+		<div class="print-row-25">代理：</div>
+		<div class="print-row-25">海关押运：</div>
+		<div class="print-row-25">仓储：</div>
+	</div>
+</div>

@@ -1,0 +1,51 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-main-search">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">主单号</div>
+        <div class="col-sm-6 modal-body-value">
+          <input type="text" class="form-control" ng-model="waybillObj.waybillNo" maxlength="11">
+        </div>
+        <div class="col-sm-2 fr">
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w20">运单号</th>
+          <th class="w10">件数</th>
+          <th class="w10">重量</th>
+          <th class="w20">目的港</th>
+          <th class="w20">航班信息</th>
+          <th class="w20">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in waybillData track by $index" ng-class-even="'even'">
+          <td>{{item.waybillNo}}</td>
+          <td>{{item.rcpNo}}</td>
+          <td>{{item.grossWeight}}</td>
+          <td>{{item.dest1 | showDest1: item}}</td>
+          <td>{{item.flightNo}}  {{item.fltDate}}</td>
+          <td>
+            <a role="button" ng-click="select(item)">选择</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row" ng-show="!isedit">
+        <div class="col-sm-2 modal-body-name">资源ID<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+            <input type="text" class="form-control" name="resId" required ng-model="resourceObj.resId">
+        </div>
+      </div>
+      <div class="row" ng-show="isedit">
+        <div class="col-sm-2 modal-body-name">资源ID<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          {{resourceObj.resId}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">资源名称<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" name="resName" required ng-model="resourceObj.resName"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">资源类型<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="resourceObj.resType" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in resTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="resType" required ng-model="resourceObj.resType">
+        </div>
+      </div>
+      <div class="row" ng-if="resourceObj.resType.id==='R'">
+          <div class="col-sm-2 modal-body-name">URL<span class="text-danger">*</span></div>
+          <div class="col-sm-10 modal-body-value">
+            <textarea rows="3" class="form-control" name="url" ng-required="resourceObj.resType.id==='R'" ng-model="resourceObj.url"></textarea>
+          </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,67 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-main-search">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 50px;">城市</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="nameObj.city">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 50px;">名称</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="nameObj.name">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 50px;">代码</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="nameObj.code">
+          </div>
+        </div>
+      </div>
+      <div class="row search-btn">
+        <div class="pull-right">
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+    <table class="table content-main-table">
+      <thead>
+        <tr>
+          <th class="w10">代码</th>
+          <th class="w10">城市</th>
+          <th class="w20">名称</th>
+          <th class="w20">地址</th>
+          <th class="w20">电话</th>
+          <th class="w20">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in nameData track by $index" ng-class-even="'even'">
+          <td>{{item.code}}</td>
+          <td>{{item.city}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.address}}</td>
+          <td>{{item.tel}}</td>
+          <td>
+            <a role="button" ng-click="select(item)">选择</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

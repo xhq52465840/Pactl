@@ -1,0 +1,48 @@
+<div class="main-content">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">运单必录项</div>
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.fieldType" class="ellipsis">
+          运单字段分类
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.field" class="ellipsis">
+          运单字段维护
+        </a>
+      </li>
+      <!--<li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.fieldAirline" class="ellipsis">
+          航空公司必录项
+        </a>
+      </li>-->
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.verifyType" class="ellipsis">
+          运单校验分类
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.verifyField" class="ellipsis">
+          运单校验字段
+        </a>
+      </li>            
+      <!--<li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.fieldPactl" class="ellipsis">
+          PACTL预审必录项
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="pactlOption.wayBillItem.fieldBill" class="ellipsis">
+          运单关键字段列表
+        </a>
+      </li>-->
+    </ul>
+  </div>
+  <div role="button" class="content-arrow" ng-click="nav()" ng-class="{'left-arrow-show':!showNav}"></div>
+  <div class="row content-right-white" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>

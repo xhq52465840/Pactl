@@ -1,0 +1,91 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      延期信息
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="base-title" ng-class="{'dropup': showOfficeSub}" ng-click="showOfficeSub=!showOfficeSub">
+          鉴定机构延期
+          <span class="caret"></span>
+        </div>
+      </div>
+      <div class="col-sm-12" ng-hide="showOfficeSub">
+        <table class="table content-main-table">
+          <thead>
+            <th class="w33">鉴定机构</th>
+            <th class="w33">货物类型</th>
+            <th class="w34">延期天数</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in officeDelay track by $index" ng-class-even="'even'">
+              <td>{{row.shortName}}</td>
+              <td>{{row.goodsType | showStatus: goodTypeData}}</td>
+              <td>{{row.days}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="base-title" ng-class="{'dropup': showAirSub}" ng-click="showAirSub=!showAirSub">
+          鉴定机构航空公司延期信息
+          <span class="caret"></span>
+        </div>
+      </div>
+      <div class="col-sm-12" ng-hide="showAirSub">
+        <table class="table content-main-table">
+          <thead>
+            <th class="w25">鉴定机构</th>
+            <th class="w25">航空公司</th>
+            <th class="w25">货物类型</th>
+            <th class="w25">延期天数</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in airDelay track by $index" ng-class-even="'even'">
+              <td>{{row.shortName}}</td>
+              <td>{{row.airCode}}</td>
+              <td>{{row.goodsType | showStatus: goodTypeData}}</td>
+              <td>{{row.days}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+          <div class="base-title" ng-class="{'dropup': showABookSub}" ng-click="showABookSub=!showABookSub">
+            单本证书延期信息
+            <span class="caret"></span>
+          </div>
+        </div>
+        <div class="col-sm-12" ng-hide="showABookSub">
+          <table class="table content-main-table">
+            <thead>
+              <th class="w25">鉴定机构</th>
+              <th class="w25">航空公司</th>
+              <th class="w25">货物类型</th>
+              <th class="w25">延期天数</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat="row in bookDelay track by $index" ng-class-even="'even'">
+                <td>{{row.shortName}}</td>
+                <td>{{row.airCode}}</td>
+                <td>{{goodsType | showStatus: goodTypeData}}</td>
+                <td>{{row.days}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">名称<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" name="name" required ng-model="planObj.name">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">方案类型<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="planObj.type" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in planTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+              <input type="hidden" class="form-control" name="type" required ng-model="planObj.type">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">描述</div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" name="description" ng-model="planObj.description"></textarea>
+        </div>
+      </div>            
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

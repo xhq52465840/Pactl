@@ -1,0 +1,20 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			操作提示
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body modal-body-content">
+		<div class="mb10">使用时间从：
+			<input type="text" class="form-control dib w30 mr10" pikaday="myPickerObject1" ng-model="auditObj.validilyStart">至
+			<input type="text" class="form-control dib w30 ml10" pikaday="myPickerObject2" ng-model="auditObj.validilyEnd">
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">确定</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

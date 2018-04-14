@@ -1,0 +1,55 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">邮件</li>
+</ol> 
+<div class="content-main-title">
+  <div class="title">报文</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="addSent()">新建发件箱</button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="systemSet.receiveEmail">
+          <i class="i-pop"></i>收件箱</a>
+        </li>
+        <li role="presentation" ui-sref-active="active">
+          <a role="button" ui-sref="systemSet.sentEmail">
+            <i class="i-public"></i>发件箱</a>
+          </li>
+          <li role="presentation" ui-sref-active="active">
+            <a role="button" ui-sref="systemSet.menageEmail">
+              <i class="i-pop"></i>邮件账号管理</a>
+            </li>
+          </ul>
+        </div>
+        <table class="table content-main-table">
+          <thead>
+            <tr>
+              <th class="w25">收件类型</th>
+              <th class="w25">发件箱</th>
+              <th class="w25">备注</th>
+              <th class="w25">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-class-even="'even'" ng-repeat="row in rows track by $index">
+              <td>{{row.receiveType.name}}</td>
+              <td>{{row.mailAccount.emailAddr}}</td>
+              <td>{{row.eamil.remark}}</td>
+              <td>
+                <button class="btn btn-default" ng-click="remove(row, row.id)">删除</button>
+                <button class="btn btn-default" ng-click="edit(row)">修改</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+                <div ng-include="'page.html'" class="row"></div>
+      </div>

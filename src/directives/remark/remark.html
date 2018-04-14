@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="remark" ng-repeat="remark in remarks">
+    <div class="remark-img">
+      <img ng-src="{{remark.url}}" alt="avatar">
+    </div>
+    <div class="remark-content">
+      <div class="remark-title">
+        <span class="remark-title-name">{{remark.createName}}</span>
+        <span class="remark-title-time">{{remark.updateTime | date:'MM/dd HH:mm'}}</span>
+      </div>
+      <div class="fr" ng-if="remark.createId === userId">
+        <i class="i-edit" ng-click="edit(remark, $event)"></i>
+        <i class="i-remove" ng-click="remove(remark, $index)"></i>
+      </div>
+      <div class="remark-body" ng-show="!remark.isEdit">
+        {{remark.content}}
+      </div>
+      <div class="remark-body" ng-show="remark.isEdit">
+        <textarea rows="3" class="form-control" ng-model="remark.content" ng-blur="editContent(remark, $index)"></textarea>
+      </div>      
+    </div>
+  </div>
+  <form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+    <div class="row mt10">
+      <textarea rows="3" class="form-control" ng-model="remarkObj.content" name="content" required></textarea>
+    </div>
+    <div class="row mt10">
+      <button class="btn btn-default" w5c-form-submit="add()">增加备注</button>
+    </div>
+  </form>
+</div>

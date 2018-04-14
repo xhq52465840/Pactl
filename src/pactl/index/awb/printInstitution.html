@@ -1,0 +1,116 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-declare-main">
+      <div class="row line4">
+      </div>
+      <div class="content-main-tab line6">
+        <ul class="nav nav-tabs" style="border-bottom: 1px solid #ddd;">
+          <li ng-class="{'active': declare.type==='printSet'}" ng-click="select('printSet')">
+            <a role="button">打印机设置</a>
+          </li>
+          <li ng-class="{'active': declare.type==='IE'}" ng-click="select('IE')">
+            <a role="button">IE</a>
+          </li>
+          <li ng-class="{'active': declare.type==='chrome'}" ng-click="select('chrome')">
+            <a role="button">chrome</a>
+          </li>
+        </ul>
+      </div>
+      <div ng-show="declare.type==='printSet'">
+          <div class="=row line7">
+            <h4>1、进入 控制面板-->设备和打印机 </h4>           
+          </div>
+          <div class="row line7">
+              <h4>2、选中要打印的打印机,点击打印机服务器属性</h4>
+              <img src="../../../image/pactl/print/printer-01.png"/>
+          </div>
+          <div class="row line7">
+              <h4>3、创建新的纸张规格 AIR WAY</h4>
+              <img src="../../../image/pactl/print/printer-02.png"/>
+          </div>
+          <div class="row line7">
+              <h4>4、选中打印机,并右键点击 打印机首选项</h4>
+              <img src="../../../image/pactl/print/printer-03.png"/>
+          </div>
+          <div class="row line7">
+              <h4>5、将页面大小选择为 AIR WAY</h4>
+              <img src="../../../image/pactl/print/printer-05.png"/>
+          </div>
+        </div>
+      <div ng-show="declare.type==='IE'">
+        <div class="row line7">
+        <h2>方法一：修改IE浏览器安检设置</h2>
+        </div>
+        <div class="row line7">
+            <h4>1、点击设置图标 或者 工具 在菜单中点击 Internet 选项</h4>
+            <img src="../../../image/pactl/print/ie-waybill-print-01.png"/>
+        </div>
+        <div class="row line7">
+            <h4>2、选中安全 选项卡，点击 自定认级别</h4>
+            <img src="../../../image/pactl/print/ie-waybill-print-02.png"/>
+        </div>
+        <div class="row line7">
+            <h4>3、启用 对未标记为可安全执行脚本的ActiveX控件初始化并执行脚本 以及 下载未签名的ActiveX控制 </h4>
+            <img src="../../../image/pactl/print/ie-waybill-print-03.png"/>
+        </div>
+        <div class="row line7">
+            <h4>4、禁用  允许ActiveX筛选  (注：如果没有这一项可以不设置) </h4>
+            <img src="../../../image/pactl/print/ie-waybill-print-04.png"/>
+        </div>
+        <div class="row line7">
+        <h2>方法二：修改系统注册表</h2>
+        </div>
+        <div class="row line7">
+            <h4>1、运行  regedit</h4>
+            <img src="../../../image/pactl/print/regedit-01.png"/>
+        </div>
+        <div class="row line7">
+            <h4>2、找到以下路径 HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\PageSetup 并将页边距都设置为0</h4>
+            <img src="../../../image/pactl/print/regedit-02.png"/>
+        </div>
+      </div>
+      <div ng-show="declare.type==='chrome'">
+        <div class="row line7">
+          <h2>设置最小字体</h2>
+        </div>
+        <div class="row line7">
+            <h4>1、点击 最右边的三个小圆点  在菜单中点击 设置</h4>
+            <img src="../../../image/pactl/print/Chrome-03.png"/>
+        </div>
+        <div class="row line7">
+            <h4>2、找到自定义字体,并点击</h4>
+            <img src="../../../image/pactl/print/Chrome-04.png"/>
+        </div>
+        <div class="row line7">
+            <h4>3、将最小字号设置为6px</h4>
+            <img src="../../../image/pactl/print/Chrome-05.png"/>
+        </div>
+        <div class="row line7">
+          <h2>设置打印预览</h2>
+        </div>
+        <div class="row line7">
+            <h4>1、在打印预览中点  更多设置</h4>
+            <img src="../../../image/pactl/print/Chrome-01.png"/>
+        </div>
+        <div class="row line7">
+            <h4>2、将纸张尺寸设置为 AIR WAY 边距设置为 无</h4>
+            <img src="../../../image/pactl/print/Chrome-02.png"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

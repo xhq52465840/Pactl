@@ -1,0 +1,40 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w15">可能出运航空公司</th>
+        <th class="w10">目的港</th>
+        <th class="w15">英文品名</th>
+        <th class="w10">中文品名</th>
+        <th class="w10">产品说明</th>
+        <th class="w10">在线产品说明</th>
+        <th class="w10">补充文档</th>
+        <th class="w10">修改人</th>
+        <th class="w10">修改时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in refer.historys track by $index" ng-class-even="'even'">
+        <td>{{row.code}}</td>
+        <td>{{row.name}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>

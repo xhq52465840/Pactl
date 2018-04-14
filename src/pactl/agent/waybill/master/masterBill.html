@@ -1,0 +1,72 @@
+<div class="bg">
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>运单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">主运单搜索</li>
+</ol>
+<div class="bill-content" style="background-color: transparent;">
+  <div class="bill-content-body">
+    <div tabset ng-if="!showResult">
+      <div tab select="setResult()">
+        <div tab-heading>
+          <i class="i-search"></i> 主运单查询
+        </div>
+        <div class="input-group bill-content-body-info">
+          <input type="text" class="form-control info-input-1" id="srh_code" ng-model="billObj.srh_code" do-search="search()">
+          <input type="text" class="form-control info-input-2" id="srh_no" ng-model="billObj.srh_no" maxlength="8" do-search="search()">
+          <button class="btn info-btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+      <div tab select="setResult()">
+        <div tab-heading>
+          <i class="i-add"></i> 新建主运单
+        </div>
+        <div class="input-group bill-content-body-info">
+          <input type="text" class="form-control info-input-1" id="new_code" ng-model="billObj.new_code" do-search="newBill()">
+          <input type="text" class="form-control info-input-2" id="new_no" ng-model="billObj.new_no" maxlength="8" do-search="newBill()">
+          <button class="btn info-btn btn-primary" ng-click="newBill()">新建</button>
+        </div>
+      </div>
+    </div>
+    <div class="bill-resullt" ng-if="showResult">
+      <div class="bill-content-body-result">
+        <div class="bill-content-body-result-show">
+          <span>{{billObj.srh_code}}</span>
+          <span>-</span>
+          <span>{{billObj.srh_no}}</span>
+          <span>运单不存在，是否新建？</span>
+        </div>
+        <div class="bill-content-body-result-btn">
+          <button type="button" class="btn btn-primary" ng-click="showNew()">新建</button>
+          <button type="button" class="btn btn-default" ng-click="showSearch()">重新搜索</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bill-right">
+  <div class="bill-right-title">
+    <i class="i-title"></i>
+    <span>最新操作记录</span>
+  </div>
+  <div class="bill-right-body" >
+    <div ng-show="contentLoading" class="header">
+      <div class="bill-right-body-shadow"></div>
+    </div>
+    <div id="bill-right-body" style="height: 430px;">
+    <div class="bill-right-body-content" ng-repeat="item in recentlyData track by $index">
+      <a ui-sref="agentWaybill.newMasterBill({billNo:item.waybillNo})" target="_blank">
+        <div class="bill-right-body-content1">
+          {{item.waybillNo.substr(0, 3) + '-' + item.waybillNo.substr(3)}}
+        </div>
+        <div class="bill-right-body-content2">
+          {{item.modifiedDate | date: 'yyyy-MM-dd HH:mm:ss'}}
+        </div>
+      </a>
+    </div>
+    </div>
+  </div>
+</div>

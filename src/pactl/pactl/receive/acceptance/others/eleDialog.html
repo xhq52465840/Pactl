@@ -1,0 +1,23 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+		<input type="hidden" ng-model="wbEle">
+	</div>
+	<div class="modal-body">
+		<div class="receiptPass">
+			<div class="reBillNo">备注</div>
+			<div><textarea class="form-control receipthei reBillVal" ng-model="elec.comment"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save('1')" ng-show="wbEle==='0'">标记为电子运单</button>
+		<button class="btn btn-primary" ng-click="save('0')" ng-show="wbEle==='1'">标记为非电子运单</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

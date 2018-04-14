@@ -1,0 +1,13 @@
+{
+  "HEAD": {
+    "personal_info": "个人信息",
+    "logout": "注销",
+    "user": "用户",
+    "unit": "机构",
+    "base": "基础数据",
+    "sys": "系统",
+    "switch_lang": "切换语言",
+    "chinese": "中文",
+    "english": "英文"
+  }
+}

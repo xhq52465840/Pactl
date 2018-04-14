@@ -1,0 +1,75 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">证书共享在线审核</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">证书共享在线审核</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="audit()">
+      <i class="i-audit2"></i>开始审核
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">证书编号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="certObj.bookNo" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w11">编号</th>
+        <th class="w11">申请人</th>
+        <th class="w11">鉴定机构</th>
+        <th class="w11">鉴定证书编号</th>
+        <th class="w11">证书信息</th>
+        <th class="w11">状态</th>
+        <th class="w11">是否启用</th>
+        <th class="w12">提交时间</th>
+        <th class="w11">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index" ng-class-even="'even'">
+        <td>{{$index+1}}</td>
+        <td>{{item.pAgentShareBook.proposer}}</td>
+        <td>{{item.pAgentShareBook.officeName}}</td>
+        <td>{{item.pAgentShareBook.bookNo}}</td>
+        <td class="imgShow">
+          <i class="i-pdf" ng-click="openDialog({
+            officeName: item.pAgentShareBook.officeName,
+            bookNo: item.pAgentShareBook.bookNo,
+            src: item.pdfPath,
+            srcArr: item.srcArr
+          })" ng-if="item.pdfPath" ng-mouseover="item.imgShow=!item.imgShow" ng-mouseleave="item.imgShow=!item.imgShow"></i>
+          <div ng-show="item.imgShow" ng-style="item.style1">
+            <img ng-src="{{item.filePath}}" ng-style="item.style2">
+          </div>           
+          <a ng-href="{{item.pOfficeInfo.url}}" target="_blank" ng-if="item.pOfficeInfo.url">
+            <i class="i-site"></i>
+          </a>
+        </td>
+        <td>{{item.pAgentShareBook.auditStatus | showStatus: auditFlagData}}<span ng-if="item.pAgentShareBook.auditStatus==='100'"><br/>退回原因 : </span>{{item.pAgentShareBook.reReason}}<span ng-if="item.pAgentShareBook.auditStatus==='100'"><br/>操作人 : {{item.pAgentShareBook.auditUserName}}</span></td>
+        <td>{{item.pAgentShareBook.disableFlag | isValid: '7'}}</td>
+        <td>{{item.pAgentShareBook.createdDate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td>
+          <a role="button" class="btn btn-default" ng-if="item.pAgentShareBook.auditStatus ==='101' || item.pAgentShareBook.auditStatus ==='102'" 
+           ui-sref="pactlAssist.auditCertDetail({id: item.pAgentShareBook.bookId})" target="_blank">审核</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

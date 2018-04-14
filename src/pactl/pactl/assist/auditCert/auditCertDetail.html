@@ -1,0 +1,86 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">鉴定证书在线审核操作</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">鉴定证书在线审核操作</div>
+</div>
+<div class="content-main-body">
+  <div class="row mt10 mb30">
+    <div class="cert-left">
+      <div class="cert-title">
+        <div class="auditCertDetail-titleBtton">鉴定机构:{{certData.officeName}}</div>
+        <div class="auditCertDetail-titleBtton">鉴定证书编号:{{certData.bookNo}}</div>
+        <div class="auditCertDetail-titleBtton">使用年份:
+          <div ui-select ng-model="certData.year" theme="select2" class="form-control" style="width: 70px;font-size: 12px;">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in yearData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <button ng-if="showCopy" class="btn btn-default" style="font-size: 12px;" ngclipboard data-clipboard-text="{{certData.bookNo}}">复制证书编号</button>
+        <button ng-if="showCopy" class="btn btn-default" style="font-size: 12px;" ngclipboard data-clipboard-text="{{certData.pOfficeInfo.accredit}}">复制授权编号</button>
+      </div>
+      <div class="cert-content" style="position: relative;">
+        <div ylx="srcArr"></div>
+      </div>
+    </div>
+    <div class="cert-right">
+      <div class="cert-title">
+        <div class="auditCertDetail-titleBtton">
+          <button type="button" ng-repeat="type in goodTypeData track by $index" value="{{type.name}}" class="mr5 btn padding" ng-class="{'auditCertDetail-label1':type.id==='101','auditCertDetail-label2':type.id==='102','active':certData.goodsType===type.id}"
+            ng-click="selectGoodsType(type)" style="font-size:12px">
+          <i class="ldc" ng-if="type.id==='102'"></i>
+          <i class="ph" ng-if="type.id==='101'"></i>
+         {{type.name}}
+          </button>
+        </div>
+
+        <div class="auditCertDetail-titleBtton">
+          <button type="button" ng-click="selectAuditStatus('102')" value="通过" style="font-size:12px" ng-class="{'active':certData.auditStatus === '102'}"
+            class="mr5 btn padding auditCertDetail-button1" ng-model="certData.auditStatus">
+            <i class="i-yes"></i> 通过
+          </button>
+          <button type="button" ng-click="selectAuditStatus('100')" value="退回" ng-class="{'active':certData.auditStatus === '100'}"
+            class="mr5 btn padding auditCertDetail-button2" ng-model="certData.auditStatus">
+            <i class="i-no"></i>
+            退回
+          </button>
+                  <button class="btn btn-default" style="font-size:12px;padding: 3px;" ng-click="save()">
+      <i class="i-save"></i>保存结果
+    </button>
+        <button class="btn btn-default" style="font-size:12px;padding: 3px;" ng-click="searchNextAuditInfo()">
+      <i class="i-next"></i>下一个证书
+    </button>
+          <br ng-show="certData.auditStatus==='100'"  />
+          <label class="radio-inline" ng-show="certData.auditStatus==='100'" style="padding-left:0px;line-height: 41px;">
+          	
+            <div ui-select multiple="multiple" ng-model="certData.reReason"  theme="select2" class="form-control" style="width: 519px;font-size:12px">
+              <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+              <div ui-select-choices repeat="item in reasonData | filter: {name:$select.search}">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <!--<button class="btn btn-default" style="font-size:12px;padding: 3px;" ng-click="save()">
+      <i class="i-save"></i>保存结果
+    </button>
+        <button class="btn btn-default" style="font-size:12px;padding: 3px;" ng-click="searchNextAuditInfo()">
+      <i class="i-next"></i>下一个证书
+    </button>-->
+        <span class="mr10" ng-if="!showCopy">证书编号：{{certData.bookNo}}</span>
+        <span class="mr10" ng-if="!showCopy">授权编号：{{certData.pOfficeInfo.accredit}}</span>
+      </div>
+      <div class="cert-content">
+      	<div style="float: left;height: 50px;width: 100%;"ng-show="certData.auditStatus==='100'"></div>
+        <iframe ng-src="{{trustSrc(certData.pOfficeInfo.url)}}" frameborder="0" style="width:100%;height:900px;">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>

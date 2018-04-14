@@ -1,0 +1,45 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread noprint">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <!--<li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>-->
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">运单条形码</li>
+</ol>
+<div class="content-main-body print-width">
+  <div class="row noprint">
+    <div class="pull-right">
+      <button class="btn btn-default" ng-click="printCode()">
+        <i class="i-print"></i>打印
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="car-title1" style="width: 100%;">运单条形码</div>
+  </div>
+  <table class="table car-table">
+    <thead>
+      <tr>
+        <th class="w55">条形码<br />AWB</th>
+        <th class="w15">件数<br />PC</th>
+         <th class="w15">重量<br />KG</th>
+          <th class="w15">目的港<br />DEST</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index">
+        <td>
+          <img ng-src="{{item.barCode.src}}" alt="code">
+          <div class="fs20">
+            {{item.Number}}
+          </div>
+        </td>
+        <td>{{item.rcpNo}}</td>
+         <td>{{item.grossWeight}}</td>
+          <td>{{item.airportDest}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

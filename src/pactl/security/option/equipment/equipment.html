@@ -1,0 +1,75 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">安检设备管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    安检设备管理
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">设备名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="equipmentObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+				<div class="search-name">所属货站</div>
+				<div class="search-value">
+					<div ui-select ng-model="equipmentObj.station" theme="select2" class="form-control wd">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="getMachine()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="">设备编号</th>
+        <th class="">设备名称</th>
+        <th style="text-align: center;">MAC地址</th>
+        <th class="">货站</th>
+        <th class="">安检机</th>
+        <th style="text-align: center;">备注</th>
+        <th class="">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in equipmentData track by $index" ng-class-even="'even'">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td style="text-align: center;">{{item.mac}}</td>
+        <td>{{item.ct | showStatus: stationData}}</td>
+        <td>{{item.machine | showStatus: machineData}}</td>
+        <td>{{item.remark}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="del(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

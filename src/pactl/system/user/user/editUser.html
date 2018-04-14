@@ -1,0 +1,109 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="col-sm-7">
+          <div class="row">
+            <div class="modal-body-name">账户名</div>
+            <div class="modal-body-value">
+              <span>{{userObj.account}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">员工编号<span class="text-danger" ng-show="userObj.dept.unitType === 'security' || userObj.dept.unitType === 'terminal'">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="employid" autocomplete="off" ng-required="userObj.dept.unitType === 'security' || userObj.dept.unitType === 'terminal'" ng-model="userObj.employid">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">用户名<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="fullname" autocomplete="off" required ng-model="userObj.fullname">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">用户组</div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="userObj.userGroup" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in userGroupData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<div class="row">
+            <div class="modal-body-name">所属机构</div>
+            <div class="modal-body-value">
+              <div ui-select ng-model="userObj.dept" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+                <div ui-select-choices repeat="item in agentData | filter:{name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+          </div>-->
+          <div class="row">
+            <div class="modal-body-name">角色<span class="text-danger">*</span></div>
+            <div class="modal-body-value">
+              <div ui-select multiple ng-model="userObj.roles" theme="select2" class="form-control">
+                <div ui-select-match placeholder="请选择...">{{$item.name}}</div>
+                <div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="hidden" name="roles" required ng-model="userObj.roles">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">邮箱</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control" name="email" ng-model="userObj.email">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">账户过期日期</div>
+            <div class="modal-body-value">
+              <input type="text" class="form-control dib w40 mr10 ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty" pikaday="myPickerObject1" ng-model="userObj.expireDate">
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-body-name">是否管理员</div>
+            <div class="modal-body-value" ng-if="userObj.ismanager">
+              <input type="checkbox" class="checkbox-primary" ng-model="userObj.ismanager" checked name="ismanager">
+            </div>
+            <div class="modal-body-value" ng-if="!userObj.ismanager">
+              <input type="checkbox" class="checkbox-primary" ng-model="userObj.ismanager" name="ismanager">
+            </div>
+          </div>
+          <div class="row" ng-if="userObj.ismanager">
+            <div class="modal-body-name">超级管理员</div>
+            <div class="modal-body-value">
+              <input type="checkbox" class="checkbox-primary" ng-model="userObj.isSuper" name="isSuper">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+          <img ng-src="{{userObj.fileObj.url}}" alt="" class="upload-avatar mb10">
+          <div>
+            <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, userObj)" pl-upload pl-filters-model="[{title: 'Image files', extensions:'gif,png,jpg,jpeg'}]" pl-max-file-size="5mb" pl-url="/api/org/units/avatars/ ">上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

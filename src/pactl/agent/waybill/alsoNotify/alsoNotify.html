@@ -1,0 +1,44 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="line-row">
+        <i class="i-search" ng-click="searchUser()"></i>
+        <i class="i-save" ng-click="saveUser()"></i>
+      </div>
+      <div class="line-row">
+        <input type="text" class="form-control" placeholder="Name" ng-model="alsoObj.notifyName" maxlength="70" ng-change="changeText('notifyName')">
+      </div>
+      <div class="line-row">
+        <input type="text" class="form-control" placeholder="Address" ng-model="alsoObj.notifyAddress" maxlength="70" ng-change="changeText('notifyAddress')">
+      </div>
+      <div class="line-row">
+        <input type="text" class="form-control line-row-1" placeholder="Zipcode" ng-model="alsoObj.notifyZipcode" maxlength="9" ng-change="changeText1('notifyZipcode')">
+        <input type="text" class="form-control line-row-1" placeholder="City" ng-model="alsoObj.notifyCity" maxlength="17" ng-change="changeText('notifyCity')">
+        <input type="text" class="form-control line-row-1" placeholder="State" ng-model="alsoObj.notifyState" maxlength="9" ng-change="changeText('notifyState')">
+        <div ui-select ng-model="alsoObj.notifyCountry" theme="select2" class="form-control line-row-1">
+          <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.countryCode}}</div>
+          <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+            <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+          </div>
+        </div>
+      </div>
+      <div class="line-row">
+        <input type="text" class="form-control line-row-1" placeholder="Tel" ng-model="alsoObj.notifyTel" maxlength="25" ng-change="changeNum('notifyTel')">
+        <input type="text" class="form-control line-row-1" placeholder="Fax" ng-model="alsoObj.notifyFax" maxlength="25" ng-change="changeNum('notifyFax')">
+        <input type="text" class="form-control line-row-2" placeholder="CONTACT" ng-model="alsoObj.notifyContractor" ng-change="changeText('notifyContractor')">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()">保存</button>
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

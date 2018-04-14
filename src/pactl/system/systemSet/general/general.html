@@ -1,0 +1,94 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">通用</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    通用选项
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width: 18%;">系统标题</div>
+        <div class="search-value" style="width: 50%;">
+          <input type="text" class="form-control" ng-model="general.data1.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width: 35%;">最大尝试登录次数</div>
+        <div class="search-value" style="width: 50%;">
+          <input type="text" class="form-control" ng-model="general.data2.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width: 36%;">登录是否需要验证码</div>
+        <div class="search-value" style="width: 50%;">
+          <div ui-select ng-model="general.data3.regVal" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in codeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-main-title">
+  <div class="title">
+    快捷键
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width:11%">审单</div>
+        <div class="search-value">
+          <input type="text" class="form-control" value="Ctrl+P" readonly>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">收单</div>
+        <div class="search-value">
+          <input type="text" class="form-control" value="Ctrl+Q" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-main-title">
+  <div class="title">
+    分页设置
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width: 18%;">分页选项</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="general.data4.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">默认每页数量</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="general.data5.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">
+          <button class="btn btn-default" ng-click="save()">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

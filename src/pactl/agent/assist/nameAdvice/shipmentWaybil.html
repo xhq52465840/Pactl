@@ -1,0 +1,82 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">品名咨询</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">已出运运单</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-tab">
+		<ul class="nav nav-tabs">
+			<li role="presentation" ui-sref-active="active">
+				<a role="button" ui-sref="agentAssist.nameAdvice">
+					<i class="i-pop"></i>品名咨询</a>
+				</li>
+				<li role="presentation" ui-sref-active="active">
+					<a role="button" ui-sref="agentAssist.shipmentWaybil">
+						<i class="i-public"></i>已出运运单</a>
+					</li>
+				</ul>
+			</div>
+			<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="nameForm">
+				<div class="content-main-search">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="search-name">品名</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="refer.goodsDesc" ng-change="onlyEn()" name="goodsDesc" ng-minlength="3">
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="pull-right">
+								<button class="btn btn-primary" w5c-form-submit="search()">查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<table class="table content-main-table">
+				<thead>
+					<tr>
+						<th class="w15" t-sort="OFFICE_NAME">主运单号</th>
+						<th class="w10">分单号</th>
+						<th class="w15">品名</th>
+						<th class="w10" t-sort="OFFICE_NAME">目的港</th>
+						<th class="w10" t-sort="OFFICE_NAME">出运日期</th>
+						<th class="w30">使用证书类型</th>
+						<th class="w10" t-sort="OFFICE_NAME">状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-class-even="'even'" ng-repeat="row in rowCollection track by $index">
+						<td>
+							<a role="button" ng-if="row.type === '0'" ui-sref="agentPrejudice.pre({awId:row.awId})" target="_blank">{{row.parentWaybillNo}}</a>
+							<a role="button" ng-if="row.type === '1'" ui-sref="agentPrejudice.pre({awId:row.parentNo})" target="_blank">{{row.parentWaybillNo}}</a>
+						</td>
+						<td>{{row.childWaybillNo}}</td>
+						<td>{{row.goodsDesc}}</td>
+						<td>
+							<label ng-if="row.type === '0'">{{row.airportDest}}</label>
+							<label ng-if="row.type === '1'">{{row.dest1}}</label>
+						</td>
+						<td>{{row.shipmentDate | date:'MM/dd HH:mm'}}</td>
+						<td>
+							<div ng-show="row.booksCount.book" class="corner-parent">
+								<i class="i-zs-z"></i>
+							</div>
+							<div ng-show="row.booksCount.electric" class="corner-parent">
+								<i class="i-ci-1"></i>
+							</div>
+							<div ng-show="row.booksCount.other" class="corner-parent">
+								<i class="i-zs-qt"></i>
+							</div>
+						</td>
+						<td>可引用</td>
+					</tr>
+				</tbody>
+			</table>
+			<div ng-include="'page.html'" class="row"></div>
+		</div>

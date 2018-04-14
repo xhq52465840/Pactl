@@ -1,0 +1,47 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<div class="main-content" ng-if="ismanager">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">站点管理</div>
+    <ul class="nav nav-pills nav-stacked">
+      <!--<li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.param">
+          <i class="i-param"></i> 参数管理
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.ukey">
+          <i class="i-ukey"></i> Ukey
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.link">
+          <i class="i-link"></i> 报文地址
+        </a>
+      </li>-->
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.operatoragent">
+          <i class="i-agent"></i> 我的子账户
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.saleagent">
+          <i class="i-agent"></i> 我的主账户
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="agentSite.agentuser">
+          <i class="i-user"></i> 用户管理
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div role="button" ng-click="nav()" ng-class="{'left-arrow-show':!showNav,'content-arrow1': !showNav,'content-arrow': showNav}"></div>
+  <div class="row content-right" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>
+<div ng-include="'foot.html'"></div>

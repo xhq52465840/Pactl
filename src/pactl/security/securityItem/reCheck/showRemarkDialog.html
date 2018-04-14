@@ -1,0 +1,40 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        备注
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content modal-body-scroll">
+      <table class="table remark-table">
+        <thead>
+          <tr>
+            <th class="w20">员工编号</th>
+            <th class="w48">内容</th>
+            <th class="w22">时间</th>
+            <th class="w10">首检图片</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in remarkData track by $index">
+            <td>{{item.pCheckRemark.employid}}</td>
+            <td ng-show="item.editShow">
+              <textarea class="form-control" rows="3" ng-blur="editItem(item)" ng-model="item.pCheckRemark.remark"></textarea>
+            </td>
+            <td ng-show="!item.editShow">
+              {{item.pCheckRemark.remark}}
+              <i class="btn-edit" ng-if="item.pCheckRemark.isedit==='1'" ng-click="edit(item)"></i>
+            </td>
+            <td>{{item.pCheckRemark.createddate | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>
+               <i class="i-eye" ng-if="item.pFileRelation && item.pFileRelation.fileHttpPath" ng-click="openDialog({srcArr:[item.pFileRelation.fileHttpPath]})"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>

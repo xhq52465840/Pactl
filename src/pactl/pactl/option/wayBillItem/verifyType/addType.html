@@ -1,0 +1,32 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">分类<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="sortName" class="form-control" required ng-model="fieldObj.sortName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">代码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="sid" class="form-control" required ng-model="fieldObj.sid" 
+          ng-pattern="/^\d{3,3}$/" ng-disabled="fieldObj.isEdit">
+          <small>请输入3位数字</small>
+        </div>
+      </div>      
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

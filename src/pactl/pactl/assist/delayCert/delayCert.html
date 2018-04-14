@@ -1,0 +1,113 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">证书延期操作</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">证书延期操作</div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="search-name">证书编号</div>
+        <div class="search-value" style="width: 600px;">
+          <div ui-select multiple tagging tagging-label="" ng-model="certObj.bookNo" theme="select2" class="form-control" autofocus="true">
+            <div ui-select-match>{{$item}}</div>
+            <div ui-select-choices repeat="book in availableBookNo | filter:$select.search">
+              {{book}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">鉴定机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="certObj.officeCode" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.shortName}}</div>
+            <div ui-select-choices repeat="item in agentData | filter: {shortName:$select.search}">
+              <div ng-bind-html="item.shortName | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">货物类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="certObj.cargoType" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in cargoTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">适用航空公司</div>
+        <div class="search-value">
+          <div ui-select ng-model="certObj.air" theme="select2" class="form-control wd" allow-clear="true">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">鉴定机构</th>
+        <th class="w16">鉴定书编号</th>
+        <th class="w12">证书PDF</th>
+        <th class="w12">证书有效期至</th>
+        <th class="w12">货物类型</th>
+        <th class="w12">适用航空公司</th>
+        <th class="w12">延期结果</th>
+        <th class="w12">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in certData track by $index" ng-class-even="'even'">
+        <td>{{item.pAgentShareBook.officeName}}</td>
+        <td>{{item.pAgentShareBook.bookNo}}</td>
+        <td class="imgShow">
+          <i class="i-pdf" ng-if="item.pdfPath" ng-click="openDialog({
+            officeName: item.pAgentShareBook.officeName,
+            bookNo: item.pAgentShareBook.bookNo,
+            src: item.pdfPath,
+            srcArr: item.srcArr
+          })" ng-mouseover="item.imgShow=!item.imgShow" ng-mouseleave="item.imgShow=!item.imgShow"></i>
+          <div ng-show="item.imgShow" ng-style="item.style1">
+            <img ng-src="{{item.filePath}}" ng-style="item.style2">
+          </div>          
+          <a ng-href="{{item.pOfficeInfo.url}}" target="_blank" ng-if="item.pOfficeInfo.url">
+            <i class="i-site"></i>
+          </a>
+        </td>
+        <td>{{item.pAgentShareBook.validityYear}}</td>
+        <td>{{item.pAgentShareBook.goodsType | showStatus: cargoTypeData}}</td>
+        <td>
+          <a role="button" ng-click="showData(item.airLines)">{{item.airLines.length}}</a>
+        </td>
+        <td>
+          <a role="button" ng-click="showData1(item.pAirLineDelays)">{{item.pAirLineDelays.length}}</a>
+        </td>
+        <td>
+          <button class="btn btn-default" ng-click="delay(item)">延期</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

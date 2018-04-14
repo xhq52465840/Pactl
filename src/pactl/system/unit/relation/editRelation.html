@@ -1,0 +1,78 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">机构<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="relationObj.unit" theme="select2" class="form-control" on-select="refushRoleData()">
+            <div ui-select-match placeholder="请选择..." allow-clear="false">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in unitData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="unit" required ng-model="relationObj.unit">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">对象类型<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="relationObj.authObj" theme="select2" class="form-control" on-select="changeAuthObj($item)">
+            <div ui-select-match placeholder="请选择..." allow-clear="false">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in authObjTypeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="people" required ng-model="relationObj.authObj">
+        </div>
+      </div>
+      <div class="row" ng-if="hiddenuser" ng-init="hiddenuser = true">
+        <div class="col-sm-2 modal-body-name">用户<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="relationObj.people" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="false">{{$select.selected.fullname}}</div>
+            <div ui-select-choices repeat="item in peopleData | filter: {fullname:$select.search}">
+              <div ng-bind-html="item.fullname | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="people" required ng-model="relationObj.people">
+        </div>
+      </div>
+      <div class="row"  ng-if="hiddengroup" ng-init="hiddengroup = true">
+        <div class="col-sm-2 modal-body-name">用户组<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="relationObj.userGroup" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="false">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in userGroupData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="userGroup" required ng-model="relationObj.userGroup">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">角色<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select ng-model="relationObj.role" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="false">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="role" required ng-model="relationObj.role">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

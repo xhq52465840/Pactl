@@ -1,0 +1,23 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        编辑
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="receiptPass">
+       <div class="reBillNo">备注内容</div>
+       <div><textarea class="form-control receipthei reBillVal" ng-model="remark.content" name="content" required></textarea>
+       </div>
+     </div>
+  </div>
+  <div class="receipt-footer">
+    <button class="btn btn-primary" w5c-form-submit="save()">确定</button>
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+  </div>
+</div>
+</form>

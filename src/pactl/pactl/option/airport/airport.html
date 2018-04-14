@@ -1,0 +1,78 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">机场</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">机场</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">机场代码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airPortObj.airportCode" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">城市全称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="airPortObj.cityName">
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">城市代码</th>
+        <th class="w12">城市全称</th>
+        <th class="w12">国家代码</th>
+        <th class="w12">州名代码</th>
+        <th class="w12">机场代码</th>
+        <th class="w12">机场全称</th>
+        <th class="w12">币种</th>
+        <th class="w16">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in airPortData track by $index" ng-class-even="'even'">
+        <td>{{item.cityCode}}</td>
+        <td>{{item.cityName}}</td>
+        <td>{{item.countryCode}}</td>
+        <td>{{item.stateCode}}</td>
+        <td>{{item.airportCode}}</td>
+        <td>{{item.airportName}}</td>
+        <td>{{item.currencyName}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="enable(item.id)" ng-if="item.status==='2'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="disable(item.id)" ng-if="item.status==='0'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.airportName)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

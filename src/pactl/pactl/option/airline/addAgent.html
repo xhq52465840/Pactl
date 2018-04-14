@@ -1,0 +1,42 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">鉴定机构<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="agentObj.officeCode" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.shortName}}</div>
+            <div ui-select-choices repeat="item in officeCodeData | filter: {shortName:$select.search}">
+              <div ng-bind-html="item.shortName | highlight: $select.search"></div>
+            </div>
+          </div>          
+          <input type="hidden" name="officeCode" class="form-control" required ng-model="agentObj.officeCode">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">延期天数<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="days" class="form-control" required ng-model="agentObj.days" ng-pattern="/^[0-9]+$/">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">航空公司鉴定机构有效年度<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="year" class="form-control" required ng-model="agentObj.year" ng-pattern="/^[0-9]+$/">
+        </div>
+      </div>      
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

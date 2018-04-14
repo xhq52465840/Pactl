@@ -1,0 +1,69 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">高级</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    品名咨询
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+      <div class="search-name" style="width:18%">附件路径</div>
+        <div class="search-value">
+          <input type="text" class="form-control" placeholder="显示附件存放路径" ng-model="seniors.data1.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:18%">附件大小</div>
+        <div class="search-value">
+          <input type="text" class="form-control" placeholder="显示附件存放路径" ng-model="seniors.data2.regVal">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:29%">启用ＺＩＰ支持</div>
+        <div class="search-value">
+          <div ui-select ng-model="seniors.data3.regVal" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in codeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-main-title">
+  <div class="title">
+    快捷键
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name" style="width:11%">审单</div>
+        <div class="search-value">
+          <input type="text" class="form-control" value="Ctrl+P" readonly>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name" style="width:11%">收单</div>
+        <div class="search-value">
+          <input type="text" class="form-control" value="Ctrl+Q" readonly>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-default" ng-click="save()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>

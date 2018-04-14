@@ -1,0 +1,84 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">标签管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">标签管理</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="addTag()">
+      <i class="i-add"></i>新增
+    </button>  
+    <button class="btn btn-primary" ng-click="batchAdd()">
+      <i class="i-add"></i>批量新增
+    </button>  
+    <button class="btn btn-default" ng-click="exportExl()">
+      <i class="i-export"></i>标签导出
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">标签名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="tagObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">标签状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="tagObj.status" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w10">编号</th>
+        <th class="w20" t-sort="NAME">标签名称</th>
+        <th class="w30">备注</th>
+        <th class="w10">标签颜色</th>
+        <th class="w15">状态</th>
+        <th class="w15">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in tagData track by $index" ng-class-even="'even'">
+        <td>{{$index + 1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.remark}}</td>
+        <td><span class="tagColor" ng-style="item.styleObj"></span></td>
+        <td>
+          <div class="btn-img" ng-click="disableTag(item)" ng-if="item.status==='0'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="enableTag(item)" ng-if="item.status==='1'">
+            <i class="i-sx"></i>
+          </div>
+        </td>
+        <td>
+          <div class="btn-img" ng-click="editTag(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="delTag(item.name, item.id)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

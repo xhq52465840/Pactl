@@ -1,0 +1,120 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="onlineForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <label class="reBillNo">运单号</label>
+        <label class="reBillVal">{{inspect.waybillNo}}</label>
+      </div>
+      <div tabset>
+        <div tab select="selectTab('1')" tab-select="type2" tab-change="tabChange('2')">
+          <div tab-heading>检查</div>
+          <div class="mb20">
+            <div class="border3">
+              <div class="row">
+                <div ng-repeat="row in localeCheck" class="fl mr10 mt10">
+                  <button class="btn" ng-class="{'btn-notselected': row.checkFlag !== 'true' && row.checkFlag !== true, 'btn-default': row.checkFlag === 'true' || row.checkFlag === true}" ng-disabled="vm.inspect.preMask === '2'">{{row.checkName}}</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-1 ml10">
+                  <label>UN</label>
+                </div>
+                <div class="col-sm-6 ml10">
+                  <div class="border2" style="height:150px;overflow:auto">
+                    <div ng-repeat="row in inspect.newItems track by $index">
+                      <input type="text" class="form-control check-UNl" ng-disabled="!editable1()" ng-model="row.unNumber" maxlength="4" name="UNl" ng-change="changeNum(row)">
+                      <div ui-select multiple ng-model="row.dgrClass" ng-disabled="!editable1()" theme="select2" class="form-control wd" style="width: 45%;" ng-change="setTableChange1()">
+                        <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+                        <div ui-select-choices repeat="item in UNDatas | filter: {name:$select.search} | orderBy:'name'">
+                          <div ng-bind-html="item.name | highlight: $select.search"></div>
+                        </div>
+                      </div>
+                      <span class="glyphicon glyphicon-minus csp" ng-click="removeItem($index)" ng-if="inspect.newItems.length >= 1 && editable1()"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-1 ml10" ng-if="editable1()"><i class="i-add ml10" ng-click="addUN()"></i></div>
+                <label ng-if="editable1()">ID</label>
+                <label ng-if="!editable1()" style="margin-left:30px;">ID</label>
+                <div ui-select ng-model="inspect.dgrId" ng-disabled="!editable1()" theme="select2" class="form-control wd" ng-change="setTableChange1()">
+                  <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in inspect.selectID | filter: {name:$select.search} | orderBy:'name'">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row ml10">
+              	<p style="float: left">货站无需制作检查单：</p>
+                <label><input type="checkbox" style="margin-right:10px" ng-checked="inspect.fltCheckFlag1" ng-model="inspect.fltCheckFlag1" ng-change="setFltCheckFlag('1')" ng-disabled="!editable1()">航空公司做现场检查</label>
+                <label><input type="checkbox" style="margin-right:10px" ng-checked="inspect.fltCheckFlag2" ng-model="inspect.fltCheckFlag2" ng-change="setFltCheckFlag('2')" ng-disabled="!editable1()">货站仅检查外包装及标签</label>
+              </div>
+              <!-- 添加通过标记位 -->
+              <div class="row ml10">
+                <!-- <div>通过标记</div> -->
+                <div class="btn-img" ng-click="passTag('0')" ng-if="inspect.passFlag==='1'">
+                  <label>通过检查</label><i class="i-yx ml5"></i>
+                </div>
+                <div class="btn-img" ng-click="passTag('1')" ng-if="inspect.passFlag==='0'">
+                  <label>通过检查</label><i class="i-sx ml5"></i>
+                </div>
+              </div>
+              <!-- 添加通过标记位 -->
+            </div>
+          </div>
+        </div>
+        <!-- <div tab select="selectTab('2')" tab-select="type1" tab-change="tabChange('1')"> -->
+        <div tab select="selectTab('2')" tab-select="type1" tab-change="tabChange('1')">
+          <div tab-heading>复检</div>
+          <div class="row mt10">
+            <div ng-repeat="row in localeCheck" class="fl mr10 mt10">
+              <button class="btn" ng-if="row.checkFlag" ng-class="{'btn-notselected': row.checkFlag !== 'true' && row.checkFlag !== true, 'btn-default': row.checkFlag === 'true' || row.checkFlag === true}" ng-click="checkName(row)" ng-disabled="afterClick || inspect.passFlag==='1' || editable2()" >{{row.checkName}}</button> 
+              <!--<button class="btn btn-default" ng-if="row.checkFlag" ng-click="checkName(row)" ng-disabled="afterClick || inspect.passFlag==='1'">{{row.checkName}}</button>-->
+            </div>
+          </div>
+          <table class="table content-dialog-table">
+            <thead>
+              <tr>
+                <th class="w25" style="text-align: center;">操作日期</th>
+                <th class="w25" style="text-align: center;">Re-check类型</th>
+                <th class="w25" style="text-align: center;">操作人员</th>
+                <th class="w25" style="text-align: center;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="row in inspect.recheckBean | orderBy:'-createdDate'">
+                <td style="text-align: center;">{{row.createdDate | date: "yy/MM/dd HH:mm:ss"}}</td>
+                <td style="text-align: center;">{{row.checkName}}</td>
+                <td style="text-align: center;">{{row.operator}}</td>
+                <td style="text-align: center;">
+                  <div class="btn-img" ng-click="disableTag(row, '0')" ng-if="row.effectFlag==='1'">
+                    <i class="i-yx"></i>
+                  </div>
+                  <div class="btn-img" ng-click="disableTag(row, '1')" ng-if="row.effectFlag==='0'">
+                    <i class="i-sx"></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save1()" ng-show="inspect.type === '1'" ng-disabled="!editable1()">保存</button>
+      <button class="btn btn-primary" w5c-form-submit="save2()" ng-show="inspect.type === '2'" ng-disabled="editable2()">保存</button>
+      <!--   <button class="btn btn-default" w5c-form-submit="noPass()" ng-disabled="inspect.preMask==='3'">不通过</button> -->
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

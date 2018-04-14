@@ -1,0 +1,67 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">原因</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">原因</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">原因</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="reasonObj.name">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">类型</div>
+        <div class="search-value">
+          <div ui-select ng-model="reasonObj.type" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in typeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w25">序号</th>
+        <th class="w25">原因</th>
+        <th class="w25">类型</th>
+        <th class="w25">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in reasonData track by $index" ng-class-even="'even'">
+        <td>{{$index + 1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.type|showStatus:typeData}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

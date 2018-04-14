@@ -1,0 +1,32 @@
+<div>
+  <div class="first-line">
+    <ul class="nav nav-pills">
+      <li>
+        <button class="btn btn-default" role="button">更多1</button>
+      </li>
+      <li>
+        <button class="btn btn-default" role="button">更多2</button>
+      </li>
+      <li>
+        <a ng-click="toggle($event)" role="button">更多</a>
+        <div ng-show="open" class="filter-drop-div">
+          <div class="filter-drop-input">
+            <input type="text" class="form-control" autocomplete="off" ng-model="search">
+          </div>
+          <ul class="filter-drop-ul">
+            <li class="filter-drop-li" ng-repeat="li in liList | filter: search">
+              <label>
+                <input type="checkbox" ng-click="liClick($event, li)" ng-checked="checked.indexOf(li.key)>-1">
+                <span>{{li.name}}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="second-line">
+    <ul class="nav nav-pills">
+    </ul>
+  </div>
+</div>

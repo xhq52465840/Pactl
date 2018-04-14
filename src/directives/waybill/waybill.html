@@ -1,0 +1,1382 @@
+<div class="row">
+  <div class="col-sm-2" style="padding: 10px 20px 0 0">
+    <div class="panel panel-default">
+      <div class="panel-heading panel-bill-heading">主运单</div>
+      <div class="panel-body panel-bill-body" ng-class="{'active': currentBillNo === billObj.waybillNo && currentBillType === billObj.type}"
+        ng-click="chooseMaster()">
+        {{billObj.waybillNo}}
+      </div>
+      <div class="panel-body panel-bill-body-row">
+        <div class="row panel-bill-body-row-1">
+          <div class="col-sm-8">件数/SLAC件数</div>
+          <div class="col-sm-4">重量KG</div>
+        </div>
+        <div class="row panel-bill-body-row-2">
+          <div class="col-sm-8">{{billObj.rcpNo || 0}}/{{billObj.slac || 0}}</div>
+          <div class="col-sm-4">{{billObj.grossWeight || 0}}</div>
+        </div>
+      </div>
+      <div class="panel-heading panel-bill-heading">分运单</div>
+      <div class="panel-body panel-bill-body-row">
+        <div class="row panel-bill-body-row-2">
+          <div class="col-sm-8">
+            <span ng-class="{'red-ft': +billObj.rcpNo != +showText.subRcpNo}">{{showText.subRcpNo}}</span> /{{showText.subSlac}}
+          </div>
+          <div class="col-sm-4">
+            <span ng-class="{'red-ft': +billObj.grossWeight != +showText.subGrossWeight}">{{showText.subGrossWeight}}</span>
+          </div>
+        </div>
+        <div class="row panel-bill-body-row-3">
+          <a role="button" ng-click="showAllInfo()">
+            <span ng-show="showAllSubInfo">收起分单信息</span>
+            <span ng-hide="showAllSubInfo">展开分单信息</span>
+          </a>
+        </div>
+      </div>
+      <ul class="list-group">
+        <li ng-repeat="row in billObj.newSubBillObj track by $index" class="list-group-item panel-bill-body" ng-class="{'active': currentBillNo === row.pAirWaybillInfo.waybillNo && currentBillType === row.pAirWaybillInfo.type}">
+          <!-- <div class="row" ng-click="chooseBill(row, $index)">
+            <span class="fl mt7">{{row.pAirWaybillInfo.waybillNo}}</span>
+            <button class="btn btn-default fr" ng-click="pullDown(row, $index, $event)" ng-show="canPull(row, 'down')">拉下</button>
+            <button class="btn btn-default fr" ng-click="pullUp(row, $index, $event)" ng-show="canPull(row, 'up')">拉上</button>
+          </div> -->
+          <div class="row mb10" ng-class="{'dropup':row.showLeftSub}">
+            <span class="caret mb5" ng-click="showLeftSub(row, $event)"></span>
+            <span ng-click="chooseBill(row, $index)">{{row.pAirWaybillInfo.waybillNo}}</span>
+            <i class="i-list-remove" ng-click="disConnect(row, $index, $event)" title="删除" ng-if="(billObj.statusData.wStatus === '000' || billObj.statusData.wStatus === '102') && (row.pAirWaybillInfo.wbEle!=='1' || airlineAllowPullDown)"></i>
+            <button class="btn btn-default fr" ng-click="pullDown(row, $index, $event)" ng-show="canPull(row, 'down')">拉下</button>
+            <button class="btn btn-default fr" ng-click="pullUp(row, $index, $event)" ng-show="canPull(row, 'up')">拉上</button>
+          </div>
+          <div class="row sub-bill-li-row" ng-show="row.showLeftSub">
+            <div class="row">
+              <div class="col-sm-5">件数</div>
+              <div class="col-sm-7">{{row.pAirWaybillInfo.rcpNo || 0}}/{{row.pAirWaybillInfo.slac || 0}}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">重量KG</div>
+              <div class="col-sm-7">{{row.pAirWaybillInfo.grossWeight || 0}}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">目的港</div>
+              <div class="col-sm-7">{{showSubDest1(row.pAirWaybillInfo.dest1)}}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">品名</div>
+              <div class="col-sm-7 wdbrk">{{row.pAirWaybillInfo.goodsDesc}}</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-10">
+    <div class="row" ng-show="!showSubBill" style="padding-top: 16px;">
+      <i class="i-public"></i>
+      <div class="search-text">
+        主单号
+      </div>
+      <div class="search-input">
+        {{billObj.waybillNo}}
+      </div>
+      <div class="pull-right listCert">
+        <div class="search-input">底色说明：</div>
+        <div class="bill-desc-1"></div>
+        <span>非关键字段的修改</span>
+        <div class="bill-desc-2"></div>
+        <span style="margin-right: 50px;">关键字段的修改</span>
+
+        <!-- <span role="button" class="name-result name-result1 noCargoBook" ng-show="billObj.showCargoDeclare.dangerFlag !=='0' && billObj.showCargoDeclare.dangerFlag !=='1' && billObj.showCargoDeclare.dangerFlag !=='2' && billObj.showCargoDeclare.dangerFlag !=='3' && billObj.showCargoDeclare.dangerFlag !=='4'"
+          ng-click="showCargoDeclaraction()">货物申报</span> -->
+        <span role="button" class="name-result name-result1 dangerGoods" ng-if="billObj.waybillNo && billObj.showCargoDeclare" ng-show="billObj.showCargoDeclare.cargoDeclare.dangerFlag==='0' || billObj.showCargoDeclare.cargoDeclare.dangerFlag==='3'" ng-click="showCargoDeclaraction()">危险品</span>
+        <span role="button" class="name-result name-result1 hasNoBook" ng-if="billObj.waybillNo && billObj.showCargoDeclare" ng-show="billObj.showCargoDeclare.cargoDeclare.dangerFlag==='1'" ng-click="showCargoDeclaraction()">普货有证书</span>
+        <span role="button" class="name-result name-result1 hasNoBook" ng-if="billObj.waybillNo && billObj.showCargoDeclare" ng-show="billObj.showCargoDeclare.cargoDeclare.dangerFlag==='2'" ng-click="showCargoDeclaraction()">普货无证书</span>
+        <span role="button" class="name-result name-result1 lidianchi" ng-if="billObj.waybillNo && billObj.showCargoDeclare" ng-show="billObj.showCargoDeclare.cargoDeclare.dangerFlag==='4'" ng-click="showCargoDeclaraction()">锂电池</span>
+        
+        <span role="button" class="name-result name-result1 noCargoBook" ng-if="billObj.waybillNo && billObj.showLiBattery" ng-show="billObj.showLiBattery.eli.flag !== 'true' && billObj.showLiBattery.elm.flag !== 'true'" ng-click="
+          showBatteryDeclaraction()">锂电池声明</span>
+        <span role="button" class="name-result name-result1 lidianchi listCert nullClass" ng-if="billObj.waybillNo && billObj.showLiBattery" ng-show="billObj.showLiBattery.eli.flag === 'true'" ng-click="showBatteryDeclaraction()">ELI</span>
+        <span role="button" class="name-result name-result1 lidianchi listCert nullClass" ng-if="billObj.waybillNo && billObj.showLiBattery" ng-show="billObj.showLiBattery.elm.flag === 'true'" ng-click="showBatteryDeclaraction()">ELM</span>
+
+        <div ng-if="billObj.waybillNo && showMasterCert" class="search-input info-name" style="margin-right:4px;">品名补充:</div>
+        <i ng-if="billObj.waybillNo && showMasterCert" tooltip-placement="left" tooltip-html-unsafe="{{billObj.div}}" role="button" class="i-mpbc-1 preIcon1" style="margin-right:10px;top:3px;" ng-show="(billObj.goodsNameEn || billObj.goodsNameCn || billObj.goodsRemarks)" ng-click="nameAadded(billObj)"></i>
+        <i ng-if="billObj.waybillNo && showMasterCert" role="button" class="i-mpbc-2 preIcon1" style="margin-right:10px;top:3px;" ng-show="(!billObj.goodsNameEn && !billObj.goodsNameCn && !billObj.goodsRemarks)" ng-click="nameAadded(billObj)"></i>
+        <input type="text" hidden name="m_goodsNameEn" ng-model="billObj.goodsNameEn" >
+        <input type="text" hidden name="m_goodsNameCn" ng-model="billObj.goodsNameCn" >
+        <input type="text" hidden name="m_goodsRemarks" ng-model="billObj.goodsRemarks" >
+
+        <div class="dib" ng-if="billObj.statusData.wStatus !== '000'">
+          <!--图标1-->
+          <div class="corner-parent" ng-if="masterCertData.book || showMasterCert" ng-click="searchBook(billObj.awId, 'book', '0')">
+            <i class="i-zs-z"></i>
+            <a><small class="corner">{{(masterCertData.book || 0)+(billObj.applyBookData.length || 0)}}</small></a>
+          </div>
+          <!--图标2-->
+          <div class="corner-parent" ng-show="false" ng-click="searchBook(billObj.awId, 'electric', '0')">
+            <i class="i-zs-c"></i>
+            <a><small class="corner">{{masterCertData.electric || 0}}</small></a>
+          </div>
+          <!--图标3-->
+          <div class="corner-parent" ng-show="showOther()" ng-click="searchBook(billObj.awId, 'other', '0')">
+            <i class="i-zs-qt"></i>
+            <a><small class="corner">{{masterCertData.other || 0}}</small></a>
+          </div>
+
+          <!--磁检证书-->
+          <i class="i-ci-1 preIcon1" ng-show="billObj.ckElectricFlag === '1' && showCkElectricFlag('0')" ng-click="ckEleStatus(billObj,'0')"></i>
+          <i class="i-ci-2 preIcon1" ng-show="billObj.ckElectricFlag !== '1' && showCkElectricFlag('0')" ng-click="ckEleStatus(billObj,'1')"></i>
+          <input type="text" hidden name="m_ckElectricFlag" ng-model="billObj.ckElectricFlag" >
+
+        </div>
+      </div>
+    </div>
+    <div class="content-main-body-bill row" ng-show="!showSubBill">
+      <!--line-1  start -->
+      <div class="row">
+        <div class="line-left line-left-1">
+          <div class="line-left-1-1">
+            <div class="line-left line-left-1-1-1">
+              Shipper's Name and Address*
+              <div class="line-left-1-1-1-2">
+                <i class="i-search" ng-click="searchUser('1', '0')"></i>
+                <i class="i-save fr" ng-click="saveUser('1', '0')"></i>
+              </div>
+            </div>
+            <div class="line-left-1-1-2">
+              Shipper's Account Number
+              <input type="text" class="form-control" name="m_spAccountNumber" ng-model="billObj.spAccountNumber" maxlength="14" ng-disabled="isDisable('spAccountNumber')">
+            </div>
+          </div>
+          <div class="line-left-1-2">
+            <div class="line-row">
+              <input type="text" class="form-control" placeholder="Name" name="m_spName" ng-model="billObj.spName" maxlength="70" ng-disabled="isDisable('spName')">
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control" placeholder="Address" name="m_spAddress" ng-model="billObj.spAddress" maxlength="70"
+                ng-disabled="isDisable('spAddress')">
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control line-row-1-1" name="m_spZipcode" placeholder="Zipcode" ng-model="billObj.spZipcode"
+                maxlength="9" ng-disabled="isDisable('spZipcode')">
+              <input type="text" class="form-control line-row-1-1" placeholder="City" name="m_spCity" ng-model="billObj.spCity" maxlength="17"
+                ng-disabled="isDisable('spCity')">
+              <input type="text" class="form-control line-row-1-1" placeholder="State" name="m_spState" ng-model="billObj.spState" maxlength="9"
+                ng-disabled="isDisable('spState')">
+              <div ui-select ng-model="billObj.spCountry" name="m_spCountry" theme="select2" class="form-control line-row-1-2" ng-disabled="isDisable('spCountry')">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                <div ui-select-choices repeat="item in countryData | filter: { countryCode: $select.search }">
+                  <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control line-row-1-3" placeholder="Tel" name="m_spTel" ng-model="billObj.spTel" maxlength="25"
+                ng-disabled="isDisable('spTel')">
+              <input type="text" class="form-control line-row-1-3" placeholder="Fax" name="m_spFax" ng-model="billObj.spFax" maxlength="25"
+                ng-disabled="isDisable('spFax')">
+            </div>
+          </div>
+        </div>
+        <div class="line-right line-right-2">
+          <div class="line-right-1-1">
+            <div class="line-right-1-1-1">
+              <div class="text1">Not Negotiable</div>
+              <div class="text2">AIR WAYBILL</div>
+              <div class="text1">Issued by</div>
+            </div>
+            <div class="line-right-1-1-2">
+              <textarea class="form-control" rows="3" name="m_issuedBy" ng-model="billObj.issuedBy" maxlength="500" ng-disabled="isDisable('issuedBy')"></textarea>
+            </div>
+          </div>
+          <div class="line-right-1-2">
+            Copies 1,2 and 3 of this Air Waybill are originals and have the same validity.
+          </div>
+        </div>
+      </div>
+      <!-- line-1 end -->
+      <!-- line-2 start -->
+      <div class="row">
+        <div class="line-left line-left-2">
+          <div class="line-left-2-1">
+            <div class="line-left line-left-2-1-1">
+              Consignee's Name and Address*
+              <div class="line-left-2-1-1-2">
+                <i class="i-search dib" ng-click="searchUser('0', '0')"></i>
+                <i class="i-save dib fr" ng-click="saveUser('0', '0')"></i>
+              </div>
+            </div>
+            <div class="line-left-2-1-2">
+              Consignee's Account Number
+              <input type="text" class="form-control" name="m_csAccountNumber" ng-model="billObj.csAccountNumber" maxlength="14" ng-disabled="isDisable('csAccountNumber')">
+            </div>
+          </div>
+          <div class="line-left-2-2">
+            <div class="line-row">
+              <input type="text" class="form-control" placeholder="Name" name="m_csName" ng-model="billObj.csName" maxlength="70" ng-disabled="isDisable('csName')">
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control" placeholder="Address" name="m_csAddress" ng-model="billObj.csAddress" maxlength="70"
+                ng-disabled="isDisable('csAddress')">
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control line-row-1-1" placeholder="Zipcode" name="m_csZipcode" ng-model="billObj.csZipcode"
+                ng-disabled="isDisable('csZipcode')" maxlength="9">
+              <input type="text" class="form-control line-row-1-1" placeholder="City" name="m_csCity" ng-model="billObj.csCity" maxlength="17"
+                ng-disabled="isDisable('csCity')">
+              <input type="text" class="form-control line-row-1-1" placeholder="State" name="m_csState" ng-model="billObj.csState" maxlength="9"
+                ng-disabled="isDisable('csState')">
+              <div ui-select ng-model="billObj.csCountry" name="m_csCountry" theme="select2" class="form-control line-row-1-2" ng-disabled="isDisable('csCountry')">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                  <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+            <div class="line-row">
+              <input type="text" class="form-control line-row-1-3" placeholder="Tel" name="m_csTel" ng-model="billObj.csTel" maxlength="25"
+                ng-disabled="isDisable('csTel')">
+              <input type="text" class="form-control line-row-1-3" placeholder="Fax" name="m_csFax" ng-model="billObj.csFax" maxlength="25"
+                ng-disabled="isDisable('csFax')">
+            </div>
+          </div>
+        </div>
+        <div class="line-right line-right-2">
+          <div class="line-right-2-1">
+            It is agreed that the goods described herein are accepted in apparent good order and condition (except as noted) for carriage
+            SUBJECT TO THE CONDITIONS OF CONTRACT ON THE REVERSE HEREOF, ALL GOODS MAY BE CARRIED BY ANY OTHER MEANS. INCLUDING
+            ROAD OR ANY OTHER CARRIER UNLESS SPECIFIC CONTRARY INSTRUCTIONS ARE GIVEN HEREON BY THE SHIPPER. THE SHIPPER’S
+            ATTENTION IS DRAWN TO THE NOTICE CONCERNING CARIER’S LIMITATION OF LIABILITY.Shipper may increase such limitation
+            of liability by declaring a higher value of carriage and paying a supplemental charge if required. INSURANCE-If
+          </div>
+        </div>
+      </div>
+      <!-- line-2 end-->
+      <!-- line-3 start-->
+      <div class="row">
+        <div class="line-left line-left-3">
+          <div class="line-left-3-1">
+            <div class="line-left-3-1-1">
+              Issuing Carrier’s Agent Name and City
+            </div>
+            <div class="line-left-3-1-2 line-row">
+              <input type="text" class="form-control line-row-3-1 line-row-3-1-1-1" placeholder="NAME" name="m_agentName" ng-model="billObj.agentName"
+                maxlength="35" ng-disabled="isDisable('agentName')">
+              <div class="form-control line-row-1 line-row-3-1-1-2" ng-if="billObj.agentPartIdentifier">{{billObj.agentPartIdentifier}}</div>
+              <input type="text" class="form-control line-row-1 pull-right line-row-3-1-1-3" placeholder="CITY" name="m_agentCity" ng-model="billObj.agentCity"
+                maxlength="17" ng-disabled="isDisable('agentCity')">
+            </div>
+            <div class="line-row">
+              {{billObj.agentOprn}}
+            </div>
+          </div>
+          <div class="line-left-3-2">
+            <div class="line-left-3-2-1">
+              <div class="line-left-3-2-1-1">
+                Agents IATA Code
+              </div>
+              <div class="line-left-3-2-1-2 line-row">
+                <input type="text" class="form-control line-row-3-2" placeholder="CODE" name="m_agentIataCode" ng-model="billObj.agentIataCode"
+                  maxlength="7" ng-disabled="isDisable('agentIataCode')">
+                <input type="text" class="form-control line-row-3-2" placeholder="CASS NUMBER" name="m_agentCassAddress" ng-model="billObj.agentCassAddress"
+                  maxlength="4" ng-disabled="isDisable('agentCassAddress')">
+              </div>
+            </div>
+            <div class="line-left-3-2-2">
+              <div class="line-left-3-2-2-1">
+                Account No.
+              </div>
+              <div class="line-left-3-2-2-2 line-row">
+                <input type="text" class="form-control" name="m_accountNo" ng-model="billObj.accountNo" maxlength="14" ng-disabled="isDisable('accountNo')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-3-3">
+            <div class="line-left-3-3-1">
+              Airport of Departure(Add. of First Carrier) and Requested Routing
+            </div>
+            <div class="line-left-3-3-2 line-row">
+              <div ui-select ng-model="billObj.dept" name="m_dept" theme="select2" class="form-control line-row-1" on-select="onSelectDept($item)"
+                ng-disabled="isDisable('dept')">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                  <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                </div>
+              </div>
+              <input type="text" class="form-control line-row-2" name="m_deptDesc" ng-model="billObj.deptDesc" ng-disabled="isDisable('deptDesc')">
+            </div>
+          </div>
+        </div>
+        <div class="line-right line-right-3">
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif" name="m_accounInforIdentif" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid" ng-model="billObj.freightPrepaid"
+              ng-disabled="isDisable('freightPrepaid')">
+          </div>
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif1" name="m_accounInforIdentif1" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif1')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid1" ng-model="billObj.freightPrepaid1"
+              ng-disabled="isDisable('freightPrepaid1')">
+          </div>
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif2" name="m_accounInforIdentif2" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif2')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid2" ng-model="billObj.freightPrepaid2"
+              ng-disabled="isDisable('freightPrepaid2')">
+          </div>
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif3" name="m_accounInforIdentif3" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif3')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid3" ng-model="billObj.freightPrepaid3"
+              ng-disabled="isDisable('freightPrepaid3')">
+          </div>
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif4" name="m_accounInforIdentif4" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif4')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid4" ng-model="billObj.freightPrepaid4"
+              ng-disabled="isDisable('freightPrepaid4')">
+          </div>
+          <div class="line-row">
+            <div ui-select ng-model="billObj.accounInforIdentif5" name="m_accounInforIdentif5" theme="select2" class="form-control line-right-3-1"
+              ng-disabled="isDisable('accounInforIdentif5')">
+              <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+              <div ui-select-choices repeat="item in accounInforIdentifData | filter: {id:$select.search}">
+                <div ng-bind-html="item.id | highlight: $select.search"></div>
+              </div>
+            </div>
+            <input type="text" class="form-control line-right-3-2" maxlength="35" name="m_freightPrepaid5" ng-model="billObj.freightPrepaid5"
+              ng-disabled="isDisable('freightPrepaid5')">
+          </div>
+        </div>
+      </div>
+      <!-- line-3 end-->
+      <!-- line-4 start-->
+      <div class="row">
+        <div class="line-left-4">
+          <div class="line-left-4-1 w7">
+            <div class="line-left-4-1-1">To</div>
+            <div class="line-left-4-1-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.dest1" name="m_dest1" theme="select2" class="form-control" on-select="onSelectTo($item)"
+                  ng-disabled="isDisable('dest1')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                  <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                    <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-2 w7">
+            <div class="line-left-4-2-1">By First Carrier</div>
+            <div class="line-left-4-2-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.carrier1" name="m_carrier1" theme="select2" class="form-control" ng-disabled="isDisable('carrier1')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                  <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                    <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-3 w7">
+            <div class="line-left-4-3-1">To</div>
+            <div class="line-left-4-3-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.dest2" name="m_dest2" theme="select2" class="form-control" on-select="onSelectTo($item)"
+                  ng-disabled="isDisable('dest2')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                  <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                    <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-4 w7">
+            <div class="line-left-4-4-1">By</div>
+            <div class="line-left-4-4-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.carrier2" name="m_carrier2" theme="select2" class="form-control" ng-disabled="isDisable('carrier2')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                  <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                    <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-5 w7">
+            <div class="line-left-4-5-1">To</div>
+            <div class="line-left-4-5-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.dest3" name="m_dest3" theme="select2" class="form-control" on-select="onSelectTo($item)"
+                  ng-disabled="isDisable('dest3')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                  <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                    <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-6 w7">
+            <div class="line-left-4-6-1">By</div>
+            <div class="line-left-4-6-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.carrier3" name="m_carrier3" theme="select2" class="form-control" ng-disabled="isDisable('carrier3')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                  <div ui-select-choices repeat="item in airData | filter:{airCode:$select.search}">
+                    <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-13 w7">
+            <div class="line-left-4-13-1">To</div>
+            <div class="line-left-4-13-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.dest4" name="m_dest4" theme="select2" class="form-control" on-select="onSelectTo($item)"
+                  ng-disabled="isDisable('dest4')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+                  <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+                    <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-14 w7">
+            <div class="line-left-4-14-1">By</div>
+            <div class="line-left-4-14-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.carrier4" name="m_carrier4" theme="select2" class="form-control" ng-disabled="isDisable('carrier4')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airCode}}</div>
+                  <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                    <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-7 w7">
+            <div class="line-left-4-7-1">Currency</div>
+            <div class="line-left-4-7-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.currency" name="m_currency" theme="select2" class="form-control" ng-disabled="isDisable('currency')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.currencyCode}}</div>
+                  <div ui-select-choices repeat="item in currencyData | filter: $select.search">
+                    <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-8 w7">
+            <div class="line-left-4-8-1">CHGS Code</div>
+            <div class="line-left-4-8-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.chargeCode" name="m_chargeCode" theme="select2" class="form-control" ng-disabled="isDisable('chargeCode')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.id}}</div>
+                  <div ui-select-choices repeat="item in chargeCodeData | filter: {id:$select.search}">
+                    <div ng-bind-html="item.id | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-9 w7">
+            <div class="line-left-4-9-1">WT/VAL</div>
+            <div class="line-left-4-9-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.wtVal" name="m_wtVal" theme="select2" class="form-control" on-select="selectWT()" ng-disabled="isDisable('wtVal')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-10 w7">
+            <div class="line-left-4-10-1">Other</div>
+            <div class="line-left-4-10-2">
+              <div class="line-row-4">
+                <div ui-select ng-model="billObj.other" name="m_other" theme="select2" class="form-control" on-select="selectOwner()" ng-disabled="isDisable('other')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-11 w7">
+            <div class="line-left-4-11-1">Declared Value for Carriage</div>
+            <div class="line-left-4-11-2">
+              <div class="line-row-4">
+                <input type="text" class="form-control" placeholder="NVD" name="m_carriageValue" ng-model="billObj.carriageValue" maxlength="11"
+                  ng-disabled="isDisable('carriageValue')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-4-12 w9">
+            <div class="line-left-4-12-1">Declared Value for Customs</div>
+            <div class="line-left-4-12-2">
+              <div class="line-row-4">
+                <input type="text" class="form-control" placeholder="NCV" name="m_customsValue" ng-model="billObj.customsValue" maxlength="11"
+                  ng-disabled="isDisable('customsValue')">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- line-4 end-->
+      <!-- line-5 start-->
+      <div class="row">
+        <div class="line-left-5">
+          <div class="line-left-5-1 w15">
+            <div class="line-left-5-1-1">
+              Airport of Destination
+            </div>
+            <div class="line-left-5-1-2">
+              <div class="line-row">
+                <div class="form-control">{{billObj.airportDest}}</div>
+              </div>
+              <div class="line-row">{{showText.airPort}}</div>
+            </div>
+          </div>
+          <div class="line-left-5-2 w23">
+            <div class="line-left-5-2-1">
+              Flight No/Flight Date
+            </div>
+            <div class="line-left-5-2-2">
+              <div class="line-row">
+                <input type="text" class="form-control line-row-5-1" placeholder="FLIGHT NO" name="m_flightNo" ng-model="billObj.flightNo"
+                  maxlength="7" ng-disabled="isDisable('flightNo')">
+                <input type="text" class="form-control line-row-5-2" placeholder="FLIGHT DATE" name="m_fltDate" pikaday="myPickerObject"
+                  ng-model="billObj.fltDate" ng-disabled="isDisable('fltDate')" min-date="{{flightDate.dateNow}}" on-select="onDate1(myPickerObject, myPickerObject1)">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-5-3 w23">
+            <div class="line-left-5-3-1">
+              Flight No/Flight Date
+            </div>
+            <div class="line-left-5-3-2">
+              <div class="line-row">
+                <input type="text" class="form-control line-row-5-1" placeholder="FLIGHT NO" name="m_flightNo2" ng-model="billObj.flightNo2"
+                  maxlength="7" ng-disabled="isDisable('flightNo2')">
+                <input type="text" class="form-control line-row-5-2" placeholder="FLIGHT DATE" pikaday="myPickerObject1" name="m_fltDate2"
+                  ng-model="billObj.fltDate2" ng-disabled="isDisable('fltDate2')" on-open="openDate(myPickerObject1)">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-5-4 w18">
+            <div class="line-left-5-4-1">
+              Amount of Insurance
+            </div>
+            <div class="line-left-5-4-2">
+              <div class="line-row">
+                <input type="text" class="form-control" placeholder="XXX" name="m_insuranceValue" ng-model="billObj.insuranceValue" maxlength="11"
+                  ng-disabled="isDisable('insuranceValue')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-5-5 w21">
+            <div class="line-left-5-5-1">
+              INSURANCE-If carrier offers insurance and such insurance is requested in accordance with the conditions thereof indicate
+              amount to be insured in figures in box marked”Amount of Insurance”
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- line-5 end-->
+      <!-- line-6 start-->
+      <div class="row line-row-6">
+        <div class="line-row">
+          <div class="col-sm-12">Handling Information</div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-2">SSR (SPECIAL SERVICE REQUEST)</div>
+          <div class="col-sm-8">
+            <textarea class="form-control line-row-6-1" text-height name="m_ssr" ng-model="billObj.ssr" maxlength="195" ng-disabled="isDisable('ssr')"></textarea>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-2">OSI (OTHER SERVICE REQUEST)</div>
+          <div class="col-sm-8">
+            <textarea class="form-control line-row-6-2" text-height name="m_osi1" ng-model="billObj.osi1" maxlength="195" ng-disabled="isDisable('osi1')"></textarea>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-2">SHC (SPECIAL HANDLING CODE)</div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" placeholder="代码间用逗号隔开" name="m_holdCode" ng-model="billObj.holdCode" maxlength="35" ng-disabled="isDisable('holdCode')">
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-default btn-line-6" ng-click="selectShcCode()" ng-disabled="isDisable('holdCode')">选择</button>
+          </div>
+        </div>
+        <div class="line-row">
+          <div class="col-sm-2">Also notify</div>
+          <div class="col-sm-8">
+            <div class="form-control line-row-6-4">{{billObj.alsoNotify}}</div>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-default btn-line-6" ng-click="alsoNotify()" ng-disabled="isDisable('alsoNotify')">选择</button>
+          </div>
+        </div>
+      </div>
+      <!-- line-6 end-->
+      <!-- line-7 start-->
+      <div class="row">
+        <div class="line-left-7">
+          <div class="line-left-7-1 w13">
+            <div class="line-left-7-1-1">
+              No. of Pieces RCP
+            </div>
+            <div class="line-left-7-1-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_rcpNo" ng-model="billObj.rcpNo" maxlength="4" ng-disabled="isDisable('rcpNo')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-2 w13">
+            <div class="line-left-7-2-1">
+              Gross Weight (KG)
+            </div>
+            <div class="line-left-7-2-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_grossWeight" ng-blur="blurGrossWeight()" ng-model="billObj.grossWeight" maxlength="7"
+                  ng-disabled="isDisable('grossWeight')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-9 w9">
+            <div class="line-left-7-9-1">
+              kg lb
+            </div>
+            <div class="line-left-7-9-2">
+              <div class="line-row">
+                <div ui-select ng-model="billObj.weightCode" name="m_weightCode" theme="select2" class="form-control" ng-disabled="isDisable('weightCode')">
+                  <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-3 w10">
+            <div class="line-left-7-3-1">
+              Rate Class
+            </div>
+            <div class="line-left-7-3-2">
+              <div class="line-row">
+                <div ui-select ng-model="billObj.rateClass" name="m_rateClass" theme="select2" class="form-control" ng-disabled="isDisable('rateClass')">
+                  <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in rateClassData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-4 w13">
+            <div class="line-left-7-4-1">
+              Commodity Item No.
+            </div>
+            <div class="line-left-7-4-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_commodityNo" ng-model="billObj.commodityNo" maxlength="7" ng-disabled="isDisable('commodityNo')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-5 w13">
+            <div class="line-left-7-5-1">
+              Chargeable Weight (KG)
+            </div>
+            <div class="line-left-7-5-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_chargeWeight" ng-blur="blurChargeWeight()" ng-model="billObj.chargeWeight"
+                  maxlength="7" ng-disabled="isDisable('chargeWeight')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-6 w13">
+            <div class="line-left-7-6-1">
+              Rate/Charge
+            </div>
+            <div class="line-left-7-6-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_rateCharge" ng-model="billObj.rateCharge" maxlength="8" ng-disabled="isDisable('rateCharge')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-7 w16">
+            <div class="line-left-7-7-1">
+              Total
+            </div>
+            <div class="line-left-7-7-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_totalCount" ng-model="billObj.totalCount" maxlength="12" ng-disabled="isDisable('totalCount')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-7-8">
+            <div class="line-left-7-8-1">
+              <div class="line-left-7-8-1-1">SLAC</div>
+              <div class="line-left-7-8-1-2">
+                <div class="line-row">
+                  <input type="text" class="form-control" name="m_slac" ng-model="billObj.slac" maxlength="5" ng-disabled="isDisable('slac')">
+                </div>
+              </div>
+            </div>
+            <div class="line-left-7-8-2">
+              <div class="line-row">
+                <div class="line-row-7-1">REMARK</div>
+                <textarea class="form-control line-row-7-2" placeholder="仅供打印运单使用,同PACTL预审品名无关" name="m_remark" ng-model="billObj.remark" ng-disabled="isDisable('remark')"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="line-right-7">
+          <div class="line-right-7-1">
+            Nature and Quantity of Goods (incl. Dimensions or Volume)
+          </div>
+          <div class="line-right-7-2">
+            <div class="line-right-7-2-1">
+              <div class="line-right-7-2-1-1">
+                Goods Description
+                <button class="btn btn-default" ng-click="selectName('main')" ng-if="!isDisable('goodsDesc')">选择</button>
+              </div>
+              <div class="line-right-7-2-1-2">
+                <textarea ng-change="changeXiang('goodsDesc')"class="form-control line-row-7-2" name="m_goodsDesc" ng-model="billObj.goodsDesc" maxlength="240" ng-disabled="isDisable('goodsDesc')"></textarea>
+              </div>
+              <div class="line-right-7-2-1-3">
+              </div>
+            </div>
+            <div class="line-right-7-2-2">
+              <div class="line-right-7-2-2-1">
+                Vol
+              </div>
+              <div class="line-right-7-2-2-2">
+                <input type="text" class="form-control w55 dib" name="m_vol" ng-model="billObj.vol" maxlength="7" ng-disabled="isDisable('vol')">
+                <div ui-select ng-model="billObj.volumeCode" name="m_volumeCode" theme="select2" class="form-control w35" ng-disabled="isDisable('volumeCode')">
+                  <div ui-select-match placeholder="">{{$select.selected.id}}</div>
+                  <div ui-select-choices repeat="item in volumeCodeData | filter: {id:$select.search}">
+                    <div ng-bind-html="item.id | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="line-right-7-2-2-3">
+                <button class="btn btn-default" ng-click="selectVol()" ng-disabled="isDisable('vol')">尺寸</button>
+              </div>
+            </div>
+            <div class="line-right-7-2-3" ng-if="billObj.densityGroup">
+              <div class="line-right-7-2-3-1">
+                Density group
+              </div>
+              <div class="line-right-7-2-3-2">
+                <div class="form-control" name="m_densityGroup" ng-disabled="isDisable('densityGroup')">{{billObj.densityGroup}}</div>
+              </div>
+              <div class="line-right-7-2-3-3">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- line-7 end-->
+      <!-- line-8 start-->
+      <div class="row">
+        <div class="line-left-8">
+          <div class="line-left-8-1">
+            <div class="line-left-8-1-1">Prepaid</div>
+            <div class="line-left-8-1-2">Weight Charge</div>
+            <div class="line-left-8-1-3">Collect</div>
+          </div>
+          <div class="line-left-8-2">
+            <div class="line-left-8-2-1">
+              <div class="line-row">
+                <div class="form-control" name="m_prepaid" ng-disabled="isDisable('prepaid')">{{billObj.prepaid}}</div>
+              </div>
+            </div>
+            <div class="line-left-8-2-2">
+              <div class="line-row">
+                <div class="form-control" name="m_collect" ng-disabled="isDisable('collect')">{{billObj.collect}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-3">
+            <div class="line-left-8-3-1">&nbsp;</div>
+            <div class="line-left-8-3-2">Valuation Charge</div>
+            <div class="line-left-8-3-3">&nbsp;</div>
+          </div>
+          <div class="line-left-8-4">
+            <div class="line-left-8-4-1">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_valuationCharge" ng-model="billObj.valuationCharge" maxlength="12" ng-disabled="isDisable('valuationCharge')">
+              </div>
+            </div>
+            <div class="line-left-8-4-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_valuationCharge2" ng-model="billObj.valuationCharge2" maxlength="12" ng-disabled="isDisable('valuationCharge2')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-5">
+            <div class="line-left-8-5-1">&nbsp;</div>
+            <div class="line-left-8-5-2">Tax</div>
+            <div class="line-left-8-5-3">&nbsp;</div>
+          </div>
+          <div class="line-left-8-6">
+            <div class="line-left-8-6-1">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_tax" ng-model="billObj.tax" maxlength="12" ng-disabled="isDisable('tax')">
+              </div>
+            </div>
+            <div class="line-left-8-6-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_tax2" ng-model="billObj.tax2" maxlength="12" ng-disabled="isDisable('tax2')">
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-7">
+            <div class="line-left-8-7-1">&nbsp;</div>
+            <div class="line-left-8-7-2">Total Other Charges Due Agent</div>
+            <div class="line-left-8-7-3">&nbsp;</div>
+          </div>
+          <div class="line-left-8-8">
+            <div class="line-left-8-8-1">
+              <div class="line-row">
+                <div class="form-control" name="m_totalAgent" ng-disabled="isDisable('totalAgent')">{{billObj.totalAgent || ''}}</div>
+              </div>
+            </div>
+            <div class="line-left-8-8-2">
+              <div class="line-row">
+                <div class="form-control" name="m_totalAgent2" ng-disabled="isDisable('totalAgent2')">{{billObj.totalAgent2 || ''}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-9">
+            <div class="line-left-8-9-1">&nbsp;</div>
+            <div class="line-left-8-9-2">Total Other Charges Due Carrier</div>
+            <div class="line-left-8-9-3">&nbsp;</div>
+          </div>
+          <div class="line-left-8-10">
+            <div class="line-left-8-10-1">
+              <div class="line-row">
+                <div class="form-control" name="m_totalCarrier" ng-disabled="isDisable('totalCarrier')">{{billObj.totalCarrier || ''}}</div>
+              </div>
+            </div>
+            <div class="line-left-8-10-2">
+              <div class="line-row">
+                <div class="form-control" name="m_totalCarrier2" ng-disabled="isDisable('totalCarrier2')">{{billObj.totalCarrier2 || ''}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-11">
+            <div class="line-left-8-11-1">
+              <div class="line-row">
+                &nbsp;
+              </div>
+            </div>
+            <div class="line-left-8-11-2">
+              <div class="line-row">
+                &nbsp;
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-12">
+            <div class="line-left-8-12-1">
+              Total Prepaid
+            </div>
+            <div class="line-left-8-12-2">
+              Total Collect
+            </div>
+          </div>
+          <div class="line-left-8-13">
+            <div class="line-left-8-13-1">
+              <div class="line-row">
+                <div class="form-control" name="m_totalPrepaid" ng-disabled="isDisable('totalPrepaid')">{{billObj.totalPrepaid || ''}}</div>
+              </div>
+            </div>
+            <div class="line-left-8-13-2">
+              <div class="line-row">
+                <div class="form-control" name="m_totalCollect" ng-disabled="isDisable('totalCollect')">{{billObj.totalCollect || ''}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="line-left-8-14">
+            <div class="line-left-8-14-1">
+              Currency Conversion Rates
+            </div>
+            <div class="line-left-8-14-2">
+              CC Charges in des. Currency
+            </div>
+          </div>
+          <div class="line-left-8-15">
+            <div class="line-left-8-15-1">
+              <div class="line-row">
+                <div ui-select ng-model="billObj.destCurrency" name="m_destCurrency" theme="select2" class="form-control w30 fl mr10" ng-disabled="isDisable('destCurrency')">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.currencyCode}}</div>
+                  <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+                    <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+                  </div>
+                </div>
+                <input type="text" class="form-control w55 fl" name="m_rates" ng-model="billObj.rates" maxlength="11" ng-disabled="isDisable('rates')">
+              </div>
+            </div>
+            <div class="line-left-8-15-2">
+              <div class="line-row">
+                <input type="text" class="form-control" name="m_ccChargesDes" ng-model="billObj.ccChargesDes" maxlength="12" ng-disabled="isDisable('ccChargesDes')">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="line-right-8">
+          <div class="line-right-8-1">
+            <div class="line-right-8-1-1 row">
+              <div class="w10">Other Fee</div>
+              <div class="w20">Code</div>
+              <div class="w20">Owner</div>
+              <div class="w45">Fee</div>
+            </div>
+            <div class="line-right-8-1-div row" ng-repeat="item in otherFeeData track by $index">
+              <div class="w10">
+                <span class="glyphicon glyphicon-minus csp" ng-click="removeOtherFee($index)" ng-hide="isDisable3()"></span>
+              </div>
+              <div class="w20">
+                <div ui-select ng-model="item.code" name="code{{$index}}" theme="select2" class="form-control" ng-disabled="isDisable3()">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in otherCodeData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="w20">
+                <div ui-select ng-model="item.owner" name="owner{{$index}}" theme="select2" class="form-control" on-select="selectOwner()"
+                  ng-disabled="isDisable3()">
+                  <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.name}}</div>
+                  <div ui-select-choices repeat="item in otherOwnerData | filter: {name:$select.search}">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="w45">
+                <input type="text" class="form-control" name="fee{{$index}}" ng-model="item.fee" maxlength="12" ng-class="{'error': item.errorFlag}"
+                  ng-disabled="isDisable3()">
+              </div>
+            </div>
+            <div class="row">
+              <span class="glyphicon glyphicon-plus csp" ng-click="addOtherFee()" ng-hide="isDisable3()"></span>
+            </div>
+          </div>
+          <div class="line-right-8-2">
+            <div class="line-right-8-2-1">
+              Shipper certifies that the particulars on the face hereof are correct and that insofar as any part of the consignment contains
+              dangerous goods, such part is properly described by name and is in proper condition for carriage by air according
+              to the applicable Dangerous Goods Regulations
+            </div>
+            <div class="line-right-8-2-2">
+              <div class="line-right-8-2-2-check" name="m_agreedFlag">
+                <label>
+                  <input type="checkbox" ng-model="billObj.agreedFlag" ng-checked="billObj.agreedFlag === '1'" ng-disabled="isDisable3()">
+                  <span>I agreed with above all terms</span>
+                </label>
+              </div>
+            </div>
+            <div class="line-right-8-2-3">
+              <textarea class="form-control" rows="3" maxlength="50" name="m_signatureAgent" ng-model="billObj.signatureAgent" ng-disabled="isDisable3()"></textarea>
+            </div>
+            <div class="line-right-8-2-4">
+              Signature of Shipper or his agent
+            </div>
+          </div>
+          <div class="line-right-8-3">
+            <div class="line-right-8-3-1">
+              <div>
+                <input type="text" class="form-control" pikaday="myPickerObject2" name="m_executed" ng-model="billObj.executed" ng-disabled="isDisable3()">
+                <div>Executed on(Date)</div>
+              </div>
+              <div>
+                <input type="text" class="form-control" name="m_place" ng-model="billObj.place" maxlength="17" ng-disabled="isDisable3()">
+                <div>at(Place)</div>
+              </div>
+              <div>
+                <input type="text" class="form-control" name="m_signatureIssuing" ng-model="billObj.signatureIssuing" maxlength="20" ng-disabled="isDisable3()">
+                <div>Signature of issuing Carrier or its Agent</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- line-8 end-->
+      <!-- line-9 start-->
+      <div class="row line-last">
+        <div class="line-left-9">
+          <div class="line-left-9-1">
+            For Carrier's Use Only at Destinationes at Destination
+          </div>
+          <div class="line-left-9-2">
+            <div class="line-left-9-2-1">
+              Charges at Destination
+            </div>
+            <div class="line-left-9-2-2">
+              <input type="text" class="form-control" name="m_chargesDestination" ng-model="billObj.chargesDestination" maxlength="12"
+                ng-disabled="isDisable('chargesDestination')">
+            </div>
+          </div>
+        </div>
+        <div class="line-right-9">
+          <div class="line-right-9-1">
+            Total Collect Charges
+          </div>
+          <div class="line-right-9-2">
+            <input type="text" class="form-control" name="m_totalCollectCharges" ng-model="billObj.totalCollectCharges" maxlength="12"
+              ng-disabled="isDisable('totalCollectCharges')">
+          </div>
+        </div>
+      </div>
+      <!-- line-9 end-->
+    </div>
+    <div class="row" ng-show="showSubBill" style="padding-top: 16px;">
+      <i class="i-public"></i>
+      <div class="search-text">
+        分单号
+      </div>
+      <div class="search-input">
+        {{subBillObj.waybillNo}}
+      </div>
+      <div class="pull-right listCert">
+        <div class="search-input">底色说明：</div>
+        <div class="bill-desc-1"></div>
+        <span>非关键字段的修改</span>
+        <div class="bill-desc-2"></div>
+        <span style="margin-right: 50px;">关键字段的修改</span>
+  
+
+        <button class="btn mt5" style="width:36px;padding:7px 0px;margin-top: -14px;" ng-click="editELI(subBillObj)" ng-class="{'btn-notselected':subBillObj.eliFlag !== '1','btn-Success': subBillObj.eliFlag === '1'}"
+          ng-show="billObj.showLiBattery.eli.flag === 'true'"
+          tooltip-placement="left" tooltip-html-unsafe="" role="button">ELI</button>
+        <button class="btn mt5" style="width:36px;padding:7px 0px;margin-top: -14px;" ng-click="editELM(subBillObj)" ng-class="{'btn-notselected':subBillObj.elmFlag !== '1','btn-Success': subBillObj.elmFlag === '1'}"
+          ng-show="billObj.showLiBattery.elm.flag === 'true'"
+          tooltip-placement="left" tooltip-html-unsafe="" role="button">ELM</button>
+
+        <div class="search-input info-name" style="margin-right:4px;">品名补充:</div>
+        <i tooltip-placement="left" tooltip-html-unsafe="{{subBillObj.div}}" role="button" class="i-mpbc-1 preIcon1" style="margin-right:10px;top:3px;" ng-show="(subBillObj.remark || subBillObj.goodsNameCn || subBillObj.goodsRemarks)" ng-click="nameAadded(subBillObj)"></i>
+        <i role="button" class="i-mpbc-2 preIcon1" style="margin-right:10px;top:3px;" ng-show="(!subBillObj.remark && !subBillObj.goodsNameCn && !subBillObj.goodsRemarks)" ng-click="nameAadded(subBillObj)"></i>
+
+
+        <div class="dib" ng-if="billObj.statusData.wStatus !== '000'">
+          <!--图标1-->
+          <div class="corner-parent" ng-click="searchBook(subBillObj.awId, 'book', '1')">
+            <i class="i-zs-z"></i>
+            <a><small class="corner">{{(subBillObj.subCertData.book || 0)+(subBillObj.applyBookData.length || 0)}}</small></a>
+          </div>
+          <!--图标2-->
+          <div class="corner-parent" ng-show="false" ng-click="searchBook(subBillObj.awId, 'electric', '1')">
+            <i class="i-zs-c"></i>
+            <a><small class="corner">{{subBillObj.subCertData.electric || 0}}</small></a>
+          </div>
+          <!--图标3-->
+          <div class="corner-parent" ng-show="showOther()" ng-click="searchBook(subBillObj.awId, 'other', '1')">
+            <i class="i-zs-qt"></i>
+            <a><small class="corner">{{subBillObj.subCertData.other || 0}}</small></a>
+          </div>
+
+          <!--磁检证书-->
+          <i class="i-ci-1 preIcon1" ng-show="subBillObj.ckElectricFlag === '1' && showCkElectricFlag('1')" ng-click="ckEleStatus(subBillObj,'0')"></i>
+          <i class="i-ci-2 preIcon1" ng-show="subBillObj.ckElectricFlag !== '1' && showCkElectricFlag('1')" ng-click="ckEleStatus(subBillObj,'1')"></i>
+          <input type="text" hidden name="s_ckElectricFlag" ng-model="subBillObj.ckElectricFlag" >
+
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-show="showSubBill">
+      <div class="col-sm-12 pt10">
+        <div class="search-text">
+          始发站
+        </div>
+        <div class="search-input" style="width: 100px;">
+          <div ui-select ng-model="subBillObj.dept" name="s_dept" theme="select2" class="form-control" ng-disabled="isDisable2('dept')">
+            <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="search-text">
+          目的站
+        </div>
+        <div class="search-input" style="width: 100px;">
+          <div ui-select ng-model="subBillObj.dest1" name="s_dest1" theme="select2" class="form-control" ng-disabled="isDisable2('dest1')">
+            <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="search-text">
+          货物品名
+        </div>
+        <div class="search-input listCert" style="width: 40%;">
+          <input type="text" class="form-control" maxlength="200" ng-model="subBillObj.goodsDesc" name="s_goodsDesc" ng-disabled="isDisable2('goodsDesc')" tooltip-placement="center" tooltip-html-unsafe="<div class=&quot;pre-name&quot; style=&quot;width:100%;word-break:break-all &quot;>{{subBillObj.goodsDesc}}</div>">
+        </div>
+        <button class="btn btn-primary" ng-click="selectName('sub')" ng-if="!isDisable2('goodsDesc')">选择</button>
+      </div>
+    </div>
+    <div class="content-main-body-subBill row" ng-show="showSubBill">
+      <div class="row subBill-line-3">
+        <div class="subBill-line-3-1 w7">
+          件数
+        </div>
+        <div class="subBill-line-3-2 w17">
+          重量
+        </div>
+        <div class="subBill-line-3-3 w9">
+          SLAC件数
+        </div>
+        <div class="subBill-line-3-4 w11">
+          运输申明价值
+        </div>
+        <div class="subBill-line-3-5 w11">
+          运输保险价值
+        </div>
+        <div class="subBill-line-3-6 w11">
+          海关申明价值
+        </div>
+        <div class="subBill-line-3-7 w11">
+          付款方式
+        </div>
+        <div class="subBill-line-3-8 w12">
+          其他费用付款方式
+        </div>
+        <div class="subBill-line-3-9 w11">
+          币种
+        </div>
+      </div>
+      <div class="row subBill-line-4">
+        <div class="subBill-line-4-1 w7">
+          <input type="text" class="form-control" name="s_rcpNo" ng-model="subBillObj.rcpNo" maxlength="4" ng-disabled="isDisable2('rcpNo')">
+        </div>
+        <div class="subBill-line-4-2 w17">
+          <input type="text" class="form-control w50 dib" name="s_grossWeight" ng-model="subBillObj.grossWeight" maxlength="7" ng-disabled="isDisable2('grossWeight')">
+          <div ui-select name="s_weightCode" ng-model="subBillObj.weightCode" theme="select2" class="form-control w45" ng-disabled="isDisable2('weightCode')">
+            <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in weightCodeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="subBill-line-4-3 w9">
+          <input type="text" class="form-control" name="s_slac" ng-model="subBillObj.slac" maxlength="5" ng-disabled="isDisable2('slac')">
+        </div>
+        <div class="subBill-line-4-4 w11">
+          <input type="text" class="form-control" name="s_carriageValue" ng-model="subBillObj.carriageValue" maxlength="11" ng-disabled="isDisable2('carriageValue')">
+        </div>
+        <div class="subBill-line-4-5 w11">
+          <input type="text" class="form-control" name="s_insuranceValue" ng-model="subBillObj.insuranceValue" maxlength="11" ng-disabled="isDisable2('insuranceValue')">
+        </div>
+        <div class="subBill-line-4-6 w11">
+          <input type="text" class="form-control" name="s_customsValue" ng-model="subBillObj.customsValue" maxlength="11" ng-disabled="isDisable2('customsValue')">
+        </div>
+        <div class="subBill-line-4-7 w11">
+          <div ui-select ng-model="subBillObj.wtVal" name="s_wtVal" theme="select2" class="form-control" ng-disabled="isDisable2('wtVal')">
+            <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="subBill-line-4-8 w12">
+          <div ui-select ng-model="subBillObj.other" name="s_other" theme="select2" class="form-control" on-select="selectOwner()"
+            ng-disabled="isDisable2('other')">
+            <div ui-select-match placeholder="">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in wtValData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="subBill-line-4-9 w11">
+          <div ui-select ng-model="subBillObj.currency" name="s_currency" theme="select2" class="form-control" ng-disabled="isDisable2('currency')">
+            <div ui-select-match placeholder="">{{$select.selected.currencyCode}}</div>
+            <div ui-select-choices repeat="item in currencyData | filter: {currencyCode:$select.search}">
+              <div ng-bind-html="item.currencyCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="subBill-line-left subBill-line-left-1">
+          <div class="line-row">
+            <div class="fl">发货人信息</div>
+            <div class="fr">
+              <i class="i-search" ng-click="searchUser('1', '1')"></i>
+              <i class="i-save" ng-click="saveUser('1', '1')"></i>
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">名称</div>
+            <div class="col-sm-11">
+              <input type="text" class="form-control" name="s_spName" ng-model="subBillObj.spName" maxlength="70" ng-disabled="isDisable2('spName')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">地址</div>
+            <div class="col-sm-11">
+              <input type="text" class="form-control" name="s_spAddress" ng-model="subBillObj.spAddress" maxlength="70" ng-disabled="isDisable2('spAddress')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">城市</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" name="s_spCity" ng-model="subBillObj.spCity" maxlength="17" ng-disabled="isDisable2('spCity')">
+            </div>
+            <div class="col-sm-1 pl10">国家</div>
+            <div class="col-sm-3">
+              <div ui-select name="s_spCountry" ng-model="subBillObj.spCountry" theme="select2" class="form-control" ng-disabled="isDisable2('spCountry')">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                  <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1 pl10">州</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.spState" name="s_spState" maxlength="9" ng-disabled="isDisable2('spState')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">邮编</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.spZipcode" name="s_spZipcode" maxlength="9" ng-disabled="isDisable2('spZipcode')">
+            </div>
+            <div class="col-sm-1 pl10">电话</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.spTel" name="s_spTel" maxlength="25" ng-disabled="isDisable2('spTel')">
+            </div>
+            <div class="col-sm-1 pl10">传真</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.spFax" name="s_spFax" maxlength="25" ng-disabled="isDisable2('spFax')">
+            </div>
+          </div>
+        </div>
+        <div class="subBill-line-right">
+          <div class="line-row">
+            <div class="fl">收货人信息</div>
+            <div class="fr">
+              <i class="i-search" ng-click="searchUser('0', '1')"></i>
+              <i class="i-save" ng-click="saveUser('0', '1')"></i>
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">名称</div>
+            <div class="col-sm-11">
+              <input type="text" class="form-control" ng-model="subBillObj.csName" name="s_csName" maxlength="70" ng-disabled="isDisable2('csName')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">地址</div>
+            <div class="col-sm-11">
+              <input type="text" class="form-control" ng-model="subBillObj.csAddress" name="s_csAddress" maxlength="70" ng-disabled="isDisable2('csAddress')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">城市</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.csCity" name="s_csCity" maxlength="17" ng-disabled="isDisable2('csCity')">
+            </div>
+            <div class="col-sm-1 pl10">国家</div>
+            <div class="col-sm-3">
+              <div ui-select name="s_csCountry" ng-model="subBillObj.csCountry" theme="select2" class="form-control" ng-disabled="isDisable2('csCountry')">
+                <div ui-select-match placeholder="" allow-clear="true">{{$select.selected.countryCode}}</div>
+                <div ui-select-choices repeat="item in countryData | filter: {countryCode:$select.search}">
+                  <div ng-bind-html="item.countryCode | highlight: $select.search"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1 pl10">州</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.csState" name="s_csState" maxlength="9" ng-disabled="isDisable2('csState')">
+            </div>
+          </div>
+          <div class="line-row">
+            <div class="col-sm-1">邮编</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.csZipcode" name="s_csZipcode" maxlength="9" ng-disabled="isDisable2('csZipcode')">
+            </div>
+            <div class="col-sm-1 pl10">电话</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.csTel" name="s_csTel" maxlength="25" ng-disabled="isDisable2('csTel')">
+            </div>
+            <div class="col-sm-1 pl10">传真</div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" ng-model="subBillObj.csFax" name="s_csFax" maxlength="25" ng-disabled="isDisable2('csFax')">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row subBill-line-2">
+        <div class="line-row">
+          <div class="col-sm-1">英文品名补充</div>
+          <div class="col-sm-11">
+            <textarea rows="4" class="form-control" maxlength="585" ng-model="subBillObj.remark" name="s_remark" ng-disabled="isDisable2('remark')"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row subBill-line-5">
+        <div class="subBill-line-5-left">
+          <div class="line-row">
+            <div class="col-sm-2">
+              特货代码<br> (代码间需用逗号","隔开)
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="s_holdCode" ng-model="subBillObj.holdCode" maxlength="35" ng-disabled="isDisable2('holdCode')">
+            </div>
+          </div>
+        </div>
+        <div class="subBill-line-5-right">
+          <div class="line-row">
+            <div class="col-sm-2">
+              货物代码
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="s_commodityCodes" ng-model="subBillObj.commodityCodes" maxlength="350" ng-disabled="isDisable2('commodityCodes')">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>预审</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">现场检查货物预审列表</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">现场检查货物预审列表</div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">运单号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="billObj.waybillNo" ng-change="changeNum('waybillNo')" autofocus>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">代理</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.agentOprn" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.status" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">运单号</th>
+        <th class="w5">代理代码</th>
+        <th class="w5">目的港</th>
+        <th class="w10">件数/重量</th>
+        <th class="w10">特货代码</th>
+        <th class="w53">检查类型</th>
+        <th class="w5">检查结果</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in billData track by $index" ng-class-even="'even'">
+        <td>
+          <span ng-if="item.isFormal === '1' && item.showWord && item.showWord && item.showWord !== ''" class="waybill-formal">{{item.showWord}}</span>
+          <span ng-if="item.isFormal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+          <a role="button" ui-sref="pactlPrejudice.localInspect({waybillNo: item.waybillNo})" target="_blank">{{item.waybillNo}}</a>
+          <i class="i-e" ng-if="item.wbEle === '1'"></i>
+        </td>
+        <td>{{item.agentOprn}}</td>
+        <td>{{item.dest1 | showDest1: item}}</td>
+        <td>{{item.rcpNo}}/{{item.grossWeight}}</td>
+        <td>{{item.holdCode}}</td>
+        <td>
+          <label class="label-checkbox" ng-repeat="row in item.localeCheck track by $index">
+            <span class="btn" ng-class="{'btn-default':row.checkFlag === 'true' || row.checkFlag === true,'btn-notselected':row.checkFlag !== 'true' && row.checkFlag !== true}">{{row.checkName}}</span>
+          </label>
+        </td>
+        <td>
+          <span class="label" style="font-size: 15px;" ng-class="{'wstatus1':item.preMask ==='0',
+          'wstatus3':item.preMask === '2',
+          'wstatus6':item.preMask === '3'}">
+          {{item.preMask | showStatus: statusData}}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

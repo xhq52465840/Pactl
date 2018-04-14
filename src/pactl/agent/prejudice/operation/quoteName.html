@@ -1,0 +1,78 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      品名咨询引用
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-main-search">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 50px;">品名</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="quotationObj.namesEn" ng-change="upperName()">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 60px;">主单号</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="quotationObj.wayBillNo">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="search-name" style="width: 60px;">分单号</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="quotationObj.subWayBillNo">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <label><input type="checkbox" ng-checked="quotationObj.myself" ng-model="quotationObj.myself">本公司咨询</label>
+        </div>
+      </div>
+      <div class="row search-btn">
+        <div class="pull-right">
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+    </div>
+    <table class="table content-dialog-table">
+      <thead>
+        <tr>
+          <th class="w16">类型</th>
+          <th class="w21">已出运单号</th>
+          <th class="w18">分单号</th>
+          <th class="w12">英文品名</th>
+          <th class="w12">证书类型</th>
+          <th class="w13">出运日期</th>
+          <th class="w8">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-class-even="'even'" ng-repeat="row in quotationData track by $index">
+          <td><label class="name-result unpack1">{{row.typename}}</label></td>
+          <td>{{row.waybillno}}</td>
+          <td>{{row.subwaybillno}}</td>
+          <td>{{row.namesEn}}</td>
+          <td>
+            <label ng-repeat="goodsType in row.booksType track by $index" class="label label-primary mr5 dib">
+              {{goodsType.name}}
+            </label>
+          </td>
+          <td>{{row.type==='101'?row.createdDate:row.shipmentDate | date:'yyyy/MM/dd'}}</td>
+          <td>
+            <a role="button" ng-click="save(row)" ng-show="quotationObj.wStatus">引用</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'page.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

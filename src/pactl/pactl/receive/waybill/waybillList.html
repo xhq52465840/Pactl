@@ -1,0 +1,187 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>收单</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">运单列表</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">运单列表</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="printSub()">
+      <i class="i-print"></i>打印分单清单
+    </button>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" data-toggle="dropdown" id="awb">
+        <i class="i-print"></i>打印运单
+      </button>
+      <ul class="dropdown-menu awb-dropdown-right" role="awb" aria-labelledby="awb">
+        <li ng-click="print('A4')">
+          <a role="button">A4</a>
+        </li>
+        <li ng-click="print('FWB')">
+          <a role="button">中性运单</a>
+        </li>
+        <li ng-click="print('airLine')">
+          <a role="button">航空公司运单</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">主单号</div>
+        <div class="search-value">
+          <input type="text" class="form-control dib" style="width: 70px;" id="srh_code" ng-model="billObj.srh_code" auto-focus="true">-
+          <input type="text" class="form-control dib" style="width: 115px;" id="srh_no" maxlength="8" ng-model="billObj.srh_no">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">代理</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.agentSales" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentSalesData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">航班号</div>
+        <div class="search-value"><input type="text" class="form-control" ng-model="billObj.flightNo"></div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">航班日期</div>
+        <div class="search-value"><input type="text" class="form-control" pikaday="myPickerObject1" ng-model="billObj.fltDate"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">运单状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.wStatus" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in wDatas | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">安检状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.aStatus" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in aDatas | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">目的港</div>
+        <div class="search-value">
+          <div ui-select ng-model="billObj.dest" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-left: 50px;">
+      <div class="col-sm-4">
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.wbEle">电子运单</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.localeCheckFlag">现场检查</label>
+      </div>
+      <div class="col-sm-4">
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.approachFlag">已进场</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.billReturnFlag">退单</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.aFlag">安检注销</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.returnFlag">退运</label>
+          <label class="label-checkbox"><input type="checkbox" ng-model="billObj.shipmentFlag">已出运</label>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">货站</div>
+        <div class="search-value">
+          <label class="label-checkbox" ng-repeat="station in stationData track by $index">
+            <input type="checkbox" ng-click="selectStation($event, station.id)" ng-checked="checkStation(station.id)">{{station.name}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table" style="table-layout:fixed">
+    <thead>
+      <tr>
+        <th class="w4" style="min-width: 88px;">
+          <label>
+            <input type="checkbox" ng-checked="billObj.allselected" ng-click="allCheck($event)" style="margin-right: 6px;">
+          </label>
+        </th>
+        <th class="w11" style="min-width: 107px;">运单</th>
+        <th class="w8">状态</th>
+        <th class="w5">件数(件)</th>
+        <th class="w6">重量(KG)</th>
+        <th class="w5">目的港</th>
+        <th class="w6">航空公司</th>
+        <th class="w10">品名</th>
+        <th class="w5">代理</th>
+        <th class="w7">安检状态</th>
+        <th class="w8">最新更新时间</th>
+        <th class="w13">货站/提交时间</th>
+        <th class="w16">货单状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in billData track by $index" ng-class-even="'even'">
+        <td>
+          <input type="checkbox" ng-checked="isChecked(item.awId)" ng-click="singleCheck($event, item)">
+        </td>
+        <td>
+          <span ng-if="item.isFormal === '1' && item.showWord && item.showWord && item.showWord !== ''" class="waybill-formal">{{item.showWord}}</span>
+          <span ng-if="item.isFormal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+          <a role="button" ui-sref="pactlReceive.acceptanceListById({'awId': item.awId})" target="_blank">{{item.waybillNo}}</a>
+          <i class="i-e" ng-if="item.wbEle==='1'"></i>
+        </td>
+        <td>{{item.wStatus | showStatus: wDatas}}</td>
+        <td>{{item.rcpNo}}</td>
+        <td>{{item.grossWeight}}</td>
+        <td>{{item.dest1 | showDest1: item}}</td>
+        <td>{{item.carrier1}}</td>
+        <td class="listCert"><span class="textWidth" tooltip-placement="left" tooltip-html-unsafe="{{item.div}}" role="button">{{item.goodsDesc1}}</span></td>
+        <td>{{item.agentOprn}}</td>
+        <td>{{item.aStatus|showStatus: aDatas}}</td>  
+        <td>{{item.updateTime | date:'MM/dd HH:mm'}}</td>
+        <td>
+          <span ng-if="item.goodstation">{{item.goodstation}}&nbsp;</span>
+          <span>{{item.submitTime | date:'MM/dd HH:mm'}}</span>
+          <span class="label wstatus6" ng-if="item.localeCheckFlag === '1'">现场</span>
+        </td>
+        <td>
+          <i class="i-huiji" ng-if="item.shipmentFlag === '1'"></i>
+          <span class="label wstatus6" ng-if="item.aFlag === '1'">安检注销</span>
+          <span class="label wstatus1" ng-if="item.billReturnFlag === '1'">已退单</span>
+          <span class="label wstatus5" ng-if="item.returnFlag === '1'">已退运</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row" style="position: relative;"></div>
+  <div class="pre-operation-total">共{{totalObj.packages}}件&nbsp;&nbsp;&nbsp;&nbsp;共{{totalObj.weight}}KG</div>
+</div>

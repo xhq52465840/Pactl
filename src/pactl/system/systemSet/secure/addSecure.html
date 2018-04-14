@@ -1,0 +1,30 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">ip地址</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea id="ipName" rows="3" class="form-control" ng-model="ipObj1.accessIp"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">备注</div>
+        <div class="col-sm-11 modal-body-value">
+          <textarea id="beizhu" rows="3" class="form-control" ng-model="ipObj1.remark"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

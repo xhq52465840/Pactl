@@ -1,0 +1,17 @@
+<div>
+  <button class="btn filter-drop-button ellipsis" ng-click="toggle($event)">
+    {{showName}}
+  </button>
+  <a role="button" class="filter-drop-a" ng-click="remove()">
+    <span class="glyphicon glyphicon-remove"></span>
+  </a>
+  <div ng-show="open" class="filter-drop-div">
+    <div class="filter-drop-input">
+      <input type="text" class="form-control" autocomplete="off" ng-model="textVal">
+    </div>
+    <div class="pd5">
+      <button type="button" class="btn btn-default" ng-click="update()">更新</button>
+      <button type="button" class="btn btn-link" ng-click="close()">关闭</button>
+    </div>
+  </div>
+</div>

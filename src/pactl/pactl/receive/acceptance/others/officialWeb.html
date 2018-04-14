@@ -1,0 +1,47 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>功能</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">单次证书官网验证</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">单次证书官网验证</div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">鉴定机构</div>
+        <div class="search-value" style="width: 180px; padding: 6px 10px 6px 0;">{{cerData.officeName}}</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">鉴定证书编号</div>
+        <div class="search-value" style="padding: 6px 10px 6px 0;">{{cerData.bookNo}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt10 mb30">
+    <div class="cert-left">
+      <div class="cert-title">
+        电子版证书
+      </div>
+      <div class="cert-content" style="position: relative;">
+        <div ylx="cerData.srcArr"></div>
+      </div>      
+    </div>
+    <div class="cert-right">
+      <div class="cert-title">
+        官网信息
+        <span class="mr10" ng-if="!showCopy">证书编号：{{cerData.bookNo}}</span>
+        <span class="mr10" ng-if="!showCopy">授权编号：{{cerData.accredit}}</span>
+        <button ng-if="showCopy" class="btn btn-default" ngclipboard data-clipboard-text="{{cerData.bookNo}}">复制证书编号</button>
+        <button ng-if="showCopy" class="btn btn-default" ngclipboard data-clipboard-text="{{cerData.accredit}}">复制授权编号</button>
+      </div>
+      <div class="cert-content">
+        <iframe ng-src="{{trustSrc(cerData.classUrl)}}" frameborder="0" style="width:100%;height:900px;">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>

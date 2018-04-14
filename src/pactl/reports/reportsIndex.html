@@ -1,0 +1,22 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<div class="main-content">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">报表统计</div>
+    <ul class="nav nav-pills nav-stacked">
+      <li ng-repeat="item in list track by $index"  ng-class="{'active':$stateParams.url===item.url}"  role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="reports.statement({url:item.url,resName:item.resName})">
+          {{item.resName}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div role="button"  ng-click="nav()" ng-class="{'left-arrow-show':!showNav,'content-arrow1': !showNav,'content-arrow': showNav}"></div>
+  <div class="row content-right-white" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>
+<div ng-include="'foot.html'"></div>

@@ -1,0 +1,47 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<div class="main-content">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">机构管理</div>
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="unit.unit">
+          机构
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active':$state.includes('unit.permissionRole')}" ui-sref-active="active">
+        <a role="button" ui-sref="unit.permissionPlan">
+          权限方案
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active':$state.includes('unit.permissionSetDetail')}" ui-sref-active="active">
+        <a role="button" ui-sref="unit.permissionSet">
+          权限集合
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="unit.relation">
+          机构用户角色
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="unit.operAgent">
+          操作代理管理
+        </a>
+      </li>
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="unit.resource">
+          资源管理
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div role="button"  ng-click="nav()" ng-class="{'left-arrow-show':!showNav,'content-arrow1': !showNav,'content-arrow': showNav}"></div>
+  <div class="row content-right-white" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>
+<div ng-include="'foot.html'"></div>

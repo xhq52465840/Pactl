@@ -1,0 +1,67 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<h3 class="modal-title">{{title}}</h3>
+	</div>
+	<div class="modal-body cert">
+		<div class="modal-body-title">
+			<button class="btn btn-default" ng-click="addCert()">
+				<i class="i-add"></i>增加记录
+			</button>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w20">鉴定机构</th>
+					<th class="w25">证书编号</th>
+					<th class="w25">PDF附件</th>
+					<th class="w20">使用年份</th>
+					<th class="w10">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="itemObj in newItems">
+					<td>
+						<div ui-select ng-model="itemObj.officeCode" theme="select2" class="form-control" style="width: 150px;">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.shortName}}</div>
+							<div ui-select-choices repeat="item in officeCodeData | filter: {shortName:$select.search}">
+								<div ng-bind-html="item.shortName | highlight: $select.search"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="itemObj.bookNo" maxlength="30">
+					</td>
+					<td>
+						<div ng-show="!itemObj.pdfPath">
+							<button class="btn btn-primary" on-file-uploaded="uploadCallback($response, itemObj)" pl-max-file-size="3mb" pl-upload pl-progress-model="itemObj.progress">上传</button>
+							<div progressbar value="itemObj.progress" type="success"><b>{{itemObj.progress}}%</b></div>
+						</div>
+						<div ng-show="itemObj.pdfPath">
+							<i class="i-pdf" ng-click="openDialog(itemObj)"></i>
+							<div class="dib" ng-click="removeFile(itemObj)">
+								<i class="btn-close"></i>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div ui-select ng-model="itemObj.year" theme="select2" class="form-control" style="width: 100px;">
+							<div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+							<div ui-select-choices repeat="item in yearData | filter: {name:$select.search}">
+								<div ng-bind-html="item.name | highlight: $select.search"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="btn-img" ng-click="removeCert($index)">
+							<i class="btn-del"></i>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">保存</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">目的港<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="nameObj.dest" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="nameObj.dest" name="dest" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">航空公司<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="nameObj.fltCode" theme="select2" class="form-control" on-select="selectAir1()" on-remove="selectAir1()">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airCode}}</div>
+            <div ui-select-choices repeat="item in airData1 | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="nameObj.fltCode" name="fltCode" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">不适用航空公司<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="nameObj.noFltCode" theme="select2" class="form-control" on-select="selectAir2()" on-remove="selectAir2()">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airCode}}</div>
+            <div ui-select-choices repeat="item in airData2 | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" ng-model="nameObj.noFltCode" name="noFltCode" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">品名<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" ng-model="nameObj.goodsName" required name="goodsName">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

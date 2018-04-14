@@ -1,0 +1,92 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>系统设置</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">预审邮件提醒</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">
+		预审邮件提醒
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-default" ng-click="add()">
+			<i class="i-add"></i>新增
+		</button>
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">收件地址</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="preNoticeData.Address">
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">货站</div>
+				<div class="search-value">
+					<div ui-select ng-model="preNoticeData.freightStation" theme="select2" class="form-control wd">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+						<div ui-select-choices repeat="item in stationData | filter: {name:$select.search}">
+							<div ng-bind-html="item.name | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">邮件主题</div>
+				<div class="search-value">
+					<input type="text" class="form-control" ng-model="preNoticeData.mailTheme">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="search-name">发件箱</div>
+				<div class="search-value">
+					<div ui-select ng-model="preNoticeData.sendMail" theme="select2" class="form-control">
+						<div ui-select-match placeholder="请选择...">{{$select.selected.emailAddr}}</div>
+						<div ui-select-choices repeat="item in sentEmails | filter: {emailAddr:$select.search}">
+							<div ng-bind-html="item.emailAddr | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 fr">
+				<button class="btn btn-primary ml30" ng-click="search(true)">查询</button>
+			</div>
+		</div>
+	</div>
+	<table class="table content-main-table">
+		<thead>
+			<tr>
+				<th class="w10">货站</th>
+				<th class="w15">无人审单提醒时间</th>
+				<th class="w15">收件人</th>
+				<th class="w15">邮件主题</th>
+				<th class="w15">发送内容</th>
+				<th class="w20">发件邮箱</th>
+				<th class="w10">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in noticeData track by $index" ng-class-even="'even'">
+				<td>{{row.freightStation}}</td>
+				<td>{{row.noOneRemTime}}分</td>
+				<td>{{row.address}}</td>
+				<td>{{row.mailTheme}}</td>
+				<td>{{row.sendContent}}</td>
+				<td>{{row.sendMail | showEmailAddr: sentEmails}}</td>
+				<td>
+					<i class="btn-edit" ng-click="edit(row)"></i>
+					<i class="btn-del" ng-click="remove(row.id, row.sendMail)"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div ng-include="'page.html'" class="row"></div>
+</div>

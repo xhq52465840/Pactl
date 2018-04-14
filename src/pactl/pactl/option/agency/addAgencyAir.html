@@ -1,0 +1,42 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name">航空公司<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="airObj.air" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="air" ng-model="airObj.air" required>          
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name">鉴定证书延期年度</div>
+        <div class="modal-body-value">
+          <input type="text" name="url" class="form-control" ng-model="airObj.year" ng-pattern="/[0-9]+/">
+        </div>
+      </div>
+      <div class="row" ng-repeat="row in airObj.delayData track by $index">
+        <div class="modal-body-name">{{row.name}}</div>
+        <div class="modal-body-value">
+          <input type="text" class="form-control" w5c-dynamic-element w5c-dynamic-name="'delayData$'+row.id+'$'" ng-pattern="/^[0-9]+$/" ng-model="row.days" w5c-customizer="changeText(row)">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,43 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">名称<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <input type="text" class="form-control" name="name" required ng-model="roleObj.name">
+        </div>
+      </div>
+      <div class="row" ng-if="!isedit">
+        <div class="col-sm-2 modal-body-name">权限<span class="text-danger">*</span></div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="roleObj.permission" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+            <div ui-select-choices repeat="item in permissionData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+              <small>{{item.description}}</small>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" name="permission" required ng-model="roleObj.permission"  w5c-dynamic-element>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">描述</div>
+        <div class="col-sm-10 modal-body-value">
+          <textarea rows="3" class="form-control" name="description" ng-model="roleObj.description"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

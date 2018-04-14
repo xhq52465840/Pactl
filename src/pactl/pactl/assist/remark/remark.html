@@ -1,0 +1,49 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        备注
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">名称</div>
+        <div class="col-sm-10 modal-body-value">
+          证书编号<span></span>
+        </div>
+      </div>
+      <table class="table content-main-table">
+        <thead>
+          <tr>
+            <th class="w25">员工</th>
+            <th class="w25">内容</th>
+            <th class="w25">时间</th>
+            <th class="w25">编辑</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in remarkData track by $index">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div class="btn-img" ng-click="editTag(item)">
+                <i class="btn-edit"></i>
+              </div>              
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row">
+        <textarea rows="3" ng-model="remarkObj.remark" name="remark" required></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

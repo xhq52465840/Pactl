@@ -1,0 +1,321 @@
+<div class="fixed-title">
+	<div ng-controller="headCtrl">
+		<div ng-include="'head.html'" class="head-location"></div>
+	</div>
+	<ol class="bread">
+		<li><a role="button" ui-sref="index">首页</a></li>
+		<li class="bread-arrow">&gt;</li>
+		<li><span>收单</span></li>
+		<li class="bread-arrow">&gt;</li>
+		<li class="active">收单</li>
+	</ol>
+	<div class="business-content-title">
+		<div class="title">
+			<div class="title-top">
+				<span class="title-1">货代</span>
+				<span class="title-2">{{parentBill.agentOprn}}</span>
+			</div>
+			<div class="title-bottom" style="position:relative">
+				<span class="title-1">主单</span>
+				<span ng-if="progressObj.waybillStatus && progressObj.waybillStatus.isFormal === '1' && progressObj.waybillStatus.showWord && progressObj.waybillStatus.showWord && progressObj.waybillStatus.showWord !== ''" class="waybill-formal">{{progressObj.waybillStatus.showWord}}</span>
+				<span ng-if="progressObj.waybillStatus && progressObj.waybillStatus.isFormal !== '1' && informalRule && informalRule !== ''" class="waybill-informal">{{informalRule}}</span>
+				<span class="title-4" tooltip-placement="right" tooltip-html-unsafe="{{parentBill.wayBill}}">
+					<a ui-sref="pactlPrejudice.showMasterbill3({waybillNo:parentBill.awId})" target="_blank" role="button">{{parentBill.waybillNo}}</a>
+				</span>
+				<i class="i-e" ng-if="parentBill.wbEle==='1'"></i>
+				<i class="i-car" ng-if="progressObj.waybillStatus.approachFlag==='1'"></i>
+				<i class="i-huiji" ng-show="progressObj.waybillStatus.shipmentFlag==='1'"></i>
+				<span ng-if="progressObj.waybillStatus.wFlag === '1'" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">无效运单</span>
+				<span ng-if="moveAmount > 0" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">迁转{{moveAmount}}件</span>
+				<span ng-if="datas" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">{{datas}}</span>
+				<span ng-if="changeWaybillData" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">{{changeWaybillData}}</span>
+				<span ng-show="mainStyle" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">安检加证书</span>
+				<span class="label pre-localCheckFlag" ng-repeat="item in checkTypeData track by $index" ng-if="item.checkFlag">{{item.checkName}}</span>
+			</div>
+		</div>
+		<div class="pull-right pt30">
+			<button class="btn btn-default" ng-click="check()" ng-disabled="readOnly || progressObj.waybillStatus.wFlag === '1' || progressObj.waybillStatus.aStatus !=='201'">
+				<i class="i-jcqd"></i>检查清单
+			</button>
+			<button class="btn btn-default" ng-click="pass()" ng-disabled="readOnly || progressObj.waybillStatus.wFlag === '1' || progressObj.waybillStatus.aStatus !=='201' || btn.afterPass === 'true'">
+				<i class="i-right"></i>通过
+			</button>
+			<div style="position: relative;display: inline-block;">
+				<button style="position: relative;" class="btn btn-default" ng-click="noPass()" ng-disabled="readOnly || progressObj.waybillStatus.wFlag === '1' || progressObj.waybillStatus.aStatus !=='201' || btn.afterNopass === 'true' || progressObj.waybillStatus.shipmentFlag==='1' ">
+					<!--<i class="i-wrong" ng-class="{'nopass':progressObj.waybillStatus.wStatus === '302'}"></i>-->	
+					<i class="i-wrong"></i>不通过		
+				</button>
+				<i class="i-warning" style="position: absolute;right: -6px;top:-7px;" ng-if="noPassFlag === '1' || progressObj.waybillStatus.wStatus ==='302'"></i>
+			</div>
+
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="readOnly">
+				<span class="caret"></span>
+				<i class="i-other"></i>其他操作
+			</button>
+			<ul class="dropdown-menu" role="menu">   
+				<li><a role="button" ng-click="sendINIT(parentBill)">核放行</a></li>
+				<li><a role="button" ng-click="back(parentBill)">退单</a></li>
+				<li><a role="button" ng-click="backList(parentBill)" ng-hide="progressObj.waybillStatus.wFlag === '1'">打退库单</a></li>
+				<li><a role="button" ng-click="approachflag(parentBill)" ng-hide="progressObj.waybillStatus.wFlag === '1'">取消进场</a></li>
+				<li ng-hide="progressObj.waybillStatus.wFlag === '1' || ckReBook === '0'"><a role="button" ng-click="rebooks(parentBill.awId)">收正本</a></li>
+				<li ng-hide="progressObj.waybillStatus.wFlag === '1' || ckOpenFlag === '0'"><a role="button" ng-click="unpack(parentBill.awId)">开箱检查</a></li>
+				<li><a role="button" ng-click="move(parentBill)" ng-hide="progressObj.waybillStatus.wFlag === '1'">空侧迁转</a></li>
+				<li><a role="button" ng-click="changeWaybill(parentBill)" ng-hide="progressObj.waybillStatus.wFlag === '1'">运单改配</a></li>
+				<li><a role="button" ng-click="historys(parentBill)">历史文档</a></li>
+				<li><a role="button" ng-click="remarkInvalid(parentBill,'1')" ng-hide="progressObj.waybillStatus.wFlag === '1'">标记为无效运单</a></li>
+				<li><a role="button" ng-click="remarkInvalid(parentBill,'0')" ng-hide="progressObj.waybillStatus.wFlag !== '1'">标记为有效运单</a></li>
+				<li><a role="button" ng-click="remarkFormal(parentBill,'0')" ng-hide="progressObj.waybillStatus.isFormal === '1'">标记为正式运单</a></li>
+				<li><a role="button" ng-click="remarkFormal(parentBill,'1')" ng-hide="progressObj.waybillStatus.isFormal !== '1'">标记为测试运单</a></li>
+				<li><a role="button" ng-click="eleWaybill(parentBill.awId)" ng-hide="progressObj.waybillStatus.wFlag !== '1' && parentBill.wbEle!=='1'"
+					  ng-if="progressObj.waybillStatus.wbEle==='1'">改为非电子运单</a></li>
+				<li><a role="button" ng-click="eleWaybill(parentBill.awId)" ng-hide="progressObj.waybillStatus.wFlag !== '1' && parentBill.wbEle==='1'"
+					  ng-if="progressObj.waybillStatus.wbEle==='1'">改为电子运单</a></li>
+				<li><a role="button" ng-click="reStore(parentBill)" ng-hide="progressObj.waybillStatus.wFlag === '1'">重新入库</a></li>
+				<li><a role="button" ui-sref="pactlPrejudice.sublist({waybillNo:parentBill.awId})" target="_blank">分单清单</a></li>
+				<li><a role="button" ui-sref="pactlPrejudice.preBook({airCode:parentBill.carrier1,destCode: parentBill.airportDest})" target="_blank">审单宝典</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="business-content-body" scroll-top>
+	<div class="business-content-body-left">
+		<div class="business-content-info">
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="info-name">航空公司</div>
+					<div class="info-value-1">{{parentBill.carrier1}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">件数</div>
+					<div class="info-value-1">{{parentBill.rcpNo}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">重量(KG)</div>
+					<div class="info-value-1">{{parentBill.grossWeight}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">计费重量(KG)</div>
+					<div class="info-value-1">{{parentBill.chargeWeight}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">体积({{parentBill.volumeCode}})</div>
+					<div class="info-value-1">{{parentBill.vol}}</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name">目的港</div>
+					<div class="info-value-1">{{parentBill.airportDest}}</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2 pre-detail">
+					<div class="info-name preIcon">航班</div>
+					<div class="info-value-1 preIcon"> {{parentBill.flightNo}} {{parentBill.fltDate | date: 'MM/dd'}}</div>
+				</div>
+				<div class="col-sm-2 pre-detail">
+					<div class="info-name preIcon">
+						<a role="button" ng-click="showCargoDeclaraction()">
+							<div role="button" class="name-result name-result1 noCargoBook" ng-show="showCargoDeclare.dangerFlag !=='0' && showCargoDeclare.dangerFlag !=='1' && showCargoDeclare.dangerFlag !=='2' && showCargoDeclare.dangerFlag !=='3' && showCargoDeclare.dangerFlag !=='4'">货物申报</div>
+							<div role="button" class="name-result name-result1 dangerGoods" ng-show="showCargoDeclare.dangerFlag==='0' || showCargoDeclare.dangerFlag==='3'">危险品</div>
+							<div role="button" class="name-result name-result1 hasNoBook" ng-show="showCargoDeclare.dangerFlag==='1'">普货有证书</div>
+							<div role="button" class="name-result name-result1 hasNoBook" ng-show="showCargoDeclare.dangerFlag==='2'">普货无证书</div>
+							<div role="button" class="name-result name-result1 lidianchi" ng-show="showCargoDeclare.dangerFlag==='4'">锂电池</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-2 pre-detail">
+					<div class="info-name preIcon">
+						<a role="button" class="nullClass">
+							<div role="button" class="name-result name-result1 noCargoBook" ng-show="progressObj.eli.flag !== 'true' && progressObj.elm.flag !== 'true' "
+							  ng-click="showBatteryDeclaraction({eliFlag:progressObj.eli.flag === 'true'?'1':'0',elmFlag:progressObj.elm.flag === 'true'?'1':'0'},'ELI')">锂电池声明</div>
+							<div role="button" class="name-result name-result1 lidianchi nullClass listCert" ng-show="progressObj.eli.flag === 'true'"
+							  ng-click="showBatteryDeclaraction({eliFlag:progressObj.eli.flag === 'true'?'1':'0',elmFlag:progressObj.elm.flag === 'true'?'1':'0'},'ELI')"
+							  tooltip-placement="left" tooltip-html-unsafe="{{pres.eli}}" role="button">ELI</div>
+							<div role="button" class="name-result name-result1 lidianchi nullClass listCert" ng-show="progressObj.elm.flag === 'true'"
+							  ng-click="showBatteryDeclaraction({eliFlag:progressObj.eli.flag === 'true'?'1':'0',elmFlag:progressObj.elm.flag === 'true'?'1':'0'},'ELM')"
+							  tooltip-placement="left" tooltip-html-unsafe="{{pres.elm}}" role="button">ELM</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-2 pre-detail">
+					<div class="info-name preIcon">证书</div>
+					<div class="info-value-1 preIcon">
+						<!--图标1-->
+						<div class="corner-parent" ng-show="parentBooks.book" ng-click="searchBook({
+						wStatus: wStatus,
+						awId: parentBill.awId,
+						type: 'book',
+						goodsNameEn: parentBill.goodsNameEn,
+						goodsNameCn: parentBill.goodsNameCn,
+						goodsDesc: parentBill.goodsDesc
+					})">
+							<i class="i-zs-z preIcon1"></i>
+							<a><small class="corner">{{parentBooks.book}}</small></a>
+							<!-- <a><small class="corner" ng-show="">安检加证书</small></a> -->
+						</div>
+						<!--图标2-->
+						<!-- 						<div class="corner-parent" ng-show="parentBooks.electric" ng-click="searchBook({
+							awId: parentBill.awId,
+							type: 'electric',
+							goodsNameEn: parentBill.goodsNameEn,
+							goodsNameCn: parentBill.goodsNameCn,
+							goodsDesc: parentBill.goodsDesc
+						})">
+							<i class="i-zs-c preIcon1"></i>
+							<a><small class="corner" ng-click="searchBook({
+								awId: parentBill.awId,
+								type: 'electric',
+								goodsNameEn: parentBill.goodsNameEn,
+								goodsNameCn: parentBill.goodsNameCn,
+								goodsDesc: parentBill.goodsDesc									
+							})">{{parentBooks.electric}}</small></a>
+						</div> -->
+						<i class="i-ci-1 preIcon1" ng-show="parentBill.ckElectricFlag === '1' && sublist.length === 0"></i>
+						<!--图标3-->
+						<div class="corner-parent" ng-show="parentBooks.other" ng-click="searchBook({
+						wStatus: wStatus,
+						awId: parentBill.awId,
+						type: 'other',							
+					})">
+							<i class="i-zs-qt preIcon1"></i>
+							<a><small class="corner">{{parentBooks.other}}</small></a>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="col-sm-2">
+					<div class="info-name preIcon">保函</div>
+					<div class="info-value-1 preIcon">
+						<a role="button" target="_blank" ui-sref="pactlPrejudice.cargoDeclaraction({awId: parentBill.awId})">
+							<i class="i-bh" ng-show="showCargoDeclare"></i>
+							<i class="i-blank" ng-show="!showCargoDeclare"></i>
+							</a>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="info-name preIcon">锂电池声明</div>
+					<div class="info-value-1 preIcon">
+						<a role="button" target="_blank" ui-sref="pactlPrejudice.batteryDeclaraction({awId: parentBill.awId,waybillNo: parentBill.waybillNo})">
+							<i class="i-zs-ldc2" ng-show="showBattaryDeclare"></i>
+							<i class="i-blank" ng-show="!showBattaryDeclare"></i>
+							</a>
+					</div>
+				</div>-->
+				<div class="col-sm-2 pre-detail listCert">
+					<div class="info-name preIcon">品名补充</div>
+					<div class="info-value-1 preIcon">
+						<i tooltip-placement="left" tooltip-html-unsafe="{{parentBill.div}}" role="button" class="i-mpbc-1 preIcon1" ng-show="parentBill.goodsNameCn || parentBill.goodsNameEn || parentBill.goodsRemarks "
+						  ng-click="showNameAdvice(parentBill)"></i>
+					</div>
+				</div>
+				<div class="col-sm-2 pre-detail">
+					<div class="info-name preIcon">放行信息(件/KG)</div>
+					<div ng-if="isEqualityCustom()" class="info-value-1 preIcon">{{progressObj.waybillStatus.customRcpNo}}<span ng-if="progressObj.waybillStatus.customRcpNo && progressObj.waybillStatus.customRcpNo>0 && progressObj.waybillStatus.customWeight && progressObj.waybillStatus.customWeight>0">/</span>{{progressObj.waybillStatus.customWeight}}</div>
+					<div ng-if="!isEqualityCustom()" class="label-span"  style="background-color: rgb(232, 26, 26);">{{progressObj.waybillStatus.customRcpNo}}<span ng-if="progressObj.waybillStatus.customRcpNo && progressObj.waybillStatus.customRcpNo>0 && progressObj.waybillStatus.customWeight && progressObj.waybillStatus.customWeight>0">/</span>{{progressObj.waybillStatus.customWeight}}</div>					
+				</div>
+			</div>
+			<div class="row">
+				<div class="info-name">品名</div>
+				<div class="info-value-1 ellipsis w90">{{parentBill.goodsDesc}}</div>
+			</div>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w18">分单号</th>
+					<th class="w13">件数</th>
+					<th class="w13">重量</th>
+					<th class="w22">英文品名</th>
+					<th class="w10">品名补充</th>
+					<th class="w12">证书</th>
+					<th class="w12" ng-show="progressObj.eli.flag === 'true' || progressObj.elm.flag === 'true'">锂Ⅱ</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="checkList in sublist track by $index" ng-class-even="'even'" ng-class="{'gray-bg': checkList.childBill.refStatus === '1'}">
+					<td>
+						<a role="button">{{checkList.childBill.waybillNo}}</a>
+						<i class="i-e" ng-show="checkList.childBill.wbEle==='1'"></i>
+					</td>
+					<td>{{checkList.childBill.rcpNo}}</td>
+					<td>{{checkList.childBill.grossWeight}}</td>
+					<td>{{checkList.childBill.goodsDesc}}</td>
+					<td class="listCert">
+						<a tooltip-placement="left" tooltip-html-unsafe="{{checkList.div}}" role="button" ng-click="showNameAdvice(checkList.childBill)"
+						  ng-show="checkList.childBill.goodsNameCn || checkList.childBill.goodsNameEn || checkList.childBill.goodsRemarks"><i class="i-mpbc-1"></i></a>
+					</td>
+					<td>
+						<!--图标1-->
+						<div class="corner-parent" ng-show="checkList.childBooks.book" ng-click="searchBook({
+						wStatus: wStatus,
+						awId: checkList.childBill.awId,
+						type: 'book',
+						goodsNameEn: checkList.childBill.goodsNameEn,
+						goodsNameCn: checkList.childBill.goodsNameCn,
+						goodsDesc: checkList.childBill.goodsDesc,
+						isChildBill: '1'
+					})">
+							<i class="i-zs-z"></i>
+							<a><small class="corner">{{checkList.childBooks.book}}</small></a>
+						</div>
+						<!--图标2-->
+						<!-- 				<div class="corner-parent" ng-show="checkList.childBooks.electric" ng-click="searchBook({
+				awId: checkList.childBill.awId,
+				type: 'electric',
+				goodsNameEn: checkList.childBill.goodsNameEn,
+				goodsNameCn: checkList.childBill.goodsNameCn,
+				goodsDesc: checkList.childBill.goodsDesc
+			})">
+			<i class="i-zs-c"></i>
+			<a><small class="corner">{{checkList.childBooks.electric}}</small></a>
+		</div> -->
+						<i class="i-ci-1 preIcon1" ng-show="checkList.childBill.ckElectricFlag === '1' && sublist.length !== 0"></i>
+						<!--图标3-->
+						<div class="corner-parent" ng-show="checkList.childBooks.other" ng-click="searchBook({
+		wStatus: wStatus,
+		awId: checkList.childBill.awId,
+		type: 'other'
+	})">
+							<i class="i-zs-qt"></i>
+							<a><small class="corner">{{checkList.childBooks.other}}</small></a>
+						</div>
+						<span ng-show="checkList.subStyle" class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">安检</span>
+					</td>
+					<td ng-show="progressObj.eli.flag === 'true' || progressObj.elm.flag === 'true'" class="nullClass listCert">
+						<div role="button" class="name-result name-result1  lidianchi nullClass" ng-click="showBatteryDeclaraction(checkList.childBill,'ELI')"
+						  ng-show="checkList.childBill.eliFlag === '1'" tooltip-placement="left" tooltip-html-unsafe="{{pre.eli}}" role="button">ELI</div>
+						<div role="button" class="name-result name-result1  lidianchi nullClass" ng-click="showBatteryDeclaraction(checkList.childBill,'ELM')"
+						  ng-show="checkList.childBill.elmFlag === '1'" tooltip-placement="left" tooltip-html-unsafe="{{pre.elm}}" role="button">ELM</div>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>
+						合计： <span class="mr10">分单票数</span>{{totalObj.totalCount}}
+					</td>
+					<td>{{totalObj.rcpNo}}</td>
+					<td>{{totalObj.weight}}</td>
+					<td colspan="4"></td>
+				</tr>
+			</tfoot>
+		</table>
+		<div ng-include="'page.html'" class="row"></div>
+		<div class="remark-content-list">
+			<div tabset>
+				<div tab>
+					<div tab-heading>
+						<i class="i-search"></i> 备注
+					</div>
+					<div remark-dire awid="parentBill.awId" type="receive"></div>
+				</div>
+				<div tab>
+					<div tab-heading>
+						<i class="i-history"></i> 历史记录
+					</div>
+					<div history-dire awid="parentBill.awId" type="pactl"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div progress-dire awid="parentBill.awId" type="pactl" progress-obj="progressObj" progress-data="checkTypeData"></div>
+</div>

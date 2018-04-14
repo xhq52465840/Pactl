@@ -1,0 +1,120 @@
+<ol class="bread" ng-if="ismanager">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>门户</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">安检用户管理</li>
+</ol>
+<div class="content-main-title" ng-if="ismanager">
+  <div class="title">
+    安检用户管理
+  </div>
+  <div class="pull-right" ng-if="ismanager">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增安检用户
+    </button>
+  </div>
+</div>
+<div class="content-main-body" ng-if="ismanager">
+  <div class="content-main-search">
+    <div class="row">
+      <!--<div class="col-sm-4">
+        <div class="search-name">所属机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="securityObj.deptId" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in securityOrgData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>-->
+      <div class="col-sm-4">
+        <div class="search-name">账号名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="securityObj.account">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">用户名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="securityObj.fullname">
+        </div>
+      </div>
+       <div class="col-sm-4">
+        <div class="search-name">安检编号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="securityObj.unitcode">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">所属分队</div>
+        <div class="search-value">
+          <div ui-select ng-model="securityObj.unit" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in securityUnitData | filter: $select.search">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">账户名</th>
+        <th class="w12">安检编号</th>
+        <th class="w12">用户名</th>
+        <th class="w12">所属机构</th>
+        <th class="w16">所属分队</th>
+        <th class="w22">角色</th>
+        <!--<th class="w14">邮箱</th>-->
+        <!--<th class="w12">头像</th>-->
+        <th class="w14">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in securityData track by $index" ng-class-even="'even'">
+        <td>{{item.account}}</td>
+        <td>{{item.unitcode}}</td>
+        <td>{{item.fullname}}</td>
+        <td><span class="label label-primary">{{item.unitDO.name}}</span></td>
+        <td><span class="label label-primary" ng-if="item.unit" ng-repeat="idx in securityUnitData | filter:item.unit ">{{idx.name}}</span></td>
+        <td><span class="label label-primary" ng-repeat="role in item.roleDOs">{{role.name}}</span>
+          <div class="btn-img" ng-if="isCanEditRole(item)" ng-click="addRole(item)">
+            <i class="btn-edit"></i>
+          </div>
+        </td>
+        <!--<td>{{item.email}}</td>-->
+        <!--<td><img ng-src="{{item.avatarurl}}" alt="" class="air-img"></td>-->
+        <td>
+          <div class="btn-img" title="编辑" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" title="启用" ng-if="item.status !== '正常'" ng-click="enabled(item)">
+            <i class="i-do"></i>
+          </div>
+          <div class="btn-img" title="停用" ng-if="item.status === '正常'" ng-click="disabled(item)">
+            <i class="i-not"></i>
+          </div>
+          <div class="btn-img" title="删除" ng-click="remove(item)">
+            <i class="btn-del"></i>
+          </div>
+          <div class="btn-img" title="密码修改" ng-click="modify(item)">
+            <i class="i-password"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

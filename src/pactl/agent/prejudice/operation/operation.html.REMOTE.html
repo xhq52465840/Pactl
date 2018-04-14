@@ -1,0 +1,191 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>预审</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">综合操作</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">综合操作</div>
+  <div class="pull-right">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" ng-click="print()">
+        <i class="i-print"></i>打印运单
+      </button>
+    </div>
+    <button class="btn btn-default" ng-click="info()">
+      <i class="i-search"></i>出运信息
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="search-name">运单状态</div>
+      <label class="label-checkbox" ng-repeat="waybillData in waybillDatas">
+        <input type="checkbox" ng-model="waybillData.checked">{{waybillData.name}}
+      </label>
+    </div>
+    <div class="row">
+      <div class="search-name">安检状态</div>
+      <label class="label-checkbox" ng-repeat="aData in aDatas">
+        <input type="checkbox" ng-model="aData.checked">{{aData.name}}
+      </label>
+    </div>
+    <div class="row">
+      <div class="search-name">
+        <a role="button" ng-click="showMore=!showMore">高级搜索</a>
+      </div>
+    </div>
+    <div class="row more-search" ng-show="showMore">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="search-name">航空公司</div>
+          <div class="search-value">
+            <div ui-select ng-model="operation.fltCode" theme="select2" class="form-control">
+              <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+              <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+                <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">航班号</div>
+          <div class="search-value"><input type="text" class="form-control" ng-model="operation.flightNo"></div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">航班日期</div>
+          <div class="search-value"><input type="text" class="form-control" pikaday="myPickerObject1" ng-model="operation.fltDate"></div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">目的港</div>
+          <div class="search-value">
+            <div ui-select ng-model="operation.dest1" theme="select2" class="form-control">
+              <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+              <div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+                <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="search-name">主单号</div>
+          <div class="search-value">
+            <input type="text" class="form-control dib" ng-model="operation.waybillNo" maxlength="11">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">分单号</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="operation.subwaybillNo">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">子账户</div>
+          <div class="search-value">
+            <div ui-select ng-model="operation.agentSales" theme="select2" class="form-control">
+              <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+              <div ui-select-choices repeat="item in salesData | filter: {code:$select.search}">
+                <div ng-bind-html="item.code | highlight: $select.search"></div>
+                <small>{{item.description}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="search-name">数据修改状态</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="operation.singleBill">
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding-left: 50px;">
+        <label class="label-checkbox"><input type="checkbox" ng-model="operation.aFlag">安检注销</label>
+        <label class="label-checkbox"><input type="checkbox" ng-model="operation.returnFlag">退运</label>
+        <label class="label-checkbox"><input type="checkbox" ng-model="operation.wbEle">电子运单</label>
+        <label class="label-checkbox"><input type="checkbox" ng-model="operation.wbFocus">已收藏运单</label>
+        <label class="label-checkbox"><input type="checkbox" ng-model="operation.main">只显示主单</label>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-dialog-table">
+    <thead>
+      <tr>
+        <th class="w3"></th>
+        <th class="w15" t-sort="a.WAYBILL_NO">运单号</th>
+        <th class="w6" t-sort="a.FLIGHT_NO">航班</th>
+        <th class="w8" t-sort="a.FLT_DATE">航班日期</th>
+        <th class="w6"></th>
+        <th class="w5" t-sort="a.AIRPORT_DEST">目的港</th>
+        <th class="w5" t-sort="a.RCP_NO">件数</th>
+        <th class="w6" t-sort="a.GROSS_WEIGHT">重量(KG)</th>
+        <th class="w10" t-sort="a.CHARGE_WEIGHT">计费重量(KG)</th>
+        <th class="w6" t-sort="a.VOL">体积</th>
+        <th class="w10" t-sort="a.GOODS_DESC">品名</th>
+        <th class="w10" t-sort="b.W_STATUS">运单状态</th>
+        <th class="w10" t-sort="b.A_STATUS">安检状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in opData track by $index" ng-show="item.hasOwnProperty('pAirWaybillDetails')" ng-class="{'childbill':item.pAirWaybillInfo.parentNo}">
+        <td>
+          <i ng-click="doFocus(item)" ng-class="{'btn-nostart': !item.pAirWaybillFocus, 'btn-start': item.pAirWaybillFocus}" ng-if="item.hasOwnProperty('pAirWaybillFocus')"></i>
+        </td>
+        <td>
+          <input type="checkbox"  ng-click="singleCheck($event, item.pAirWaybillInfo)">
+          <i class="i-yes" ng-show="item.pAirWaybillInfo.refStatus === '0' && item.pAirWaybillInfo.parentNo"></i>
+          <i class="i-no" ng-show="item.pAirWaybillInfo.refStatus ==='1' && item.pAirWaybillInfo.parentNo"></i>
+          <a role="button" ui-sref="agentWaybill.newMasterBill({billNo: item.pAirWaybillInfo.waybillNo})" ng-if="item.pAirWaybillInfo.type==='0'" target="_blank">
+            {{item.pAirWaybillInfo.waybillNo.substr(0, 3)}}
+            <span class="">-</span>
+            {{item.pAirWaybillInfo.waybillNo.substr(3)}} 
+          </a>
+          <a class="billChild" role="button" ui-sref="agentWaybill.newBill({awId: item.pAirWaybillInfo.awId})" ng-if="item.pAirWaybillInfo.type==='1'" target="_blank">
+            {{item.pAirWaybillInfo.waybillNo}}
+          </a>
+          <span role="button" class="caret" ng-show="showCert(item)" ng-click="showSub(item)"></span>
+        </td>
+        <td style="text-align: left;">
+          <span ng-show="!item.pAirWaybillInfo.parentNo" ng-class="{'grayBill':!item.pAirWaybillInfo.parentNo}"><span ng-class="{'red-ft':item.pAirWaybillDifference.flightNo}">{{item.pAirWaybillInfo.flightNo}}</span></span>
+        </td>
+        <td style="text-align: left;">
+          <span ng-show="!item.pAirWaybillInfo.parentNo" ng-class="{'grayBill':!item.pAirWaybillInfo.parentNo}"><span ng-class="{'red-ft':item.pAirWaybillDifference.fltDate}">{{item.pAirWaybillInfo.fltDate}}</span></span>
+        </td>
+        <td style="text-align: left;">
+          <i class="i-e" ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillInfo.wbEle==='1'"></i>
+          <i class="i-car" ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.approachFlag==='1'"></i>
+          <i class="i-huiji" ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.shipmentFlag==='1'"></i>
+          <span ng-show="!item.pAirWaybillInfo.parentNo && item.pAirWaybillStatus.wFlag==='1'"  class="label-span ng-binding" ng-style="label.styleObj" style="background-color: rgb(232, 26, 26);">无效</span>
+        </td>
+        <td  ng-if="item.pAirWaybillInfo.type==='0'"><span ng-class="{'red-ft':item.pAirWaybillDifference.airportDest}">{{item.pAirWaybillInfo.airportDest}}</span></td>
+        <td  ng-if="item.pAirWaybillInfo.type==='1'"><span ng-class="{'red-ft':item.pAirWaybillDifference.dest1}">{{item.pAirWaybillInfo.dest1}}</span></td>
+        <td><span ng-class="{'red-ft':item.pAirWaybillDifference.rcpNo}">{{item.pAirWaybillInfo.rcpNo}}</span></td>
+        <td><span ng-class="{'red-ft':item.pAirWaybillDifference.grossWeight}">{{item.pAirWaybillInfo.grossWeight}}</span></td>
+        <td><span ng-class="{'red-ft':item.pAirWaybillDifference.chargeWeight}">{{item.pAirWaybillInfo.chargeWeight}}</span></td>
+        <td><span ng-class="{'red-ft':item.pAirWaybillDifference.vol}">{{item.pAirWaybillInfo.vol}}</span></td>
+        <td><span ng-class="{'red-ft':item.pAirWaybillDifference.goodsDesc}">{{item.pAirWaybillInfo.goodsDesc}}</span></td>
+        <td>
+          <a role="button" ng-click="goToPre(item.pAirWaybillInfo.awId, item.pAirWaybillInfo.waybillNo)" ng-show="!item.pAirWaybillInfo.parentNo">{{item.pAirWaybillStatus.wStatus | showStatus: waybillDatas}}</a>
+          <span ng-show="item.pAirWaybillInfo.refStatus === '0' && item.pAirWaybillInfo.parentNo">拉上</span>
+          <span ng-show="item.pAirWaybillInfo.refStatus ==='1' && item.pAirWaybillInfo.parentNo">拉下</span>
+        </td>
+        <td>
+          <span ng-if="item.pAirWaybillStatus.aFlag==='1'">安检注销</span>
+          <span ng-if="item.pAirWaybillStatus.aFlag==='0'">{{item.pAirWaybillStatus.aStatus | showStatus: aDatas}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

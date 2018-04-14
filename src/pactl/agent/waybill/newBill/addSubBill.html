@@ -1,0 +1,52 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+    	<span></span>
+      <div class="row">
+        <div class="col-sm-1 modal-body-name">分单号</div>
+        <div class="col-sm-4 modal-body-value">
+          <input type="text" class="form-control" name="waybillNo" ng-model="billObj.waybillNo" maxlength="12" ng-change="changeText()">
+        </div>
+        <div class="col-sm-4 modal-body-value">
+          <button class="btn btn-primary" ng-click="add()">创建分单</button>
+          <button class="btn btn-primary" ng-click="search()">查询</button>
+        </div>
+      </div>
+      <table class="table content-main-table">
+        <thead>
+          <tr>
+            <th class="w20">分单号</th>
+            <th class="w20">目的港</th>
+            <th class="w20">品名</th>
+            <th class="w10">件数</th>
+            <th class="w10">重量</th>
+            <th class="w20">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in billData track by $index" ng-class-even="'even'">
+            <td>{{item.waybillNo}}</td>
+            <td>{{item.dest1}}</td>
+            <td>{{item.goodsDesc}}</td>
+            <td>{{item.rcpNo}}</td>
+            <td>{{item.grossWeight}}</td>
+            <td>
+              <a role="button" ng-click="select(item)">选择</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    </div>
+  </div>
+</form>

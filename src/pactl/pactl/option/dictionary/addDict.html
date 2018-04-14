@@ -1,0 +1,70 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">编号<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="id" class="form-control" required ng-model="dictObj.id" ng-disabled="isEdit" maxlength="5">
+        </div>
+      </div>
+      <div class="row" style="margin: -16px 0 16px;">
+        <div class="col-sm-offset-2">
+          <small>最多5位</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">名称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="name" class="form-control" required ng-model="dictObj.name">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">分类<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="dictObj.type" theme="select2" class="form-control" ng-disabled="isEdit">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in typeData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+          <input type="hidden" name="type" required ng-model="dictObj.type">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">父节点</div>
+        <div class="modal-body-value">
+          <div ui-select ng-model="dictObj.parentId" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in allData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">排序</div>
+        <div class="modal-body-value">
+          <input type="text" name="num" class="form-control" ng-model="dictObj.num">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">备注</div>
+        <div class="modal-body-value">
+          <textarea name="remarks" class="form-control" rows="3" ng-model="dictObj.remarks"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

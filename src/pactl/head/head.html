@@ -1,0 +1,77 @@
+<div ng-show="noflash" class="noflash">
+  <b>没有安装flash，请<a href="https://get2.adobe.com/cn/flashplayer/?no_redirect" target="_blank">点击</a>安装flash,然后重启浏览器</b>
+  <span class="glyphicon glyphicon-remove" ng-click="notip()" title="关闭"></span>
+</div>
+<div class="navbar navbar-pactl">
+  <div class="collapse navbar-collapse header" style="height: 68px!important;">
+    <div class="nav-logo">
+      <a role="button" ui-sref="index">
+        <img src="../../image/pactl/logo.png" alt="logo">
+      </a>
+    </div>
+    <!-- 左侧菜单 start-->
+    <ul class="nav navbar-nav">
+      <li class="{{menu.menuClass}} nav-height dropdown" ui-sref-active="active" ng-repeat="menu in menus track by $index">
+        <a role="button" ui-sref="{{menu.url||'index'}}">{{menu.name}}</a>
+        <ul class="dropdown-menu menu-top">
+          <li ng-repeat="row in menu.childs track by $index" ng-switch="row.url">
+            <a role="button" ng-click="changeUnit(row)" ng-class="{'active':row.id===unit}" ng-if="menu.menuClass==='i-home'">{{row.name}}</a>
+            <a role="button" ui-sref="{{row.url||'index'}}" ui-sref-opts="{reload: true}" ng-if="row.type==='1'" ng-switch-default>{{row.name}}</a>
+            <a role="button" ui-sref="airline.airOperation({wStatus:'',wbFocus:'',littleTask:''})" ui-sref-opts="{reload: true}" ng-switch-when="airline.airOperation">{{row.name}}</a>
+            <a role="button" ui-sref="agentPrejudice.operation({wStatus:'',detainIn24H:'',change24H:'',wbFocus:''})" ui-sref-opts="{reload: true}"
+              ng-switch-when="agentPrejudice.operation">{{row.name}}</a>
+            <a role="button" ng-click="pactlPrejudice()" ng-if="row.type==='3'">{{row.name}}</a>
+            <a role="button" ng-click="pactlReceive()" ng-if="row.type==='4'">{{row.name}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <!-- 左侧菜单 end-->
+    <ul class="nav navbar-nav navbar-right">
+      <li class="search" ng-if="hasPermission">
+        <span>
+          <label class="label-search" ng-click="searchData.searchText()"></label>
+          <input type="text" class="search-query" ng-model="searchData.input" placeholder="主运单查询，如23554328116"
+           do-search="searchData.searchText()">
+        </span>
+      </li>
+      <li class="dropdown" ng-if="settingMenu.code">
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <span class="glyphicon glyphicon-cog"></span>
+        </a>
+        <ul class="dropdown-menu menu-top">
+          <li ng-repeat="row in settingMenu.childs track by $index">
+            <a role="button" ui-sref="{{row.url||'index'}}">{{row.name}}</a>
+          </li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <div message-temp></div>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <img ng-src="{{user.avatar}}" alt="" class="avatar"> {{user.username}}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu menu-top">
+          <li>
+            <a role="button" ng-click="changePassword()">密码修改</a>
+          </li>
+          <li><a role="button" ng-click="logout()">{{ 'HEAD.logout' | translate }}</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          {{language}}
+        </a>
+        <ul class="dropdown-menu">
+          <li><a role="button" ng-click="switchLang('CN')">{{ 'HEAD.chinese' | translate }}</a></li>
+          <!--<li><a role="button" ng-click="switchLang('EN')">{{ 'HEAD.english' | translate }}</a></li>-->
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<div ng-show="loading" class="header">
+  <div class="shadow"></div>
+</div>

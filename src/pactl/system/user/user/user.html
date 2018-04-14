@@ -1,0 +1,136 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>用户管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">用户</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    用户
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="superModify(item)">
+          <i class="i-password"></i>主账户超管密码修改
+    </button>
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增用户
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">账户名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.account">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">员工编号</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.employid">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">用户名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.fullname">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">用户组</div>
+        <div class="search-value">
+          <div ui-select ng-model="userObj.userGroup" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in userGroupData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">所属机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="userObj.deptId" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.code}}</div>
+            <div ui-select-choices repeat="item in agentData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">邮箱</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.email">
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w12">账户名</th>
+        <th class="w12">员工编号</th>
+        <th class="w14">用户名</th>
+        <th class="w12">用户组</th>
+        <th class="w14">所属机构</th>
+        <th class="w14">邮箱</th>
+        <th class="w22">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in userData track by $index" ng-class-even="'even'">
+        <td>{{item.account}}</td>
+        <td>{{item.employid}}</td>
+        <td>{{item.fullname}}</td>
+        <td>
+          <span class="label label-primary mr5 dib" ng-repeat="group in item.userGroups">{{group.name}}</span>
+        </td>
+        <td>{{item.deptName || item.validDeptName}}</td>
+        <td>{{item.email}}</td>
+        <td ng-if="item.unitValid">
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-if="item.status !== '正常'" ng-click="enable(item)">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-if="item.status === '正常'" ng-click="disable(item)">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.fullname)">
+            <i class="btn-del"></i>
+          </div>
+          <div class="btn-img" title="密码修改" ng-click="modify(item)">
+            <i class="i-password"></i>
+          </div>
+          <div class="btn-img" ng-if="!item.isHasHistory" title="操作历史" ng-click="historys(item)">
+            <i class="i-operate"></i>
+          </div>
+          <div class="btn-img" ng-if="item.isHasHistory" title="操作历史" ng-click="historys(item)">
+            <i class="i-operate2"></i>
+          </div>
+        </td>
+        <td ng-if="!item.unitValid">
+          <span class="label ng-binding wstatus6">
+            所属机构已禁用
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

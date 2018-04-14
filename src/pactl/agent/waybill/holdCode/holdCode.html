@@ -1,0 +1,53 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">SHC CODE
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body cert">
+		<div class="modal-body-title">
+			<button class="btn btn-default" ng-click="add()">
+				<i class="i-add"></i>增加
+			</button>
+		</div>
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w20">SHC CODE</th>
+					<th class="w30">DISCRIPTION</th>
+					<th class="w40">Remark</th>
+					<th class="w10"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in newItems">
+					<td>
+						<div ui-select ng-model="row.shc" theme="select2" class="form-control" on-select="selectCode($item, row)">
+							<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.sccCode}}</div>
+							<div ui-select-choices repeat="item in shcCodeData | filter: {sccCode:$select.search}">
+								<div ng-bind-html="item.sccCode | highlight: $select.search"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						{{row.discription}}
+					</td>
+					<td>
+						<textarea rows="3" class="form-control" ng-model="row.remarks"></textarea>
+					</td>
+					<td>
+						<div class="btn-img" ng-click="remove($index)">
+							<i class="btn-del"></i>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">保存</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>

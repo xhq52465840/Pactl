@@ -1,0 +1,36 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">货站编号</div>
+        <div class="modal-body-value">
+          {{stationObj.id}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">货站名称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="name" class="form-control" required ng-model="stationObj.name">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">货站描述</div>
+        <div class="modal-body-value">
+          <textarea rows="3" name="remark" class="form-control" ng-model="stationObj.remark"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

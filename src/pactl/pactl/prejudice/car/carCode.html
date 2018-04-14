@@ -1,0 +1,107 @@
+<div class="noprint" ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<ol class="bread noprint">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>预审</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">入库卡车扫描单</li>
+</ol>
+<div class="content-main-body" style="width: 794px;margin: 0 auto;background-color: #fff;">
+  <div class="row noprint">
+    <div class="pull-right">
+      <button class="btn btn-default" ng-click="printCode()">
+        <i class="i-print"></i>打印
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div print-desc></div>
+  </div>
+  <div class="row">
+    <div class="car-title1">
+      <div style="position:relative;">
+        入库卡车扫描单
+        <img src="../../../../image/pactl/pactl.png" alt="" style="position:absolute;right:0;top:2px;">
+        <br> <span class="car-en">TRUCK CONTROL TICKET</span>
+      </div>
+    </div>
+  </div>
+  <div class="row car-row">
+    <div class="car-row-1">
+      <div>
+        卡车条形码<br> <span class="car-en">TRUCK CONTROL</span>
+      </div>
+    </div>
+    <div class="car-row-2">
+      <div>
+        <img ng-src="{{carData.truckBillBarCode}}" alt="code" style="max-width: 320px;">
+        <div class="truckBill">
+          {{carData.truckBill}}
+        </div>
+      </div>
+    </div>
+    <div class="car-row-3">
+      <div class="row">
+        <div class="fl" style="width: 120px;">
+          <span class="mr20">
+          预审通过<br><span class="car-en">PRE-CHECK PASS</span>
+          </span>
+        </div>
+        <div class="car-row-3-2 fl">{{carData.prePass}}</div>
+      </div>
+      <div class="row">
+        <div class="fl" style="width: 120px;">
+          <span>现场检查<br><span class="car-en">SITE CHECK</span></span>
+        </div>
+        <div class="car-row-3-2 fl">{{carData.spotCheck}}</div>
+      </div>
+      <div class="row">
+        <div class="fl" style="width: 120px;">
+          <span>其他<br><span class="car-en">OTHERS</span></span>
+        </div>
+        <div class="car-row-3-2 fl">{{carData.other}}</div>
+      </div>
+    </div>
+  </div>
+  <div ng-class="{'print-break': !$last}" ng-repeat="row in listData track by $index">
+    <table class="table car-table">
+      <thead style="display:table-header-group;">
+        <tr>
+          <th colspan="1">代理代码<br><span class="car-en">AGENT</span></th>
+          <th>{{carData.agentCode}}</th>
+          <th colspan="2">卡车号<br><span class="car-en">TRUCK</span></th>
+          <th colspan="2">{{carData.truckNo}}</th>
+        </tr>
+        <tr>
+          <th class="w15">序号<br><span class="car-en">NO</span></th>
+          <th class="w30">运单条形码<br><span class="car-en">AWB</span></th>
+          <th class="w12">件数<br><span class="car-en">PC</span></th>
+          <th class="w15">重量<br><span class="car-en">KG</span></th>
+          <th class="w12">目的港<br><span class="car-en">DEST</span></th>
+          <th class="w16">预审状态<br><span class="car-en">STATUS</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in row track by $index">
+          <td>{{item.index}}</td>
+          <td>
+            <img ng-src="{{item.barCode}}" alt="code">
+            <div class="fs20">
+              {{item.waybillNo}}
+            </div>
+          </td>
+          <td>{{item.totalCount}}</td>
+          <td>{{item.grossWeight}}</td>
+          <td>{{item.dest1}}</td>
+          <td>
+            {{item.wStatus | showStatus: wStatusData}}
+            <br>
+            <span ng-if="item.spotCheck === '1'" style="font-size: 14px;">现场检查</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

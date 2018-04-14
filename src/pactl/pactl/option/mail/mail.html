@@ -1,0 +1,86 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">证书邮件地址</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    证书邮件地址
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li ng-class="{'active': mailObj.type==='0'}" ng-click="select('0')">
+        <a role="button">白名单</a>
+      </li>
+      <li ng-class="{'active': mailObj.type==='1'}" ng-click="select('1')">
+        <a role="button">黑名单</a>
+      </li>
+    </ul>
+  </div>
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">邮件地址</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="mailObj.emailAddress" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">地址说明</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="mailObj.mark">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w13">地址类型</th>
+        <th class="w17">邮件地址</th>
+        <th class="w18">地址说明</th>
+        <th class="w13">创建人</th>
+        <th class="w13">最后修改时间</th>
+        <th class="w13">修改人</th>
+        <th class="w13">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in mailData track by $index" ng-class-even="'even'">
+        <td>{{item.addressType|isValid: '5'}}</td>
+        <td>{{item.emailAddress}}</td>
+        <td>{{item.mark}}</td>
+        <td>{{item.creater}}</td>
+        <td>{{item.odifiedDate | date:'yyyy/MM/dd'}}</td>
+        <td>{{item.updater}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="enable(item)" ng-if="item.status==='2'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="disable(item)" ng-if="item.status==='0'">
+            <i class="i-yx"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.emailAddress)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

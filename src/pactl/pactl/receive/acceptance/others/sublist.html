@@ -1,0 +1,143 @@
+<div ng-controller="headCtrl">
+	<div ng-include="'head.html'"></div>
+</div>
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>预审</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">运单预审</li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">分单清单</li>
+</ol>
+<div print-desc></div>
+<div class="pull-right mr20">
+	<!-- <a class="btn btn-default" role="button" onclick="history.go(-1)">返回</a> -->
+	<a class="btn btn-default" role="button" ui-sref="pactlPrejudice.print({waybillNo:waybillNo})" target="_blank">打印</a>
+</div>
+<div ng-repeat="item in rows track by $index">
+	<div class="content-main-title">
+		<div class="sub_title">AIR CARGO MANIFEST</div>
+	</div>
+	<div class="content-main-body">
+		<div class="business-content-info">
+			<div class="border2" style="padding: 10px 0px;">
+				<div class="row" style="padding: 10px 0px;">
+					<div class="info-value-1">AWB INFO:</div>
+				</div>
+				<div class="row" style="padding: 10px 0px;">
+					<div class="col-sm-3">
+						<div class="info-name">AWB:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.waybillNo}}</div>
+					</div>
+					<div class="col-sm-3">			
+						<div class="info-name">FLIGHT:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.flightNo}} {{item.pAirWaybillInfo.fltDate| date:'MM/dd'}}</div>
+					</div>
+					<div class="col-sm-1">			
+						<div class="info-name">ORG:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.dept}}</div>
+					</div>
+					<div class="col-sm-1">			
+						<div class="info-name">DEST:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.airportDest}}</div>
+					</div>
+					<div class="col-sm-1">			
+						<div class="info-name">PCS:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.rcpNo}}</div>
+					</div>
+					<div class="col-sm-1">			
+						<div class="info-name">SLAC:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.slac}}</div>
+					</div>
+					<div class="col-sm-2">			
+						<div class="info-name">WEIGHT:</div>
+						<div class="info-value-1">{{item.pAirWaybillInfo.grossWeight}}</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="info-name">SHIPPER:</div>
+						<div class="info-value-1">
+							<textarea cols="70" rows="2" ng-disabled="true">{{item.pAirWaybillInfo.spName}}</textarea>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="info-name">CONSIGNEE:</div>
+						<div class="info-value-1">
+							<textarea cols="70" rows="2" ng-disabled="true">{{item.pAirWaybillInfo.csName}}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt30">
+				<div class="info-value-1">HAWB INFO：{{item.airWayBillInfoVos.length}} HAWBS</div>
+			</div>
+			<table class="table content-main-table border2" ng-repeat="row in item.airWayBillInfoVos track by $index">
+				<thead>
+					<tr>
+						<th class="w8">HAWB</th>
+						<th class="w5">DATE</th>
+						<th class="w5">ORG</th>
+						<th class="w10">DEST</th>
+						<th class="w10">PCS./SLAC</th>
+						<th class="w7">WEIGHT</th>
+						<th class="w35">COMMODITY</th>
+						<th class="w10">PAYMENT</th>
+						<th class="w10">CURRENCY</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border2">
+						<td class="border2">{{row.pAirWaybillInfo.waybillNo}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.createdDate| date:'MM/dd'}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.dept}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.dest1}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.rcpNo}}/{{row.pAirWaybillInfo.slac}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.grossWeight}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.goodsDesc}}<br/>{{row.pAirWaybillInfo.remark}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.wtVal}}</td>
+						<td class="border2">{{row.pAirWaybillInfo.currency}}</td>
+					</tr>
+					<tr class="border2"></tr>
+					<tr class="border2">
+						<td class="border2" colspan="5">SHIPPER</td>
+						<td class="border2" colspan="4">CONSIGNEE</td>
+					</tr>
+					<tr class="border2">
+						<td class="border2"></td>
+						<td class="border2" colspan="4">SHP:{{row.pAirWaybillInfo.spName}}</td>
+						<td class="border2"></td>
+						<td class="border2" colspan="3">CNS:{{row.pAirWaybillInfo.csName}}</td>
+					</tr>
+					<tr class="border2">
+						<td class="border2"></td>
+						<td class="border2" colspan="4">ADR:{{row.pAirWaybillInfo.spAddress}}</td>
+						<td class="border2"></td>
+						<td class="border2" colspan="3">ADR:{{row.pAirWaybillInfo.csAddress}}</td>
+					</tr>
+					<tr class="border2">
+						<td class="border2"></td>
+						<td class="border2" colspan="2">CITY:{{row.pAirWaybillInfo.spCity}}</td>
+						<td class="border2">COUNTRY CODE:{{row.pAirWaybillInfo.spCountry}}</td>
+						<td class="border2">STATE:{{row.pAirWaybillInfo.spState}}</td>
+						<td class="border2"></td>
+						<td class="border2">CITY:{{row.pAirWaybillInfo.csCity}}</td>
+						<td class="border2">COUNTRY CODE:{{row.pAirWaybillInfo.csCountry}}</td>
+						<td class="border2">STATE:{{row.pAirWaybillInfo.csState}}</td>
+					</tr>
+					<tr class="border2">
+						<td class="border2"></td>
+						<td class="border2" colspan="2">TEL:{{row.pAirWaybillInfo.spTel}}</td>
+						<td class="border2">FAX:{{row.pAirWaybillInfo.spFax}}</td>
+						<td class="border2">ZIPCODE:{{row.pAirWaybillInfo.spZipcode}}</td>
+						<td class="border2"></td>
+						<td class="border2">TEL:{{row.pAirWaybillInfo.csTel}}</td>
+						<td class="border2">FAX:{{row.pAirWaybillInfo.csFax}}</td>
+						<td class="border2">ZIPCODE:{{row.pAirWaybillInfo.csZipcode}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

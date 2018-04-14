@@ -1,0 +1,142 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>机构管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">操作代理管理</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    操作代理管理
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增操作代理
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="agentObj.isvalid" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in agentStatusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">IATA代码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.IATACode">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">操作代理代码</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.code">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">英文名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.ename">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">中文名称</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="agentObj.name">
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="content-right-card" ng-repeat="item in agentData track by $index" ng-show="$index > showItem.start && $index < showItem.end">
+        <div class="card-body" style="min-height:346px;">
+          <div class="row">
+            <div class="col-sm-4 card-body-name">图标</div>
+            <div class="col-sm-8 card-body-value ellipsis" style="width:40px;height:40px;">
+              <img ng-src="{{item.avatarUrl}}" alt="" class="air-img">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">操作代理代码</div>
+            <div class="col-sm-8 card-body-value ellipsis">{{item.code}}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">IATA代码</div>
+            <div class="col-sm-8 card-body-value ellipsis">{{item.iatacode}}</div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">英文名称</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" style="height:20px;" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.ename}}</div>'>{{item.ename}}</div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">中文名称</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" style="height:20px;" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.description}}</div>'>{{item.description}}</div>
+          </div>
+          <div class="row listCert">
+            <div class="col-sm-4 card-body-name">管理员</div>
+            <div class="col-sm-8 card-body-value ellipsis textWidth" style="height:20px;" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.unitmanagerText}}</div>'>{{item.unitmanagerText}}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 card-body-name">权限方案</div>
+            <div class="col-sm-8 card-body-value ellipsis" style="height:20px;">
+              <span class="label label-primary mr5" style=" font-weight:500" ng-repeat="row in item.unitSchemeDO">{{row.pScheme.name}}</span></div>
+            </div>
+            <div class="row listCert">
+              <div class="col-sm-4 card-body-name">角色</div>
+              <div class="col-sm-8 card-body-value ellipsis textWidth" style="height:20px;" tooltip-placement="center" tooltip-html-unsafe='<div class="pre-name" style="width:100%;word-break:break-all ">{{item.roleText}}</div>'>
+              {{item.roleText}}
+              </div>
+            </div>
+              <div class="row">
+                <div class="col-sm-4 card-body-name">状态</div>
+                <div class="col-sm-8 card-body-value ellipsis">
+                  <div class="btn-img" ng-click="disabled(item)" ng-if="item.isvalid">
+                    <i class="i-yx"></i>
+                  </div>
+                  <div class="btn-img" ng-click="enabled(item)" ng-if="!item.isvalid">
+                    <i class="i-sx"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4 card-body-name">最后修改时间</div>
+                <div class="col-sm-8 card-body-value ellipsis">{{item.lastUpdate}}</div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn card-footer-btn" title="删除" ng-click="remove(item)">
+                <i class="i-remove"></i>
+              </button>
+              <button class="btn card-footer-btn" title="编辑" ng-click="edit(item)">
+                <i class="i-edit"></i>
+              </button>
+              <button class="btn card-footer-btn" title="禁用" ng-click="disabled(item)" ng-if="item.isvalid">
+                <i class="i-disable"></i>
+              </button>
+              <button class="btn card-footer-btn" title="启用" ng-click="enabled(item)" ng-if="!item.isvalid">
+                <i class="i-enable"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--<div ng-include="'page.html'" class="row"></div>-->
+        <div ng-include="'pageInside.html'" class="row"></div>
+      </div>
+    </div>

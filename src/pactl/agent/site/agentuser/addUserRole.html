@@ -1,0 +1,48 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">机构</div>
+        <div class="col-sm-10 modal-body-value">
+         {{relationObj.unitDO.name}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">对象类型</div>
+        <div class="col-sm-10 modal-body-value">
+          {{relationObj.authObjType}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">用户</div>
+        <div class="col-sm-10 modal-body-value">
+          {{relationObj.fullname}}
+          <input type="hidden" name="id" required ng-model="relationObj.id">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 modal-body-name">角色</div>
+        <div class="col-sm-10 modal-body-value">
+          <div ui-select multiple ng-model="relationObj.role" theme="select2" class="form-control">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.name}}</div>
+            <div ui-select-choices repeat="item in roleData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

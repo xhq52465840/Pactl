@@ -1,0 +1,35 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <table class="table car-table">
+        <thead>
+          <tr>
+            <th class="w30">航空公司</th>
+            <th class="w70">延期天数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in delayData track by $index" ng-show="$index > showItem.start && $index < showItem.end" ng-class-even="'even'">
+            <td>{{item.airCode}}</td>
+            <td>
+              <input type="text" class="form-control" ng-model="item.days" w5c-dynamic-element w5c-dynamic-name="item.airCode" ng-pattern="/^[0-9]+$/">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div ng-include="'pageInside.html'" class="row"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

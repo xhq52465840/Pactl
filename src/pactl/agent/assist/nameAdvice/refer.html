@@ -1,0 +1,146 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">品名咨询</li>
+</ol>
+<div class="row content-nameRefer">
+	<div class="row">
+		<div class="content-nameRefer-title">
+			<div class="tar">
+				<div class="refer-mark fl userName" ng-show="agentSalesEnname">
+					货代：{{agentSalesEnname}}
+				</div>
+				<div class="refer-mark fl userName" ng-show="creatorName">
+					用户名：{{creatorName}}
+				</div>
+				<div class="refer-mark fr">
+					<a class="btn btn-default" href="../../../../down/producttemp.doc">
+						<i class="i-down"></i>产品说明模板下载
+					</a>
+				</div>
+				<div class="refer-mark fr ml30" style="font-size:16px;font-weight: 500;">
+					咨询编号{{goodsId}}
+				</div>
+				<div class="refer-mark fr" style="font-size:16px;font-weight: 500;margin-right: 60px;">
+					咨询问答记录
+				</div>
+			</div>
+		</div>
+	</div>
+	<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="addForm">
+		<div class="row content-nameRefer-left">
+			<div class="content-nameRefer-left-1">
+				<div class="row">
+					<div class="refer-name">状态</div>
+					<div class="status" ng-model="refer.status" ng-class="{'ask':ask,'add':add}" name="status">
+						{{refer.status| showStatus: statusData}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="refer-name"><span class="red">*</span>可能出运航空公司</div>
+					<div ui-select ng-model="refer.airLine1" theme="select2" on-select="valAir('1')" class="form-control" style="width: 115px;">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+						<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+							<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+						</div>
+					</div>
+					<div ui-select ng-model="refer.airLine2" theme="select2" on-select="valAir('2')" class="form-control" style="width: 115px;">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+						<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+							<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+						</div>
+					</div>
+					<div ui-select ng-model="refer.airLine3" theme="select2" on-select="valAir('3')" class="form-control" style="width: 115px;">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+						<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+							<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="refer-name"><span class="red">*</span>目的港</div>
+					<div ui-select ng-model="refer.dest" theme="select2" class="form-control w20">
+						<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airportCode}}</div>
+						<div ui-select-choices repeat="item in airportData" refresh="refreshDest($select.search)" refresh-delay="300">
+							<div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+						</div>
+					</div>
+					<input type="hidden" ng-model="refer.dest" required name="dest">
+					<small class="mr5">{{refer.dest && refer.dest.airportName}}</small>
+					<small>{{refer.dest && refer.dest.countryCode}}</small>
+				</div>
+				<div class="row">
+					<div class="refer-name" style="vertical-align: top;"><span class="red">*</span>英文品名</div>
+					<div class="refer-value">
+						<input type="text" class="form-control w150" placeholder="请只输入一个英文品名" ng-model="refer.namesEn" required name="namesEn" ng-change="onlyEn()">
+					</div>
+				</div>
+				<div class="row">
+					<div class="refer-name">中文品名</div>
+					<div class="refer-value">
+						<input type="text" class="form-control w150" placeholder="请只输入一个中文品名" ng-model="refer.namesCn">
+					</div>
+				</div>
+				<div class="row">
+					<div class="refer-name">产品说明</div>
+					<div class="refer-value">
+						<div ng-show="!refer.remoteFilename1.name || !btn.upload3" style="display: inline-block;">
+							<button class="btn btn-primary" on-file-uploaded="uploadCallback1($response, refer)" pl-upload pl-filters-model="[{title: 'files', extensions:'pdf,doc,png,jpg,jpeg'}]"
+							  pl-max-file-size="10mb" pl-url="/api/pactl/uploadfile" pl-multi-params-model="{type:'type'}" pl-progress-model="refer.progress1">上传</button>
+						</div>
+						<div ng-show="refer.remoteFilename1.name" style="display: inline-block;">
+							<span class="upload" title="{{refer.remoteFilename1.name}}" ng-click="downloadFile(refer.remoteFilename1.id)">{{refer.remoteFilename1.newName}}</span>
+							<div class="dib" ng-click="removeFile(refer.remoteFilename1.id, 'type')" ng-show="refer.remoteFilename1.newName && (refer.status === '101' || refer.status === '104')">
+								<i class="btn-close"></i>
+							</div>
+						</div>
+						<button ng-click="productExplain()" ng-class="{'onlinebtn1':done,'onlinebtn':!done}" ng-show="!refer.remoteFilename1.name && btn.upload3">在线填写产品说明</button>
+						<div ng-show="!refer.remoteFilename1.name || !btn.upload3" progressbar value="refer.progress1" type="success"><b>{{refer.progress1}}%</b></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="refer-name">补充文档</div>
+					<div class="refer-value">
+						<div ng-show="!refer.remoteFilename2.name" style="display: inline-block;">
+							<button class="btn btn-primary" on-file-uploaded="uploadCallback2($response, refer)" pl-upload pl-filters-model="[{title: 'files', extensions:'pdf,doc,png,jpg,jpeg'}]"
+							  pl-max-file-size="10mb" pl-url="/api/pactl/uploadfile" pl-multi-params-model="{type:'othertype'}" pl-progress-model="refer.progress2">上传</button>
+							<div style="width: 173px;" progressbar value="refer.progress2" type="success"><b>{{refer.progress2}}%</b></div>
+						</div>
+						<div ng-show="refer.remoteFilename2.name" style="display: inline-block;">
+							<span class="upload" title="{{refer.remoteFilename2.name}}" ng-click="downloadFile(refer.remoteFilename2.id)">{{refer.remoteFilename2.newName}}</span>
+							<div class="dib" ng-click="removeFile(refer.remoteFilename2.id, 'othertype')" ng-show="refer.remoteFilename2.newName && (refer.status === '101' || refer.status === '104')">
+								<i class="btn-close"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="refer-name">咨询问答</div>
+						<div class="refer-value">
+							<textarea class="form-control" rows="10" cols="32" placeholder="请输入内容......" ng-model="content" name="content"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="content-nameRefer-left-2">
+					<button class="btn btn-default" w5c-form-submit="save()">	暂存</button>
+					<button class="btn btn-primary" ng-click="sent()">发送</button>
+					<button class="btn btn-primary" ng-click="remove()" ng-disabled="!goodsId">删除</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="content-nameRefer-right">
+		<div class="row border2" style="height:450px;overflow-y:scroll;overflow-x: hidden;">
+			<div class="content-nameRefer-right-content" ng-repeat="rdData in records track by $index">
+				<div class="content-line" ng-repeat="record in rdData track by $index">
+					<div ng-class="{'avatar-img':record.type==='1','pactl-img':record.type==='2'}"></div>
+					<div ng-class="{'question-body':record.type==='1', 'answer-body':record.type==='2'}" style="display:inline;">{{record.contents}}</div>
+					<div class="question-foot" style="float:right;">
+						{{record.type==1?record.creatorName:''}} {{record.createdDate |date:'MM/dd HH:mm'}} {{$last == true?scrollBottom():''}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

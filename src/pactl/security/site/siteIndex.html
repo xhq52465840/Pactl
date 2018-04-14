@@ -1,0 +1,22 @@
+<div ng-controller="headCtrl">
+  <div ng-include="'head.html'"></div>
+</div>
+<div class="main-content" ng-if="ismanager">
+  <div class="content-left" ng-show="showNav">
+    <div class="content-left-head">站点管理</div>
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" ui-sref-active="active">
+        <a role="button" ui-sref="securitySite.securityuser">
+          <i class="i-user"></i> 安检用户
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div role="button" class="content-arrow" ng-click="nav()" ng-class="{'left-arrow-show':!showNav}"></div>
+  <div class="row content-right" ng-class="{'left-show':!showNav}">
+    <div class="col-sm-12 col-xs-12">
+      <div ui-view="mainInfo" class="mainInfo"></div>
+    </div>
+  </div>
+</div>
+<div ng-include="'foot.html'"></div>

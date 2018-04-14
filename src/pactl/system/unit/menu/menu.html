@@ -1,0 +1,52 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>机构管理</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">菜单</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    菜单
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增菜单
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="row">
+    <div ui-tree>
+      <ol ui-tree-nodes="" ng-model="treedata">
+        <li ng-repeat="node in treedata track by $index" ui-tree-node ng-include="'tree_renderer.html'"></li>
+      </ol>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="tree_renderer.html">
+  <div class="tree-node tree-node-content">
+    <i ng-if="node.children && node.children.length > 0" 
+      ng-click="treeToggle(this)" ng-class="{
+          'tree-collapsed': collapsed,
+          'tree-expanded': !collapsed
+        }"></i>
+    <i class="tree-child" ng-if="node.children && node.children.length == 0"></i>
+    {{node.name}}
+    <a class="pull-right btn btn-xs" ng-click="removeItem(this)" title="删除子节点">
+      <span class="glyphicon glyphicon-remove"></span>
+    </a>
+    <a class="pull-right btn btn-xs" ng-click="editItem(this)" title="编辑子节点">
+      <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+    <a class="pull-right btn btn-xs" ng-click="addSubItem(this)" style="margin-right: 8px;" title="添加子节点">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>        
+  </div>
+  <ol ui-tree-nodes="" ng-model="node.children" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.children" ui-tree-node ng-include="'tree_renderer.html'" data-collapsed="true">
+    </li>
+  </ol>
+</script>

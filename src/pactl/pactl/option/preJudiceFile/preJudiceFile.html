@@ -1,0 +1,92 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>选项</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">代理预审上传文件</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">代理预审上传文件</div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="add()">
+      <i class="i-add"></i>新增代理预审文件
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">文件类型</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="fileObj.type" auto-focus="true">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">航空公司</div>
+        <div class="search-value">
+          <div ui-select ng-model="fileObj.airLine" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w7">编码</th>
+        <th class="w7">文件简称</th>
+        <th class="w7">文件类型</th>
+        <th class="w10">适用航空公司</th>
+        <th class="w10">适用目的港</th>
+        <th class="w10">适用代理人</th>
+        <th class="w7">适用特货代码</th>
+        <th class="w7">是否必须上传</th>
+        <th class="w7">状态</th>
+        <th class="w7">创建人</th>
+        <th class="w7">修改人</th>
+        <th class="w7">最后修改时间</th>
+        <th class="w7">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in fileData track by $index" ng-class-even="'even'">
+        <td>{{item.code}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.type}}</td>
+        <td>{{item.airCode}}</td>
+        <td>{{item.destCode}}</td>
+        <td>{{item.agent}}</td>
+        <td>{{item.specialCode2}}</td>
+        <td>{{item.upload | isValid: '4'}}</td>
+        <td>
+          <div class="btn-img" ng-click="ableSatatus(item, '0')" ng-if="item.status==='2'">
+            <i class="i-sx"></i>
+          </div>
+          <div class="btn-img" ng-click="ableSatatus(item, '2')" ng-if="item.status==='0'">
+            <i class="i-yx"></i>
+          </div>
+        </td>
+        <td>{{item.creater}}</td>
+        <td>{{item.updater}}</td>
+        <td>{{item.odifiedDate | date: 'yyyy-MM-dd'}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

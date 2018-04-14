@@ -1,0 +1,104 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content">
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">编码<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="coding" class="form-control" required ng-model="fileObj.coding">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">文件名称<span class="text-danger">*</span></div>
+        <div class="modal-body-value">
+          <input type="text" name="filename" class="form-control" required ng-model="fileObj.filename">
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">航空公司</div>
+        <div class="modal-body-value" style="width: 320px;">
+          <div ui-select multiple ng-model="fileObj.airLine" theme="select2" class="form-control" ng-disabled="fileObj.check.airAble">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airCode}}</div>
+            <div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+              <div ng-bind-html="item.airCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body-value" style="width: 90px;">
+          <label>
+            所有<input type="checkbox" ng-click="fileObj.check.airAble=!fileObj.check.airAble" style="margin-left: 5px;" ng-checked="fileObj.check.airAble">
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">目的港</div>
+        <div class="modal-body-value" style="width: 320px;">
+          <div ui-select multiple ng-model="fileObj.dest" theme="select2" class="form-control" ng-disabled="fileObj.check.destAble">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.airportCode}}</div>
+            <div ui-select-choices repeat="item in airportDataPart | filter: {airportCode:$select.search}" refresh="refreshDest($select.search)" refresh-delay="300">
+              <div ng-bind-html="item.airportCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body-value" style="width: 90px;">
+          <label>
+            所有<input type="checkbox" ng-click="fileObj.check.destAble=!fileObj.check.destAble" style="margin-left: 5px;" ng-checked="fileObj.check.destAble">
+          </label>
+
+        </div>        
+      </div>
+      <div class="row" ng-if="!fileObj.check.destAble">
+        <div class="modal-body-name" style="width: 70px;">国家</div>
+        <div class="modal-body-value" style="width: 320px;">
+          <textarea class="form-control" ng-disabled="fileObj.check.destAble" ng-model="fileObj.country" rows="3"></textarea>
+        </div>
+        <div class="modal-body-value" style="width: 90px;">
+           <button class="btn btn-default" ng-click="editCountry()" ng-disabled="fileObj.check.destAble">选择</button>
+        </div>         
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">代理人</div>
+        <div class="modal-body-value" style="width: 320px;">
+          <div ui-select multiple ng-model="fileObj.agentIataCode" theme="select2" class="form-control" ng-disabled="fileObj.check.agentAble">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.code}}</div>
+            <div ui-select-choices repeat="item in agentIataData | filter: {code:$select.search}">
+              <div ng-bind-html="item.code | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body-value" style="width: 90px;">
+          <label>
+            所有<input type="checkbox" ng-click="fileObj.check.agentAble=!fileObj.check.agentAble" style="margin-left: 5px;" ng-checked="fileObj.check.agentAble">
+          </label>
+        </div>        
+      </div>
+      <div class="row">
+        <div class="modal-body-name" style="width: 70px;">特货代码</div>
+        <div class="modal-body-value" style="width: 320px;">
+          <div ui-select multiple ng-model="fileObj.specialGoodsCode" theme="select2" class="form-control" ng-disabled="fileObj.check.codeAble">
+            <div ui-select-match placeholder="请选择..." allow-clear="true">{{$item.sccCode}}</div>
+            <div ui-select-choices repeat="item in specialGoodsData | filter: {sccCode:$select.search}">
+              <div ng-bind-html="item.sccCode | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body-value" style="width: 90px;">
+          <label>
+            所有<input type="checkbox" ng-click="fileObj.check.codeAble=!fileObj.check.codeAble" style="margin-left: 5px;" ng-checked="fileObj.check.codeAble">
+          </label>
+        </div>        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

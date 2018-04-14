@@ -1,0 +1,46 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      品名选择
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="content-main-search">
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="search-name" style="width: 50px;">品名</div>
+          <div class="search-value">
+            <input type="text" class="form-control" ng-model="quotationObj.goodsName" ng-change="changeText7('goodsName')">
+          </div>
+        </div>
+        <div class="col-sm-4"><button class="btn btn-primary fr" ng-click="search()">查询</button></div>
+      </div>
+    </div>
+    <table class="table content-dialog-table">
+      <thead>
+        <tr>
+          <th class="w40" style="padding-left: 30px;">品名</th>
+          <th class="w30" style="padding-left: 30px;">备注</th>
+          <th class="w30" style="padding-left: 30px;">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-class-even="'even'" ng-repeat="row in goodsDescData track by $index" ng-show="$index > showItem.start && $index < showItem.end"
+          ng-dblclick="save(row)" style="cursor:hand;">
+          <td><label class="name-result unpack1" style="border: 1px solid #4A90E2;color: #fff;background-color: #4A90E2;">{{row.goodsName}}</label></td>
+           <td><label class="name-result">{{row.remark}}</label></td>
+          <td>
+            <a role="button" ng-click="save(row)">引用</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div ng-include="'pageInside.html'" class="row"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+  </div>
+</div>

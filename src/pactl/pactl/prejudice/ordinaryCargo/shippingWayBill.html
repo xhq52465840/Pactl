@@ -1,0 +1,18 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">{{items.title}}-请点击运单号查看引用的运单
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+     <a class="title-4 ng-binding" ng-click="showWayBill()" style="font-size: xx-large;">{{pAirWaybillInfo.waybillNo}}</a>
+     <div role="button" class="name-result name-result1 dangerGoods" style="font-size: large;" ng-if="pAirWaybillInfo.type==='0'"> 主运单</div>
+     <div role="button" class="name-result name-result1 hasBook" style="font-size: large;" ng-if="pAirWaybillInfo.type==='1'"> 分运单</div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">关闭</button>
+    <button class="btn btn-primary" ng-click="save()">继续退回</button>
+  </div>
+</div>

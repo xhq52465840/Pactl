@@ -1,0 +1,153 @@
+<ol class="bread">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>系统设置</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">报文基础设置</li>
+</ol>
+<div class="content-main-title">
+  <div class="title">
+    报文基础设置
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-click="addCatalogType()" ng-if="baseObj.type==='1'">
+      <i class="i-add"></i>新增目录类型
+    </button>
+    <button class="btn btn-default" ng-click="addSendType()" ng-if="baseObj.type==='2'">
+      <i class="i-add"></i>新增发报类型
+    </button>
+    <button class="btn btn-default" ng-click="addMsgType()" ng-if="baseObj.type==='3'">
+      <i class="i-add"></i>新增报文类型
+    </button>
+    <button class="btn btn-default" ng-click="addFileType()" ng-if="baseObj.type==='4'">
+      <i class="i-add"></i>新增文件目录
+    </button>
+  </div>
+</div>
+<div class="content-main-body">
+  <div class="content-main-tab">
+    <ul class="nav nav-tabs">
+      <li ng-class="{'active': baseObj.type==='1'}" ng-click="select('1')">
+        <a role="button">目录类型</a>
+      </li>
+      <li ng-class="{'active': baseObj.type==='2'}" ng-click="select('2')">
+        <a role="button">发报类型</a>
+      </li>
+      <li ng-class="{'active': baseObj.type==='3'}" ng-click="select('3')">
+        <a role="button">报文类型</a>
+      </li>
+      <li ng-class="{'active': baseObj.type==='4'}" ng-click="select('4')">
+        <a role="button">报文收发文件目录</a>
+      </li>
+    </ul>
+  </div>
+  <table class="table content-main-table" ng-if="baseObj.type==='1'">
+    <thead>
+      <tr>
+        <th class="w30">编码</th>
+        <th class="w30">名称</th>
+        <th class="w40">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in baseObj.catalogData track by $index" ng-class-even="'even'">
+        <td>{{item.code}}</td>
+        <td>{{item.name}}</td>
+        <td>
+          <div class="btn-img" ng-click="editType(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table content-main-table" ng-if="baseObj.type==='2'">
+    <thead>
+      <tr>
+        <th class="w30">编码</th>
+        <th class="w30">名称</th>
+        <th class="w40">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in baseObj.sendData track by $index" ng-class-even="'even'">
+        <td>{{item.code}}</td>
+        <td>{{item.name}}</td>
+        <td>
+          <div class="btn-img" ng-click="editType(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table content-main-table" ng-if="baseObj.type==='3'">
+    <thead>
+      <tr>
+        <th class="w30">编码</th>
+        <th class="w30">名称</th>
+        <th class="w40">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in baseObj.msgData track by $index" ng-class-even="'even'">
+        <td>{{item.code}}</td>
+        <td>{{item.name}}</td>
+        <td>
+          <div class="btn-img" ng-click="editType(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="remove(item.id, item.name)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table content-main-table" ng-if="baseObj.type==='4'">
+    <thead>
+      <tr>
+        <th class="w10">目录编号</th>
+        <th class="w10">目录类型</th>
+        <th class="w10">目录地址</th>
+        <th class="w15">说明</th>
+        <th class="w5">FTP</th>
+        <th class="w5">端口</th>
+        <th class="w10">用户名</th>
+        <th class="w5">密码</th>
+        <th class="w10">文件夹</th>
+        <th class="w10">备注文件夹</th>
+        <th class="w10">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in baseObj.fileData track by $index" ng-class-even="'even'">
+        <td>{{$index+1}}</td>
+        <td>{{item.catalogType | showFileType: typeData}}</td>
+        <td>{{item.catalogAddr}}</td>
+        <td>{{item.remark}}</td>
+        <td><i ng-show="item.ftp === '1'" class="i-yes"></i></td>
+        <td>{{item.port}}</td>
+        <td>{{item.username}}</td>
+        <td>.......</td>
+        <td>{{item.folder}}</td>
+        <td>{{item.folder2}}</td>
+        <td>
+          <div class="btn-img" ng-click="editFile(item)">
+            <i class="btn-edit"></i>
+          </div>
+          <div class="btn-img" ng-click="removeFile(item.id, item.catalogAddr)">
+            <i class="btn-del"></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

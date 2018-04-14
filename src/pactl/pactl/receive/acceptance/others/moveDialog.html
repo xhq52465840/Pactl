@@ -1,0 +1,149 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="content-main-search">
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="search-name">需改配运单号</div>
+				<div class="search-name textWidth" style="text-align: left;width: 63%;">{{moves.waybillNo}}
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name">货代</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.agentOprn}}/{{moves.agentSalesEnname}}
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">FLIGHT</div>
+				<div class="search-name" style="text-align: left;width: 63%;">{{moves.flightNo}} {{moves.fltDate | date: 'MM/dd'}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="search-name">件数</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.rcpNo}}
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name">重量</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.grossWeight}}
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">计费重量</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.chargeWeight}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="search-name">体积</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.vol}}
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="search-name">目的港</div>
+				<div class="search-name textWidth" style="text-align: left;">{{moves.dest1 | showDest1: moves}}
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="search-name">品名</div>
+				<div class="search-name textWidth textWidth" style="text-align: left;">{{moves.goodsDesc}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="search-name">特货代码</div>
+				<div class="search-name textWidth" style="text-align: left;width: 63%;">{{moves.holdCode}}
+				</div>
+			</div>
+		</div>
+
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">迁转至</th>
+					<th class="w20">件数</th>
+					<th class="w15">航空公司</th>
+					<th class="w15">航班号</th>
+					<th class="w15">航班日期</th>
+					<th class="w20">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in rows track by $index">
+					<td>
+						<div ng-if="row.editing">
+							<div ui-select ng-model="row.tranAgentOprn" theme="select2" class="form-control wd" style="width: 100px;">
+								<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+								<div ui-select-choices repeat="item in tranData | filter: {name:$select.search}">
+									<div ng-bind-html="item.name | highlight: $select.search"></div>
+								</div>
+							</div>
+						</div>
+						<span ng-if="!row.editing">{{row.tranAgentOprn.name||row.tranAgentOprn}}</span>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="row.pieces" ng-if="row.editing" ng-change='onlyNum(row)'>
+						<span ng-if="!row.editing">{{row.pieces}}</span>
+					</td>
+					<td>
+						<div ng-if="row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')">
+							<div ui-select ng-model="row.carrier" theme="select2" class="form-control wd" style="width: 100px;" ng-change="changeSelected(row,'name')">
+								<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+								<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+									<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+								</div>
+							</div>
+						</div>
+						<div ng-if="row.editing && (row.tranAgentOprn==='PACTL'||row.tranAgentOprn==='本货站')">
+							<div ui-select ng-model="row.carrier" theme="select2" class="form-control wd" style="width: 100px;" ng-change="changeSelected(row,'name')">
+								<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.airCode}}</div>
+								<div ui-select-choices repeat="item in airData | filter: {airCode:$select.search}">
+									<div ng-bind-html="item.airCode | highlight: $select.search"></div>
+								</div>
+							</div>
+						</div>
+						<span ng-if="!row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')">{{row.carrier.airCode}}</span>
+						<span ng-if="!row.editing && (row.tranAgentOprn ==='PACTL'||row.tranAgentOprn ==='本货站')">{{row.carrier.airCode}}</span>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="row.name" ng-if="row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')" maxlength="7"
+						  ng-change="changeText5(row,'name')" ng-class="{'error': errorData.indexOf(row.index+'name')>-1}">
+						<input type="text" class="form-control" ng-model="row.name" ng-if="row.editing && (row.tranAgentOprn==='PACTL'||row.tranAgentOprn==='本货站')" maxlength="7"
+						  ng-change="changeText5(row,'name')" ng-class="{'error': errorData.indexOf(row.index+'name')>-1}">
+						<span ng-if="!row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')">{{row.name}}</span>
+						<span ng-if="!row.editing && (row.tranAgentOprn==='PACTL'||row.tranAgentOprn==='本货站')">{{row.name}}</span>
+					</td>
+					<td>
+						<input type="text" class="form-control" pikaday="myPickerObject1" ng-model="row.fltDate" ng-if="row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')">
+						<input type="text" class="form-control" pikaday="myPickerObject1" ng-model="row.fltDate" ng-if="row.editing && (row.tranAgentOprn==='PACTL'||row.tranAgentOprn==='本货站')">
+						<span ng-if="!row.editing && (row.tranAgentOprn.name==='PACTL'||row.tranAgentOprn.name==='本货站')">{{row.fltDate}}</span>
+						<span ng-if="!row.editing && (row.tranAgentOprn==='PACTL'||row.tranAgentOprn==='本货站')">{{row.fltDate}}</span>
+					</td>
+					<td>
+						<i ng-if="!row.editing" class="btn-edit" ng-click="edit(row,true)"></i>
+						<i ng-if="row.editing" class="i-yes2" ng-click="edit(row,false)"></i>
+						<i class="btn-del" ng-click="remove(row)"></i>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer" style="text-align: right;">
+		<button class="btn btn-primary" ng-click="save()">保存</button>
+		<button class="btn btn-primary" ng-click="cancel()">取消</button>
+		<button class="btn btn-primary" ng-click="add()">添加</button>
+	</div>
+	<div ng-show="loading" class="header">
+		<div class="shadow"></div>
+	</div>
+</div>

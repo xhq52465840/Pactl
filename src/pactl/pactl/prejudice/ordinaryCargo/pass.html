@@ -1,0 +1,41 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        {{title}}
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="receiptPass">
+        <label class="reBillNo">运单号</label>
+        <label class="reBillVal">{{itemObj.waybillNo}}</label>
+      </div>
+      <div class="receiptPass">
+        <div class="reBillNo">备注</div>
+        <div><textarea class="form-control receipthei reBillVal" ng-model="itemObj.actionComments"></textarea>
+        </div>
+      </div>
+      <div class="receiptPass">
+        <div ng-show="!itemObj.fileObj.name">
+          <button class="btn btn-primary" on-file-uploaded="uploadCallback($response, itemObj)" pl-upload pl-filters-model="[{title: 'files', extensions:'pdf,doc,png,jpg,jpeg'}]"
+            pl-max-file-size="3mb" pl-url="/api/pactl/uploadfile" pl-multi-params-model="{type:'type'}" pl-progress-model="itemObj.progress">上传</button>
+          <div progressbar value="itemObj.progress" type="success"><b>{{itemObj.progress}}%</b></div>
+        </div>
+        <div ng-show="itemObj.fileObj.name">
+          <!-- <i class="i-pdf" ng-click="openDialog(itemObj.fileObj)"></i> -->
+          <span class="upload" title="{{itemObj.fileObj.name}}" ng-click="downloadFile(itemObj.fileObj.id)">{{itemObj.fileObj.newName}}</span>
+          <div class="dib" ng-click="removeFile(itemObj.fileObj.id)">
+            <i class="btn-close"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" w5c-form-submit="save()">{{btnName}}</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+  </div>
+</form>

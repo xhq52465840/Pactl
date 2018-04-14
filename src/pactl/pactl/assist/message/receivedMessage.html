@@ -1,0 +1,153 @@
+<ol class="bread">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">报文</li>
+</ol>
+<div class="content-main-title">
+	<div class="title">报文</div>
+	<div class="pull-right">
+		<button class="btn btn-default" ng-click="search()">查询</button>
+		<button class="btn btn-default" ng-click="exportTo()">导出为Excel(E)</button>
+	</div>
+</div>
+<div class="content-main-body">
+	<div class="content-main-tab">
+		<ul class="nav nav-tabs">
+			<li role="presentation" ui-sref-active="active">
+				<a role="button" ui-sref="pactlAssist.sentMessage">
+					<i class="i-pop"></i>发送的报文</a>
+				</li>
+				<li role="presentation" ui-sref-active="active">
+					<a role="button" ui-sref="pactlAssist.receivedMessage">
+						<i class="i-public"></i>收到的报文</a>
+					</li>
+					<li role="presentation" ui-sref-active="active">
+						<a role="button" ui-sref="pactlAssist.errorMessage">
+							<i class="i-pop"></i>错误的报文</a>
+						</li>
+					</ul>
+				</div>
+				<div class="content-main-search">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="search-name">处理状态</div>
+							<div ui-select ng-model="sentInfo.status" theme="select2" class="form-control wd">
+								<div ui-select-match placeholder="请选择..." allow-clear="true">{{$select.selected.name}}</div>
+								<div ui-select-choices repeat="item in statusData | filter: {name:$select.search}">
+									<div ng-bind-html="item.name | highlight: $select.search"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">开始时间</div>
+							<div class="search-value">
+								<input type="text" class="form-control" pikaday="myPickerObject1" ng-model="sentInfo.startDate">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">结束时间</div>
+							<div class="search-value">
+								<input type="text" class="form-control" pikaday="myPickerObject1" ng-model="sentInfo.endDate">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="search-name">报文类型</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.type">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">发报地址</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.origin">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">收报地址</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.destination">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="search-name">报文主题</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.subject">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">报文流水号</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.msgid">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="search-name">内容包含</div>
+							<div class="search-value">
+								<input type="text" class="form-control" ng-model="sentInfo.text">
+							</div>
+						</div>
+					</div>
+				</div>
+				<table class="table content-main-table">
+					<thead>
+						<tr>
+							<th class="w5">
+								<label>
+									<input type="checkbox" ng-click="allselect($event)" ng-checked="allselected">查阅
+								</label></th>
+								<th class="w8">报文ID</th>
+								<th class="w8">报文类型</th>
+								<th class="w8" t-sort="DEST">发报地址</th>
+								<th class="w8">标题</th>
+								<th class="w8" t-sort="STATUS">处理状态</th>
+								<th class="w13">收报地址</th>
+								<th class="w14">发送时间</th>
+								<th class="w4">批次</th>
+								<th class="w8">优先级</th>
+								<th class="w8" t-sort="CREATED_DATE">所属用户</th>
+								<th class="w8">报文流水号</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-class-even="'even'" ng-repeat="row in rows track by $index">
+								<td><input type="checkbox" ng-checked="row.checked" ng-click="singleCheck($event, row)"></td>
+								<td title="{{row.msgid}}"><a>{{row.msgid}}</a></td>
+								<td title="{{row.type}}">{{row.type}}</td>
+								<td title="{{row.origin}}">{{row.origin}}</td>
+								<td title="{{row.header}}">{{row.header}}</td>						
+								<td>{{row.status}}</td>
+								<td title="{{row.destination}}">{{row.destination}}</td>
+								<td title="{{row.remark}}">{{row.remark}}</td>
+								<td>{{row.createTime | date:"yy/MM/dd"}}</td>
+								<td title="{{row.destination}}">{{row.destination}}</td>
+								<td title="{{row.remark}}">{{row.remark}}</td>
+								<td>{{row.createTime | date:"yy/MM/dd"}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div ng-include="'page.html'" class="row"></div>
+					<table class="table table1 content-main-table">
+						<tbody>
+							<tr ng-class-even="'even'">
+								<td title="{{row.origin}}">发送报文地址: {{data.origin}}</td>
+								<td title="{{row.destination}}">收报地址: {{data.destination}}</td>
+								<td></td>
+							</tr>
+							<tr ng-class-even="'even'">
+								<td title="{{row.modifyTime}}">提交时间: {{data.modifyTime}}</td>
+								<td title="{{row.header}}">报文主题: {{data.header}}</td>
+								<td class="fr"><button class="btn btn-default">打印报文信息</button></td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						<textarea class="form-control mb20 content-main-search" 
+						placeholder="此区域内显示报文内容...."></textarea>
+					</div>
+				</div>

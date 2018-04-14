@@ -1,0 +1,53 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			收正本
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w15">证书类型</th>
+					<th class="w15">鉴定机构</th>
+					<th class="w30">证书编号</th>
+					<th class="w20">证书电子档</th>
+					<th class="w20">已收正本</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="rowobj in rows" ng-class-even="'even'">
+					<td>{{rowobj.bookType | showStatus: typeData }}</td>
+					<td>{{rowobj.officeName}}</td>
+					<td>{{rowobj.bookNo}}</td>
+					<td class="imgShow">
+						<i class="i-pdf" ng-mouseover="rowobj.imgShow=true" ng-mouseleave="rowobj.imgShow=false" ng-click="openDialog({
+						officeName:rowobj.officeName,
+						bookNo: rowobj.bookNo,
+						src:rowobj.pdfPath,
+						srcArr: rowobj.srcArr
+					})" ng-if="rowobj.pdfPath"></i>
+						<div ng-show="rowobj.imgShow" ng-style="rowobj.style1">
+							<img ng-src="{{rowobj.filePath}}" ng-style="rowobj.style2">
+						</div>
+						<span class="label goodsType-puhuo1" ng-if="rowobj.goodsType === '101'">普货</span>
+						<span class="label goodsType-ldc1" ng-if="rowobj.goodsType === '102'">锂电池</span>
+					</td>
+					<td>
+						<input type="checkbox" ng-model="rowobj.reBook" ng-checked="rowobj.reBook === '1'">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()">确定</button>
+		<button class="btn btn-default" ng-click="cancel()">取消</button>
+	</div>
+</div>
+<div ng-show="loading" class="header">
+	<div class="shadow"></div>
+</div>

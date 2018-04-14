@@ -1,0 +1,147 @@
+<ol class="bread bread1">
+	<li><a role="button" ui-sref="index">首页</a></li>
+	<li class="bread-arrow">&gt;</li>
+	<li><span>功能</span></li>
+	<li class="bread-arrow">&gt;</li>
+	<li class="active">品名咨询</li>
+</ol>
+<div class="sameNameHistory">
+	<button class="btn btn-primary" ng-click="opHis()">操作历史</button>
+</div>
+<div class="btn-group sameHistory">
+	<a role="button" class="dropdown-toggle" data-toggle="dropdown" id="history">品名相同的历史记录</a>
+	<div class="dropdown-menu" role="menu" aria-labelledby="history">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w50">咨询号</th>
+					<th class="w30">航空公司</th>
+					<th class="w20">目的港</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in history track by $index" ng-class-even="'even'">
+					<td> 
+						<a ui-sref="pactlAssist.reply({goodsId: row.pGoodsAdvice.goodsId})" target=" _blank">{{row.pGoodsAdvice.goodsId}}</a>
+					</td>
+					<td style="text-align:left">
+						<span ng-class="{'pr10':airline.length==='1'}" ng-repeat="airline in row.pGoodsAdvice.airLines.split(';') track by $index"
+						ng-if="airline!==null && airline!=''">
+						{{airline | uppercase}}</span>
+					</td>
+					<td>{{row.pGoodsAdvice.dest}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+<div class="row content-nameRefer">
+	<div class="row">
+		<div class="content-nameRefer-title">
+			<div class="refer-mark">
+				{{refer.goodsId}}
+			</div>
+			<div class="refer-titlt-name">操作</div>
+			<div class="refer-titlt-value">{{agentSalesEnname}}</div>
+			<div class="btn-img" ng-click="forbid(refer.goodsId)" ng-show="refer.status==='105' || afterenabled && refer.status!=='106'" style="margin-left: 195px;">
+				<i class="i-yx"></i>
+			</div>
+			<div class="btn-img" ng-click="enabled(refer.goodsId)" ng-show="refer.status==='106' || afterforbid && refer.status!=='105'" style="margin-left: 195px;">
+				<i class="i-sx"></i>
+			</div>
+		</div>
+	</div>
+	<div class="row content-nameRefer-left">
+		<div class="content-nameRefer-left-1">
+			<div class="row">
+				<div class="refer-name">状态</div>
+				<div class="status" ng-model="refer.status" ng-class="{'quotable':quotable,'ask':ask,'answer':answer,'forbidden':forbidden}">
+					{{refer.status| showStatus: statusData}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="refer-name"><span class="red">*</span>可能出运航空公司</div>
+				<div class="refer-value">
+					<span>{{refer.airLines}}</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="refer-name">目的港</div>
+				<div class="refer-value">
+					<span>{{refer.dest}}</span>
+				</div>
+				<small class="mr5" ng-model="airPortData.airportName">{{airPortData && airPortData.airportName}}</small>
+				<small ng-model="airPortData.countryCode">{{airPortData && airPortData.countryCode}}</small>	
+			</div>
+			<div class="row">
+				<div class="refer-name"><span class="red">*</span>英文品名</div>
+				<div class="refer-value">
+					<span>{{refer.namesEn}}</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="refer-name">中文品名</div>
+				<div class="refer-value">
+					<span>{{refer.namesCn}}</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="refer-name">产品说明</div>
+				<div class="refer-value">
+					<i class="i-pdf" ng-show="refer.remoteFiles.newName"></i>
+					<span class="upload" title="{{refer.remoteFiles.newName}}" ng-click="downloadFile(refer.remoteFiles.id)">{{refer.remoteFiles.newName}}</span>
+					<div class="dib" ng-show="btn.close1">
+						<i class="btn-close" ng-click="removeFile(refer.remoteFiles.id, 'type')"></i>
+					</div>
+					<a ng-click="productExplain()" ng-show="productDesc">查看在线产品说明</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="refer-name">补充文档</div>
+				<div class="refer-value">
+					<i class="i-pdf" ng-show="refer.remoteFiles1.newName" ></i>
+					<span class="upload" title="{{refer.remoteFiles1.newName}}" ng-click="downloadFile(refer.remoteFiles1.id)">{{refer.remoteFiles1.newName}}</span>
+					<div class="dib" ng-show="btn.close2">
+						<i class="btn-close" ng-click="removeFile(refer.remoteFiles1.id, 'othertype')"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-nameRefer-left-3">
+			<div class="row mt10 mb10">
+				<span class="verdict">结论</span>
+				<button class="mr5 btn padding" ng-repeat="resultType in resultTypes" ng-class="{'condition':resultType.condition,'backletter':resultType.backletter,'unpack':resultType.unpack,'dangerous':resultType.dangerous,'needless':resultType.needless,'other':resultType.other,'active':resultType.checked}"
+				ng-click="select(resultType)" ng-disabled="disableBtn(resultType) || refer.status==='106'"> {{resultType.name}}</button>
+				<input type="text" style="margin-left: 30px;" class="form-control w70 dib m10" placeholder="请输入其他证书类型" ng-model="refer.other" ng-disabled="refer.status==='105' || refer.status==='106' || selectNoCert">
+			</div>
+			<div class="row mb10">
+				<div class="pull-right">
+					<button class="btn btn-default" ng-click="confirm()" ng-disabled="refer.status=='106'"> 
+						<i class="i-right"></i>结果确认</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-nameRefer-right">
+			<div class="row border2" style="height:360px;overflow-y:scroll;overflow-x: hidden;">
+				<div class="content-nameRefer-right-content" ng-repeat="rdData in records track by $index">
+					<div class="content-line wrap" ng-repeat="record in rdData track by $index" ng-show="record.contents">
+						<div ng-class="{'avatar-img':record.type==='1','pactl-img':record.type==='2'}"></div>
+						<div ng-class="{'question-body':record.type==='1', 'answer-body':record.type==='2'}" style="display:inline;">{{record.contents}}</div>
+						<div class="question-foot" style="display:inline;float:right;">
+							{{record.type==2?record.creatorName:''}}
+							{{record.createdDate |date:'MM/dd HH:mm'}}</div>
+						</div>
+						{{$last == true?scrollBottom():''}}
+					</div>
+				</div>
+				<div class="mb10">
+					<textarea class="form-control" rows="3" placeholder="请输入内容......" ng-model="content" required name="content"></textarea>
+				</div>
+				<div class="content-nameRefer-right-btn">
+					<button class="btn btn-primary" ng-click="sent()" ng-disabled="refer.status==='106'">发送回复</button>
+				</div>
+			</div>
+			<!-- </form> -->
+		</div>

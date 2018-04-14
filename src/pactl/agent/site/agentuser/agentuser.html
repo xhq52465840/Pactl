@@ -1,0 +1,134 @@
+<ol class="bread" ng-if="ismanager">
+  <li><a role="button" ui-sref="index">首页</a></li>
+  <li class="bread-arrow">&gt;</li>
+  <li><span>门户</span></li>
+  <li class="bread-arrow">&gt;</li>
+  <li class="active">用户管理</li>
+</ol>
+<div class="content-main-title" ng-if="ismanager">
+  <div class="title">
+    用户管理
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-default" ng-if="unit.unitType=='agency' && operunitid==unitId && isSuper" ng-click="addAdmin()">
+      <i class="i-add"></i>新增管理员
+    </button>
+    <button class="btn btn-default" ng-click="add()" ng-if="ismanager">
+      <i class="i-add"></i>新增人员
+    </button>
+  </div>
+</div>
+<div class="content-main-body" ng-if="ismanager">
+  <div class="content-main-search">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">所属机构</div>
+        <div class="search-value">
+          <div ui-select ng-model="userObj.deptId" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in unitData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">账户名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.account">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="search-name">用户名</div>
+        <div class="search-value">
+          <input type="text" class="form-control" ng-model="userObj.fullname">
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="search-name">状态</div>
+        <div class="search-value">
+          <div ui-select ng-model="userObj.status" theme="select2" class="form-control wd">
+            <div ui-select-match placeholder="请选择...">{{$select.selected.name}}</div>
+            <div ui-select-choices repeat="item in userStatusData | filter: {name:$select.search}">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row search-btn">
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="reset()">重置</button>
+      </div>
+    </div>
+  </div>
+  <table class="table content-main-table">
+    <thead>
+      <tr>
+        <th class="w24">所属机构</th>
+        <th class="w8">管理员</th>
+        <th class="w14">账号</th>
+        <th class="w14">名称</th>
+        <th class="w10">邮件</th>
+        <!--<th class="w10">手机号</th>-->
+        <!--<th class="w12">角色</th>-->
+        <th class="w14">最后更新时间</th>
+        <th class="w16">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in userData track by $index" ng-class-even="'even'">
+        <td>{{item.unitDO.name?item.unitDO.name:item.unitDO.description}}</td>
+        <td>
+          <span class="label label-primary" ng-if="item.manager">是</span>
+          <span class="label label-primary" ng-if="!item.manager">否</span></td>
+        <td>{{item.account}}</td>
+        <td>
+          {{item.fullname}}
+        </td>
+        <td>{{item.email}}</td>
+        <!--<td>{{item.phone}}</td>-->
+        <!--<td>
+          <span class="label label-primary" ng-repeat="role in item.roleDOs">{{role.name}}</span>
+          <span ng-if="item.deptId == unitId">
+          <div class="btn-img" ng-click="addRole(item)">
+            <i class="btn-edit"></i>
+          </div>
+        </span>-->
+        </td>
+        <td>{{item.lastUpdate}}</td>
+        <td>
+          <div class="btn-img" ng-click="edit(item,item.deptId != unitId)" ng-if="item.deptId == unitId || isSuper">
+            <i class="btn-edit"></i>
+          </div>
+          <div ng-if="item.id != userid && !item.manager && item.deptId == unitId" class="dib">
+            <div class="btn-img" ng-if="item.status !== '正常'" ng-click="enable(item)">
+              <i class="i-sx"></i>
+            </div>
+            <div class="btn-img" ng-if="item.status === '正常'" ng-click="disable(item)">
+              <i class="i-yx"></i>
+            </div>
+            <div class="btn-img" ng-click="remove(item.id, item.fullname)">
+              <i class="btn-del"></i>
+            </div>
+            <div class="btn-img" title="密码修改" ng-click="modify(item)">
+              <i class="i-password"></i>
+            </div>
+          </div>
+          <div ng-if="!(item.id != userid && !item.manager && item.deptId == unitId)" class="dib">
+            <div class="btn-img" ng-if="item.status !== '正常'">
+              <span class="label label-danger" ng-if="item.manager">无效</span>
+            </div>
+            <div class="btn-img" ng-if="item.status === '正常'">
+              <span class="label label-success" ng-if="item.manager">有效</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-include="'page.html'" class="row"></div>
+</div>

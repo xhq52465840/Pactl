@@ -1,0 +1,73 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<div class="modal-title">
+			{{title}}
+			<div class="modal-close" ng-click="cancel()">
+				<i class="i-close"></i>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+		<table class="table content-main-table">
+			<thead>
+				<tr>
+					<th class="w20">运单号</th>
+					<th class="w10">航班</th>
+					<th class="w7">件数</th>
+					<th class="w7">重量</th>
+					<th class="w10">计费重量</th>
+					<th class="w7">体积</th>
+					<th class="w8">目的港</th>
+					<th class="w10">品名</th>
+					<th class="w10">特货代码</th>
+					<th class="w6"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{changes.waybillNo}}</td>
+					<td>{{changes.flightNo}} {{changes.fltDate}}</td>
+					<td>{{changes.rcpNo}}</td>
+					<td>{{changes.grossWeight}}</td>
+					<td>{{changes.chargeWeight}}</td>
+					<td>{{changes.vol}}</td>
+					<td>{{changes.dest2}}</td>
+					<td>{{changes.goodsDesc}}</td>
+					<td>{{changes.holdCode}}</td>
+					<td></td>
+				</tr>
+				<tr ng-show="row.awId">
+					<td>{{row.waybillNo}}</td>
+					<td>{{row.flightNo}} {{row.fltDate}}</td>
+					<td>{{row.rcpNo}}</td>
+					<td>{{row.chargeWeight}}</td>
+					<td>{{row.grossWeight}}</td>
+					<td>{{row.vol}}</td>
+					<td>{{row.dest1}}</td>
+					<td>{{row.goodsDesc}}</td>
+					<td>{{row.holdCode}}</td>
+					<td><i class="btn-del" ng-click="deletechanged(row.awId)"></i></td>
+				</tr>
+				<tr ng-hide="row.awId">
+					<td><input type="text" class="form-control" ng-model="change.waybillNo" maxlength="11" ng-change="detailInfo()"></td>
+					<td>{{change.flightNo}}</td>
+					<td>{{change.rcpNo}}</td>
+					<td>{{change.chargeWeight}}</td>
+					<td>{{change.grossWeight}}</td>
+					<td>{{change.vol}}</td>
+					<td>{{change.dest1}}</td>
+					<td>{{change.goodsDesc}}</td>
+					<td>{{change.holdCode}}</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="save()" ng-hide="row.awId" ng-disabled="wrongWaybillNo">确定改配</button>
+		<button class="btn btn-primary" ng-click="cancel()">取消</button>
+	</div>
+	<div ng-show="loading" class="header">
+		<div class="shadow"></div>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title">
+      {{title}}
+      <div class="modal-close" ng-click="cancel()">
+        <i class="i-close"></i>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <table class="table content-dialog-table">
+      <thead>
+        <tr>
+          <th class="w30">品名补充英文</th>
+          <th class="w30">品名补充中文</th>
+          <th class="w40">品名详细描述（可选）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{nameObj.goodsNameEn}}</td>
+          <td>{{nameObj.goodsNameCn}}</td>
+          <td><pre class="pre-goodsRemark">{{nameObj.goodsRemarks}}</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()" >关闭</button>
+  </div>
+</div>

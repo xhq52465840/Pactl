@@ -1,0 +1,53 @@
+<form class="w5c-form form-horizontal" w5c-form-validate novalidate name="validateForm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">
+        备注
+        <div class="modal-close" ng-click="cancel()">
+          <i class="i-close"></i>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body modal-body-content modal-body-scroll">
+      <table class="table remark-table" style="margin-bottom: 77px;">
+        <thead>
+          <tr>
+            <th class="w17">运单号</th>
+            <th class="w12">员工编号</th>
+            <th class="w40">内容</th>
+            <th class="w14">时间</th>
+            <th class="w9">首检图片</th>
+            <th class="w8">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in remarkData track by $index">
+            <td style="padding-left:0px;">{{item.waybillno}}</td>
+            <td>{{item.pCheckRemark.employid}}</td>
+            <td ng-show="item.editShow">
+              <textarea class="form-control" rows="3" ng-blur="editItem(item)" ng-model="item.pCheckRemark.remark"></textarea>
+            </td>
+            <td ng-show="!item.editShow">
+              {{item.pCheckRemark.remark}}
+              <i class="btn-edit" ng-if="item.pCheckRemark.isedit==='1'" ng-click="edit(item)"></i>
+            </td>
+            <td>{{item.pCheckRemark.createddate | date: 'MM-dd HH:mm:ss'}}</td>
+            <td>
+               <i class="i-eye" ng-if="item.pFileRelation && item.pFileRelation.fileHttpPath" ng-click="openDialog({srcArr:[item.pFileRelation.fileHttpPath]})"></i>
+            </td>
+             <td><i class="btn-del" ng-click="delRemark(item)"></i></td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <textarea class="form-control" rows="3" ng-model="remarkObj.remark" name="remark" required></textarea>
+            </td>
+          </tr>
+        </tbody>
+    </div>
+
+  </div>
+      <div class="modal-footer" style="position: absolute;bottom: 0px; width: 93%;">
+      <button class="btn btn-primary" w5c-form-submit="save()">保存</button>
+      <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+</form>
